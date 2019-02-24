@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.SpecialContactFrag">
+
+  <android.support.v7.widget.RecyclerView
+      android:layout_marginTop="10dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id ="@+id/SpecCon_Rec"></android.support.v7.widget.RecyclerView>
+
+
+  <TextView
+      android:layout_marginTop="50dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/welcomSpecial_txt"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center_horizontal"
+      android:textSize="20sp"
+      android:textColor="@color/colorPrimary"
+      android:visibility="gone"
+      android:fontFamily="@font/blackoblique"
+      android:text="@string/specWelcome_txt"/>
+  <TextView
+      android:layout_marginRight="5dp"
+      android:layout_marginLeft="5dp"
+      android:layout_marginTop="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/NoContact_txt"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center_horizontal"
+      android:textSize="18sp"
+      android:textColor="@color/colorPrimary"
+      android:visibility="gone"
+      android:fontFamily="@font/semibold"
+      android:text="@string/NoContact"/>
+</LinearLayout>

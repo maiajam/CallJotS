@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.activty.NewNoteActivity">
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/addnewnote"
+        android:orderInCategory="100"
+        android:title="save note"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_Reminder"
+        android:icon="@drawable/alarm"
+        android:orderInCategory="100"
+        android:title="reminde me"
+        android:visible="true"
+        app:showAsAction="always" />
+</menu>

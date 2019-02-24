@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_AllContact"
+        android:icon="@drawable/contact_gray"
+        android:orderInCategory="100"
+        android:title="All Contact"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_Spec"
+        android:icon="@drawable/addspec"
+        android:orderInCategory="100"
+        android:title="Special Contact"
+        android:visible="true"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_MyNotes"
+        android:icon="@drawable/mynote"
+        android:orderInCategory="100"
+        android:title="My Notes"
+        android:visible="true"
+        app:showAsAction="always" />
+</menu>
