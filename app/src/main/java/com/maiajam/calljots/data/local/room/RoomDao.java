@@ -66,7 +66,7 @@ public interface RoomDao {
     @Query("SELECT * FROM SpecialContactInfo")
     public List<SpecialContactInfo> getAllSpecContact();
 
-    @Query("SELECT * FROM SpecialContactInfo WHERE contactName = :Name ")
-    public SpecialContactInfo getContactInfoByName(String Name);
+    @Query("SELECT * FROM AllPhoneContact WHERE contName = :Name ")
+    public AllPhoneContact getContactInfoByName(String Name);
 
 }

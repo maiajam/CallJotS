@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -54,6 +55,7 @@ public class AllContactFrag extends Fragment {
     public AllConAdapter allConAdapter;
     List<AllPhoneContact> allPhoneContact;
     private RoomManger roomManger;
+    private Handler handler;
 
 
     public void AllContactFrag() {
@@ -79,7 +81,7 @@ public class AllContactFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        if (sp.getBoolean("first", true)) {
+        if (sp.getBoolean("first", false)) {
             NewContactObserver observer = new NewContactObserver(new Handler(), getContext());
             getContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
           AsyncTask.execute(new Runnable() {
@@ -90,11 +92,22 @@ public class AllContactFrag extends Fragment {
                   allPhoneContact = roomDao.getAllPhoneContact();
                   allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
 
-                  recyclerView.setAdapter(allConAdapter);
-                  allConAdapter.notifyDataSetChanged();
+                    handler.sendEmptyMessage(0);
               }
           });
 
+            handler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+
+                    if(allConAdapter != null)
+                    {
+                        recyclerView.setAdapter(allConAdapter);
+                        allConAdapter.notifyDataSetChanged();
+                    }
+                    super.handleMessage(msg);
+                }
+            };
 
         } else {
 
@@ -130,6 +143,7 @@ public class AllContactFrag extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -137,10 +151,23 @@ public class AllContactFrag extends Fragment {
                 RoomDao roomDao = roomManger.roomDao();
                 allPhoneContact = roomDao.getAllPhoneContact();
                 allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
-                recyclerView.setAdapter(allConAdapter);
-                allConAdapter.notifyDataSetChanged();
+               handler.sendEmptyMessage(0);
             }
         });
+
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+
+                if(allConAdapter != null)
+                {
+                    recyclerView.setAdapter(allConAdapter);
+                    allConAdapter.notifyDataSetChanged();
+                }
+                super.handleMessage(msg);
+            }
+        };
+
     }
 
     class LoadPhone extends AsyncTask<Void, Void, Void> {

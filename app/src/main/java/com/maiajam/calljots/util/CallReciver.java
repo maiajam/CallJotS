@@ -5,9 +5,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.maiajam.calljots.data.local.entity.AllPhoneContact;
+import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
+import com.maiajam.calljots.data.local.room.RoomDao;
+import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.HelperMethodes;
 
 /**
  * Created by maiAjam on 7/10/2018.
@@ -15,44 +22,45 @@ import android.widget.Toast;
 
 public class CallReciver extends BroadcastReceiver {
 
-
-
-
+    private AllPhoneContact contact;
+    RoomManger roomManger;
+    RoomDao roomDao ;
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
 
-        SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
 
-        Toast.makeText(context,"run reciver",Toast.LENGTH_LONG).show();
 
+        // recived call info
        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
+       String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+       final String Contact_name = HelperMethodes.getContactName(NOCont, context);
+       // save dialer info at shared prefrence
+        HelperMethodes.saveDialerInfo(context,Contact_name,NOCont);
 
-        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-      //  String Contact_name = Util.getContactName(NOCont, context);
-        //contact = db.getContactInfoByName(Contact_name);
+        // get contact info for the dialer from database
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
 
-        //Util.drawContactInfo(context,contact);
+                roomManger = RoomManger.getInstance(context);
+                 roomDao = roomManger.roomDao();
+                contact = roomDao.getContactInfoByName(Contact_name);
 
-      /*  editor.putString("Name",Contact_name);
-        editor.putString("phoneNumber", (NOCont));
-        editor.commit();
+            }
+        });
+
 
         if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
 
             if(!Contact_name.isEmpty())
             {
-                if (db.CheckIsSpec(Contact_name)== 1) {
-
+                if (contact.getContIsSpec()== 1) {
                     // this contact is a special contact
-                        Util.drawContactInfo(context,contact);
-
-                  //  context.startActivity(new Intent(context,TransparentActivity.class).putExtra("name",Contact_name));
-
+                        HelperMethodes.drawContactInfo(context,contact);
 
                 } else {
 
-                    Util.drawContactInfo(context,contact);
+                    HelperMethodes.drawContactInfo(context,contact);
 
 
                    // context.startActivity(new Intent(context,TransparentActivity.class).putExtra("name",Contact_name));
@@ -66,7 +74,7 @@ public class CallReciver extends BroadcastReceiver {
 
         }else if(state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
 
-
+        /*
             HandlerThread thread = new HandlerThread("MyHandlerThread");
             thread.start();
             // creates the handler using the passed looper
@@ -80,11 +88,11 @@ public class CallReciver extends BroadcastReceiver {
         }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
         {
 
-
+        */
 
         }
 
-    */
+
 
     }
 }
