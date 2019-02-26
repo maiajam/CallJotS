@@ -31,7 +31,10 @@ import com.maiajam.calljots.adapter.AllConAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.util.NewContactObserver;
+import com.maiajam.calljots.util.ReadDataThread;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +59,7 @@ public class AllContactFrag extends Fragment {
     List<AllPhoneContact> allPhoneContact;
     private RoomManger roomManger;
     private Handler handler;
+    private ReadDataThread myThread;
 
 
     public void AllContactFrag() {
@@ -144,29 +148,30 @@ public class AllContactFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                roomManger = RoomManger.getInstance(getActivity());
-                RoomDao roomDao = roomManger.roomDao();
-                allPhoneContact = roomDao.getAllPhoneContact();
-                allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
-               handler.sendEmptyMessage(0);
-            }
-        });
-
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
 
-                if(allConAdapter != null)
+                if(Message.obtain()!= null)
                 {
-                    recyclerView.setAdapter(allConAdapter);
-                    allConAdapter.notifyDataSetChanged();
+                    if(msg.obj != null)
+                    {
+                        allPhoneContact = (List<AllPhoneContact>) msg.obj;
+                        allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
+                        if(allConAdapter != null)
+                        {
+                            recyclerView.setAdapter(allConAdapter);
+                            allConAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
+
                 super.handleMessage(msg);
             }
         };
+
+        myThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_PHONE_CONTACT,"");
+        myThread.start();
 
     }
 

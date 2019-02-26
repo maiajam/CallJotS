@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activty.NewContact">
+
+    <ImageView
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="70dp"
+        android:id="@+id/ContactPhoto_newContact_img"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="70dp"
+        android:src="@drawable/conphoto" />
+
+    <EditText
+
+
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/typename"
+        android:id="@+id/ContactName_newContact_ed"
+        android:textCursorDrawable="@drawable/conphoto"/>
+
+
+    <EditText
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/typeFirstPhone"
+        android:id="@+id/ContactFirstPhone_newContact_ed"
+        android:textCursorDrawable="@drawable/conphoto"/>
+
+    <EditText
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/typeSecPhone"
+        android:id="@+id/ContactSecPhone_newContact_ed"
+        android:textCursorDrawable="@drawable/conphoto"/>
+
+    <EditText
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/typeEmail"
+        android:id="@+id/ContactEmail_newContact_ed"
+        android:textCursorDrawable="@drawable/conphoto"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AddASspec"
+        android:checked="false"
+        android:id="@+id/AddasSpec_NewContact_ch"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#ffffff"
+        android:layout_width="match_parent"
+        android:id="@+id/AddasSpec_NewContact_b"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/Addcont"/>
+</LinearLayout>

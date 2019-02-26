@@ -15,7 +15,11 @@ public class AllPhoneContact {
     private String contPhoneNo;
     private int contIsSpec;
     private String contactPhotoUri;
-
+    private String contPrimaryClassf;
+    private String contFirstClassf;
+    private String contSecClassF;
+    private String contAddress;
+    private String contCompanyName;
     public AllPhoneContact() {
 
     }
@@ -28,6 +32,7 @@ public class AllPhoneContact {
         this.contactPhotoUri = contactPhotoUri;
     }
 
+    // setter
     public void setContId(int contId) {
         this.contId = contId;
     }
@@ -51,6 +56,27 @@ public class AllPhoneContact {
     public void setContPhoneNo(String contPhoneNo) {
         this.contPhoneNo = contPhoneNo;
     }
+
+    public void setContSecClassF(String contSecClassF) {
+        this.contSecClassF = contSecClassF;
+    }
+
+    public void setContCompanyName(String contCompanyName) {
+        this.contCompanyName = contCompanyName;
+    }
+
+    public void setContAddress(String contAddress) {
+        this.contAddress = contAddress;
+    }
+
+    public void setContFirstClassf(String contFirstClassf) {
+        this.contFirstClassf = contFirstClassf;
+    }
+
+    public void setContPrimaryClassf(String contPrimaryClassf) {
+        this.contPrimaryClassf = contPrimaryClassf;
+    }
+
 
     //getter
     @Nullable
@@ -76,5 +102,25 @@ public class AllPhoneContact {
 
     public String getContPhoneNo() {
         return contPhoneNo;
+    }
+
+    public String getContCompanyName() {
+        return contCompanyName;
+    }
+
+    public String getContSecClassF() {
+        return contSecClassF;
+    }
+
+    public String getContPrimaryClassf() {
+        return contPrimaryClassf;
+    }
+
+    public String getContFirstClassf() {
+        return contFirstClassf;
+    }
+
+    public String getContAddress() {
+        return contAddress;
     }
 }

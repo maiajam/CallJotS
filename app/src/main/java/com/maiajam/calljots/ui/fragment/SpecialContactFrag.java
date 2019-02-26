@@ -2,6 +2,8 @@ package com.maiajam.calljots.ui.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +16,12 @@ import android.widget.TextView;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.SpecailConAdapter;
+import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.util.ReadDataThread;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +36,11 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
     RecyclerView recyclerView ;
     SpecailConAdapter adapter ;
     TextView txtNoItem,txtWelcome;
-    List<SpecialContactInfo> Spec_contactList ,searchList;
+    List<AllPhoneContact> Spec_contactList;
+    List<SpecialContactInfo> searchList;
     private RoomManger roomManger;
-
+    ReadDataThread readDataThread ;
+    Handler handler ;
     public void SpecialContactFrag()
     {
 
@@ -55,32 +62,45 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
         txtNoItem = (TextView) view.findViewById(R.id.NoContact_txt);
         txtWelcome = (TextView) view.findViewById(R.id.welcomSpecial_txt);
 
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
 
-                    roomManger = RoomManger.getInstance(getContext());
-                    RoomDao roomDao = roomManger.roomDao();
-                    Spec_contactList =roomDao.getAllSpecContact();
-                    int  type = 1;
-                    if(Spec_contactList.isEmpty())
+
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+
+                if(Message.obtain()!= null)
+                {
+                    if(msg.obj != null)
                     {
-                        txtWelcome.setVisibility(View.VISIBLE);
-                        txtNoItem.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                    }else {
+                        int  type = 1;
+                        Spec_contactList = (List<AllPhoneContact>) msg.obj;
+                        if(Spec_contactList.isEmpty())
+                        {
+                            txtWelcome.setVisibility(View.VISIBLE);
+                            txtNoItem.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        }else {
 
-                        recyclerView.setVisibility(View.VISIBLE);
-                        txtNoItem.setVisibility(View.GONE);
-                        txtWelcome.setVisibility(View.GONE);
-                        //
-                        adapter = new SpecailConAdapter(getContext(),Spec_contactList,type);
-                        recyclerView.setAdapter(adapter);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                        recyclerView.setLayoutManager(layoutManager);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            txtNoItem.setVisibility(View.GONE);
+                            txtWelcome.setVisibility(View.GONE);
+                            //
+                            adapter = new SpecailConAdapter(getContext(),Spec_contactList,type);
+                            recyclerView.setAdapter(adapter);
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                            recyclerView.setLayoutManager(layoutManager);
+                        }
                     }
                 }
-        });
+
+                super.handleMessage(msg);
+            }
+        };
+
+        readDataThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_SPECIAL_CONTACT,null);
+        readDataThread.start();
+
+
         return view ;
     }
 
@@ -88,28 +108,7 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
     @Override
     public boolean onQueryTextSubmit(String s)
     {
-       /* searchList = new ArrayList<>();
-        String search ;
-         searchList.clear();
-        for(int i= 0 ; i<Spec_contactList.size();i++)
-        {
-         //   search = Spec_contactList.get(i).getName();
-           // if(search.contains(s))
-            //{
-              //  searchList.add(Spec_contactList.get(i));
-            //}
-        //}
 
-        adapter = new AllConAdapter(getContext(),searchList,1);
-
-        recyclerView.setAdapter(adapter);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter.notifyDataSetChanged();
-        */
         return true;
     }
 

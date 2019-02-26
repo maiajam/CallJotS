@@ -63,8 +63,8 @@ public interface RoomDao {
     @Insert
     public void AddContact(SpecialContactInfo contact);
 
-    @Query("SELECT * FROM SpecialContactInfo")
-    public List<SpecialContactInfo> getAllSpecContact();
+    @Query("SELECT * FROM AllPhoneContact WHERE contIsSpec = 1")
+    public List<AllPhoneContact> getAllSpecContact();
 
     @Query("SELECT * FROM AllPhoneContact WHERE contName = :Name ")
     public AllPhoneContact getContactInfoByName(String Name);

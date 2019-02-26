@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.maiajam.calljots.R;
+import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.helper.HelperMethodes;
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ import java.util.List;
 public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Holder> {
 
     Context con;
-    List<SpecialContactInfo> ListCont = new ArrayList<>();
+    List<AllPhoneContact> ListCont = new ArrayList<>();
     Bitmap photo ;
     int Type  ;
 
-   public SpecailConAdapter(Context context, List<SpecialContactInfo> List, int type)
+   public SpecailConAdapter(Context context, List<AllPhoneContact> List, int type)
     {
         con = context ;
         ListCont = List ;
@@ -42,9 +43,9 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
 
-            final SpecialContactInfo contact = ListCont.get(position);
-            final String name = contact.getContactName();
-            final String phoneNo = contact.getContactPhoneNumber();
+            final AllPhoneContact contact = ListCont.get(position);
+            final String name = contact.getContName();
+            final String phoneNo = contact.getContPhoneNo();
             holder.ContName_txt.setText(name);
             holder.ContPhone_txt.setText(String.valueOf(phoneNo));
 

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 
 /**
@@ -24,21 +27,23 @@ public class CallReciver extends BroadcastReceiver {
 
     private AllPhoneContact contact;
     RoomManger roomManger;
+
     RoomDao roomDao ;
+    Handler h;
     @Override
     public void onReceive(final Context context, Intent intent) {
 
 
 
         // recived call info
-       String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
+       final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
        final String Contact_name = HelperMethodes.getContactName(NOCont, context);
        // save dialer info at shared prefrence
         HelperMethodes.saveDialerInfo(context,Contact_name,NOCont);
 
         // get contact info for the dialer from database
-        AsyncTask.execute(new Runnable() {
+     /*   AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
 
@@ -49,8 +54,49 @@ public class CallReciver extends BroadcastReceiver {
             }
         });
 
+        */
+        h = new Handler() {
 
-        if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+            @Override
+            public void handleMessage(Message msg) {
+
+                if(Message.obtain() != null)
+                {
+                     contact = (AllPhoneContact) msg.obj;
+                    if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+
+                        if (!Contact_name.isEmpty()) {
+                            if (contact.getContIsSpec() == 1) {
+                                // this contact is a special contact
+                                HelperMethodes.drawContactInfo(context, contact);
+
+                            } else {
+
+                                HelperMethodes.drawContactInfo(context, contact);
+
+
+                                // context.startActivity(new Intent(context,TransparentActivity.class).putExtra("name",Contact_name));
+
+                            }
+
+                        } else {
+                            //   // new number ... no toast msg
+                        }
+                    }
+                }
+
+                super.handleMessage(msg);
+            }
+        };
+
+        final ReadDataThread myThread  = new ReadDataThread(h,context,Constant.GET_CONTACTINFO_BY_NAME,Contact_name);
+        myThread.start();
+
+
+
+
+
+      /*  if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
 
             if(!Contact_name.isEmpty())
             {
@@ -89,10 +135,6 @@ public class CallReciver extends BroadcastReceiver {
         {
 
         */
-
         }
 
-
-
-    }
 }
