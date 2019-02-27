@@ -2,6 +2,8 @@ package com.maiajam.calljots.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,11 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maiajam.calljots.R;
-import com.maiajam.calljots.data.local.db.dbhandler;
-import com.maiajam.calljots.data.model.contact;
+import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
-import com.maiajam.calljots.util.GlobalVariable;
-import com.maiajam.calljots.util.Util;
+import com.maiajam.calljots.ui.activity.MainActivity;
+import com.maiajam.calljots.helper.ReadDataThread;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,15 +31,12 @@ import butterknife.Unbinder;
 public class AddSpecialContactFrag extends Fragment implements View.OnClickListener {
 
 
-    ImageView ContactPhotot_img;
-    Button BussinesCat_img, FamilyCat_img, FriendCat_img;
-    TextView ContNameSpec_txt, ContPhoneSpec_txt, PrimClass_txt;
-    EditText FirstClass_ed, SecClass_ed, CompName_ed, Address_ed;
-    Button AddTo_b;
+
     String img_uri;
     String name, phoneNo;
-    // defult value = 1 which means family catg
+
     int F_clciked, B_clicked, Fr_clicked;
+    // defult value = 1 which means family catg
     int CatType = 1;
     int id;
 
@@ -69,6 +68,10 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
     Button AddToSpecB;
     Unbinder unbinder;
     private int contact_id;
+    private ReadDataThread addThread;
+    private Handler handler;
+    private String CompanyName;
+    private String CompanyAdress;
 
     public AddSpecialContactFrag() {
 
@@ -85,148 +88,114 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.fragments_add_special_contact, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        ContNameSpec_txt.setText(name);
-        ContactPhotot_img.setImageDrawable(HelperMethodes.getBitmapImage(img_uri,getActivity()));
-        ContPhoneSpec_txt.setText(phoneNo);
+        SpecContNameTxt.setText(name);
+        SpecContPhotoImgView.setImageDrawable(HelperMethodes.getBitmapImage(img_uri,getActivity()));
+       SpecContPhoneNoTxt.setText(phoneNo);
+        FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
 
-        FamilyCat_img.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
-
+        AddToSpecB.setOnClickListener(this);
+        BusIconBtn.setOnClickListener(this);
+        FriendIconImg.setOnClickListener(this);
+        FamilyIconBtn.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onClick(View view) {
 
-        if (view == AddTo_b) {
-            if (CatType == 1) {
-
-                // bussiness type
-                FirstClassfication = FirstClass_ed.getText().toString();
-                SecClassification = SecClass_ed.getText().toString();
-                if (TextUtils.isEmpty(FirstClassfication)) {
-                    Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
-                } else if (TextUtils.isEmpty(SecClassification)) {
-                    Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    contact newContact = new contact();
-                    newContact.setName(name);
-                    newContact.setPhoneN0(phoneNo);
-                    newContact.setFirstClassififaction(FirstClassfication);
-                    newContact.setPrimaryClassfication(0);
-                    newContact.setSecClassifaction(SecClassification);
-                    newContact.setImage_uri(img_uri);
-                    newContact.setContactId(contact_id);
-
-                    db.AddContact(newContact);
-                    db.SetIsSpecialContact(id);
-
-                    Intent intent = new Intent(AddSpecialContact.this, MainActivity.class);
-                    intent.putExtra("tab2", 2);
-
-                    startActivity(intent);
-
-                    // to indcate that this contact has been added to speacail contact table
-                    GlobalVariable.Specialcontact_v = 1;
-
-                }
-
-
-            } else if (CatType == 2) {
-                FirstClassfication = FirstClass_ed.getText().toString();
-                SecClassification = SecClass_ed.getText().toString();
-
-                if (TextUtils.isEmpty(FirstClassfication)) {
-                    Toast.makeText(getBaseContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
-                } else {
-                    contact newContact = new contact();
-                    newContact.setName(name);
-                    newContact.setPhoneN0(phoneNo);
-                    newContact.setFirstClassififaction(FirstClassfication);
-                    newContact.setPrimaryClassfication(CatType);
-                    newContact.setSecClassifaction(SecClassification);
-                    newContact.setImage_uri(img_uri);
-
-                    db.AddContact(newContact);
-                    db.close();
-                    // to indcate that this contact has been added to speacail contact table
-                    GlobalVariable.Specialcontact_v = 1;
-                    finish();
-
-
-                    // Intent intent = new Intent(AddSpecialContact.this,MainActivity.class);
-                    Intent intent = new Intent(AddSpecialContact.this, MainActivity.class);
-                    intent.putExtra("tab2", 2);
-
-                    startActivity(intent);
-
-                }
-            } else if (CatType == 3) {
-
-                if (TextUtils.isEmpty(FirstClassfication)) {
-                    Toast.makeText(getBaseContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
-                } else {
-                    contact newContact = new contact();
-                    newContact.setName(name);
-                    newContact.setPhoneN0(phoneNo);
-                    newContact.setFirstClassififaction(FirstClassfication);
-                    newContact.setPrimaryClassfication(CatType);
-                    newContact.setSecClassifaction(SecClassification);
-                    newContact.setImage_uri(img_uri);
-                    db.AddContact(newContact);
-                    // to indcate that this contact has been added to speacail contact table
-                    GlobalVariable.Specialcontact_v = 1;
-                    db.close();
-                    finish();
-                    Intent intent = new Intent(AddSpecialContact.this, MainActivity.class);
-                    intent.putExtra("tab2", 2);
-
-                    startActivity(intent);
-
-                }
+        if (view == AddToSpecB) {
+            FirstClassfication = FirstClassifcationEd.getText().toString();
+            SecClassification = SecClassifcationEd.getText().toString();
+            if (TextUtils.isEmpty(FirstClassfication)) {
+                Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
+                return;
             }
+            if (TextUtils.isEmpty(FirstClassfication)) {
+                Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
+                return;
+            }
+            SpecialContactInfo newContact = new SpecialContactInfo();
+            newContact.setContactName(name);
+            newContact.setContactPhoneNumber(phoneNo);
+            newContact.setContFirstClassf(FirstClassfication);
+            newContact.setContPrimaryClassf(CatType);
+            newContact.setContSecClassF(SecClassification);
+            newContact.setContactPhotoUri(img_uri);
+            newContact.setContId(contact_id);
+            if (CatType == 3) {
 
-        } else if (view == BussinesCat_img) {
+                CompanyName = CompanyNameEd.getText().toString();
+                CompanyAdress = AddressEd.getText().toString();
+
+                if (TextUtils.isEmpty(CompanyAdress)) {
+                    Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(CompanyName)) {
+                    Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                newContact.setContCompanyName(CompanyName);
+                newContact.setContAddress(CompanyAdress);
+
+            }
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if (Message.obtain() != null) {
+                        if (msg.arg1 == 1) {
+                            Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
+                            // return back to the specail contact tab
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.putExtra("tab2", 2);
+                            startActivity(intent);
+                        }
+                    }
+                    super.handleMessage(msg);
+                }
+            };
+            addThread = new ReadDataThread(handler, getContext(), Constant.ADD_TO_SPECIAL_CONTACT, null);
+            addThread.setSpecialContactInfo(newContact);
+            addThread.start();
+
+
+        } else if (view == BusIconBtn) {
             B_clicked = 1;
-            CatType = 1;
-            CompName_ed.setVisibility(View.VISIBLE);
-            Address_ed.setVisibility(View.VISIBLE);
-
-
-            FamilyCat_img.setBackground(getDrawable(R.drawable.border));
-            BussinesCat_img.setBackground(getDrawable(R.drawable.clcikedborder));
-            FriendCat_img.setBackground(getDrawable(R.drawable.border));
-
-
-        } else if (view == FamilyCat_img) {
-            CatType = 2;
-            CompName_ed.setVisibility(View.GONE);
-            Address_ed.setVisibility(View.GONE);
-
-            FamilyCat_img.setBackground(getDrawable(R.drawable.clcikedborder));
-            BussinesCat_img.setBackground(getDrawable(R.drawable.border));
-            FriendCat_img.setBackground(getDrawable(R.drawable.border));
-
-
-        } else if (view == FriendCat_img) {
             CatType = 3;
-            CompName_ed.setVisibility(View.GONE);
-            Address_ed.setVisibility(View.GONE);
+            CompanyNameEd.setVisibility(View.VISIBLE);
+            AddressEd.setVisibility(View.VISIBLE);
+            FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            BusIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
+            FriendIconImg.setBackground(getResources().getDrawable(R.drawable.border));
 
-            FamilyCat_img.setBackground(getDrawable(R.drawable.border));
-            BussinesCat_img.setBackground(getDrawable(R.drawable.border));
-            FriendCat_img.setBackground(getDrawable(R.drawable.clcikedborder));
-
-
+        } else if (view == FamilyIconBtn) {
+            CatType = 1;
+            CompanyNameEd.setVisibility(View.GONE);
+            AddressEd.setVisibility(View.GONE);
+            FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
+            BusIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            FriendIconImg.setBackground(getResources().getDrawable(R.drawable.border));
+        } else if (view == FriendIconImg) {
+            CatType = 2;
+            CompanyNameEd.setVisibility(View.GONE);
+            AddressEd.setVisibility(View.GONE);
+            FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            BusIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            FriendIconImg.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
         }
-
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void setcontactInfo(String Name, String FirstPhone, String imagePath) {
+
+        name = Name;
+        phoneNo = FirstPhone;
+        img_uri = imagePath ;
+
     }
 }

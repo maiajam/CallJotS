@@ -15,7 +15,7 @@ public class AllPhoneContact {
     private String contPhoneNo;
     private int contIsSpec;
     private String contactPhotoUri;
-    private String contPrimaryClassf;
+    private int contPrimaryClassf;
     private String contFirstClassf;
     private String contSecClassF;
     private String contAddress;
@@ -73,7 +73,7 @@ public class AllPhoneContact {
         this.contFirstClassf = contFirstClassf;
     }
 
-    public void setContPrimaryClassf(String contPrimaryClassf) {
+    public void setContPrimaryClassf(int contPrimaryClassf) {
         this.contPrimaryClassf = contPrimaryClassf;
     }
 
@@ -112,7 +112,7 @@ public class AllPhoneContact {
         return contSecClassF;
     }
 
-    public String getContPrimaryClassf() {
+    public int getContPrimaryClassf() {
         return contPrimaryClassf;
     }
 

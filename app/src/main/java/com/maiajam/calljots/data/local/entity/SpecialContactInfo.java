@@ -12,7 +12,7 @@ public class SpecialContactInfo {
 
     private String contactName;
     private String contactPhoneNumber;
-    private String contPrimaryClassf;
+    private int contPrimaryClassf;
     private String contFirstClassf;
     private String contSecClassF;
     private String contAddress;
@@ -24,7 +24,7 @@ public class SpecialContactInfo {
 
     }
 
-    public SpecialContactInfo(String contactName, String contactPhoneNumber, String contPrimaryClassf, String contFirstClassf, String contSecClassF, String contAddress, String contCompanyName, String contactPhotoUri) {
+    public SpecialContactInfo(String contactName, String contactPhoneNumber, int contPrimaryClassf, String contFirstClassf, String contSecClassF, String contAddress, String contCompanyName, String contactPhotoUri) {
         this.contactName = contactName;
         this.contactPhoneNumber = contactPhoneNumber;
         this.contPrimaryClassf = contPrimaryClassf;
@@ -47,7 +47,7 @@ public class SpecialContactInfo {
         this.contactPhoneNumber = contactPhoneNumber;
     }
 
-    public void setContPrimaryClassf(String contPrimaryClassf) {
+    public void setContPrimaryClassf(int contPrimaryClassf) {
         this.contPrimaryClassf = contPrimaryClassf;
     }
 
@@ -93,7 +93,7 @@ public class SpecialContactInfo {
         return contFirstClassf;
     }
 
-    public String getContPrimaryClassf() {
+    public int getContPrimaryClassf() {
         return contPrimaryClassf;
     }
 

@@ -1,23 +1,18 @@
 package com.maiajam.calljots.util;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
-import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.ReadDataThread;
 
 /**
  * Created by maiAjam on 7/10/2018.

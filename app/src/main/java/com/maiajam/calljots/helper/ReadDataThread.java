@@ -1,14 +1,13 @@
-package com.maiajam.calljots.util;
+package com.maiajam.calljots.helper;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
-import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
+import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
-import com.maiajam.calljots.helper.Constant;
 
 ;import java.util.List;
 
@@ -22,6 +21,7 @@ public class ReadDataThread extends Thread {
     AllPhoneContact contact ;
     private List<AllPhoneContact> Spec_contactList;
     private List<AllPhoneContact> All_Contact;
+    private SpecialContactInfo Special_contact;
 
     public ReadDataThread(Handler h, Context context,int Type,String name) {
         mhandler = h;
@@ -51,10 +51,26 @@ public class ReadDataThread extends Thread {
                 All_Contact = roomDao.getAllPhoneContact();
                 message.obj = All_Contact ;
                 break;
+            case Constant.ADD_NEW_CONTACT:
+                roomDao.AddPhoneContacts(contact);
+                // added successfully
+                message.arg1 = 1;
+                break;
+            case Constant.ADD_TO_SPECIAL_CONTACT:
+                roomDao.AddContact(Special_contact);
+                // added successfully
+                message.arg1 = 1 ;
+                break;
         }
         mhandler.sendMessage(message);
         }
 
 
-
+    public void setContactInfo(AllPhoneContact newcontact) {
+        contact = newcontact ;
     }
+
+    public void setSpecialContactInfo(SpecialContactInfo contactInfo) {
+        Special_contact = contactInfo;
+    }
+}

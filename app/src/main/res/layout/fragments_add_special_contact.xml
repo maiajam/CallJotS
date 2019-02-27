@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.NewContact">
+    tools:context=".ui.fragment.NewContact">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:fontFamily="@font/bold"
-            android:text="@string/ch"/>
+            android:text="@string/chosePrim"/>
 
         <LinearLayout
             android:layout_marginRight="20dp"

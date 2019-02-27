@@ -71,4 +71,8 @@
     <string name="Name">Please enter the name</string>
     <string name="phone">please enter the first phone</string>
     <string name="Contact_Id">contact_Id</string>
+    <string name="AddDone">your contact is addedly</string>
+    <string name="NameExtra">Name</string>
+    <string name="imageUrl">imageUrl</string>
+    <string name="FirstPhone">PhoneNo</string>
 </resources>

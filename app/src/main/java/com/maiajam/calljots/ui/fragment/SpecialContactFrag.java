@@ -1,6 +1,5 @@
 package com.maiajam.calljots.ui.fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,12 +17,10 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.SpecailConAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
-import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.util.ReadDataThread;
+import com.maiajam.calljots.helper.ReadDataThread;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

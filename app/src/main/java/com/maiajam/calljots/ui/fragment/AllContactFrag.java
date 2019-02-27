@@ -20,7 +20,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +31,9 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.util.NewContactObserver;
-import com.maiajam.calljots.util.ReadDataThread;
+import com.maiajam.calljots.helper.ReadDataThread;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -134,7 +134,7 @@ public class AllContactFrag extends Fragment {
             @Override
             public void onClick(View view) {
 
-            //    startActivity(new Intent(getActivity(), NewContact.class));
+             startActivity(new Intent(getActivity(), MainNewContactActivity.class));
             }
         });
         return view;
@@ -191,6 +191,7 @@ public class AllContactFrag extends Fragment {
 
             CeckChphoneList = new ArrayList<>();
             phoneList = new ArrayList<>();
+            phoneContactsList = new ArrayList<>();
 
             if (Cr_phonesNo.moveToFirst()) {
                 do {

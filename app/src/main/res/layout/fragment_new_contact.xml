@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activty.NewContact">
+    tools:context=".ui.activity.MainNewContactActivity">
 
     <ImageView
         android:layout_marginRight="25dp"
@@ -18,14 +18,13 @@
         android:src="@drawable/conphoto" />
 
     <EditText
-
-
         android:layout_marginRight="25dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/typename"
+        android:fontFamily="@font/regulaer"
         android:id="@+id/ContactName_newContact_ed"
         android:textCursorDrawable="@drawable/conphoto"/>
 
@@ -38,6 +37,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/typeFirstPhone"
         android:id="@+id/ContactFirstPhone_newContact_ed"
+        android:fontFamily="@font/regulaer"
         android:textCursorDrawable="@drawable/conphoto"/>
 
     <EditText
@@ -47,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/typeSecPhone"
+        android:fontFamily="@font/regulaer"
         android:id="@+id/ContactSecPhone_newContact_ed"
         android:textCursorDrawable="@drawable/conphoto"/>
 
@@ -57,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/typeEmail"
+        android:fontFamily="@font/regulaer"
         android:id="@+id/ContactEmail_newContact_ed"
         android:textCursorDrawable="@drawable/conphoto"/>
 
@@ -78,6 +80,7 @@
         android:layout_width="match_parent"
         android:id="@+id/AddasSpec_NewContact_b"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/semibold"
         android:background="@color/colorPrimary"
         android:text="@string/Addcont"/>
 </LinearLayout>

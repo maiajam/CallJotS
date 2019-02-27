@@ -1,9 +1,11 @@
 package com.maiajam.calljots.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.ui.activity.MainNewContactActivity;
+import com.maiajam.calljots.ui.fragment.AddSpecialContactFrag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,6 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
     {
         con = context ;
         ListCont = List ;
-
     }
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -90,15 +93,11 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
         holder.AddToIcon_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  /*
-                    Intent intent = new Intent(con, AddSpecialContact.class);
-                    intent.putExtra("name",name);
-                    intent.putExtra("phoneNo",phoneNo);
-                    intent.putExtra("id",id);
-                    intent.putExtra("image_uri",contact.getContactPhotoUri());
-                    intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
-                    con.startActivity(intent);
-                    */
+                AddSpecialContactFrag f = new AddSpecialContactFrag();
+               con.startActivity(new Intent(con,MainNewContactActivity.class)
+                       .putExtra(con.getResources().getString(R.string.NameExtra),name)
+                       .putExtra(con.getResources().getString(R.string.FirstPhone),phoneNo)
+                       .putExtra(con.getResources().getString(R.string.imageUrl),contact.getContactPhotoUri()));
             }
         });
 
