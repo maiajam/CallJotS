@@ -61,6 +61,12 @@ public class ReadDataThread extends Thread {
                 // added successfully
                 message.arg1 = 1 ;
                 break;
+            case Constant.GET_CONTACT_NOTES:
+                message.obj = roomDao.getAllContactsNotes();
+                break;
+            case Constant.GET_ALL_NOTES:
+                message.obj = roomDao.getAllNote();
+                break;
         }
         mhandler.sendMessage(message);
         }

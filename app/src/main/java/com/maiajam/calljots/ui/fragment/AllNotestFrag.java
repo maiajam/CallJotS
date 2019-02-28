@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,12 @@ import android.widget.TextView;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.AllNotesAdapter;
+import com.maiajam.calljots.adapter.ContNotesAdapter;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.ReadDataThread;
 
 import java.util.ArrayList;
 
@@ -33,8 +37,10 @@ import butterknife.Unbinder;
 public class AllNotestFrag extends Fragment {
 
 
+    private String Name ;
     ArrayList<ContactNoteEnitiy> Allnote;
-    AllNotesAdapter adapter;
+    AllNotesAdapter allNoteadapter;
+    ContNotesAdapter contNotesAdapter;
     @BindView(R.id.ContNote_Rec)
     RecyclerView ContNoteRec;
     @BindView(R.id.NoPermission_txt)
@@ -44,15 +50,16 @@ public class AllNotestFrag extends Fragment {
     Unbinder unbinder;
     private RoomManger roomManger;
     private Handler handler;
+    private int ContactNoteIndecator;
+    private ReadDataThread readThread;
+    private ContactNoteEnitiy allNotes;
 
     public void AllNotesFrag() {
 
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -63,31 +70,44 @@ public class AllNotestFrag extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         Allnote = new ArrayList<>();
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                roomManger = RoomManger.getInstance(getActivity());
-                RoomDao roomDao = roomManger.roomDao();
-                Allnote = (ArrayList<ContactNoteEnitiy>) roomDao.getAllContactsNotes();
-                adapter = new AllNotesAdapter(getContext(), Allnote);
-                handler.sendEmptyMessage(0);
-            }
-        });
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-
-                if (adapter != null) {
-                    ContNoteRec.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        ContNoteRec.setLayoutManager(layoutManager);
+            handler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+                    if(Message.obtain()!= null)
+                    {
+                        if(msg.obj != null )
+                        {
+                            allNotes = (ContactNoteEnitiy) msg.obj;
+                            if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
+                            {
+                                contNotesAdapter = new ContNotesAdapter(getContext(), Allnote,0);
+                                ContNoteRec.setAdapter(contNotesAdapter);
+                                contNotesAdapter.notifyDataSetChanged();
+                            }else
+                            {
+                                allNoteadapter = new AllNotesAdapter(getContext(), Allnote);
+                                ContNoteRec.setAdapter(allNoteadapter);
+                               allNoteadapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                    super.handleMessage(msg);
                 }
-                super.handleMessage(msg);
-            }
-        };
+            };
 
+        if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
+        {
+            // view the contact notes
+            readThread = new ReadDataThread(handler,getContext(),Constant.GET_CONTACT_NOTES,Name);
+        }else {
+            // view all the notes for all contact
+            readThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_NOTES,Name);
+        }
+        readThread.start();
         return view;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -97,6 +117,12 @@ public class AllNotestFrag extends Fragment {
 
     @OnClick(R.id.addNewNote_fab)
     public void onViewClicked() {
+    }
+
+    public void SetFromWhere(String name)
+    {
+        ContactNoteIndecator = Constant.ONE_CONTACT_NOTE;
+        Name = name ;
     }
 }
 
