@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.CallLogAdapter;
-import com.maiajam.calljots.data.model.CalLog;
+import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.util.Constant;
-import com.maiajam.calljots.util.PermissionsUtils;
-import com.maiajam.calljots.util.Util;
-
+import com.maiajam.calljots.helper.HelperMethodes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +28,13 @@ public class CallLogFrag extends Fragment {
     int PhoneNo ;
     RecyclerView callog_Rec;
     CallLogAdapter callLogAdapter;
-    List<CalLog> lisLog ;
+    List<ContactLogs> lisLog ;
     CallLogAdapter adapter ;
     TextView noPermesioin_txt;
     private Cursor cursor;
     private LinearLayoutManager Laymang;
     private int Contact_Id;
     private String Contact_Number;
-
 
     public CallLogFrag() {
     }
@@ -60,15 +56,17 @@ public class CallLogFrag extends Fragment {
         Contact_Id = getArguments().getInt(getString(R.string.Contact_Id));
         Contact_Number = getArguments().getString("phoneNo");
 
-        if(!PermissionsUtils.isCallLogPermissionsGranted(getActivity()))
+      if(ActivityCompat.checkSelfPermission(getActivity(),
+              Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS) ==
+                        PackageManager.PERMISSION_GRANTED)
         {
+
             requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG},
                     Constant.RequestCodeCallLog);
         }else {
-
             lisLog = new ArrayList<>();
-            lisLog =  Util.getCallLogsList(getActivity(),Contact_Id,Contact_Number);
-
+            lisLog = HelperMethodes.getCallLogsList(getActivity(),Contact_Id,Contact_Number);
             if(lisLog == null || lisLog.isEmpty())
             {
                 noPermesioin_txt.setVisibility(View.VISIBLE);
@@ -83,9 +81,6 @@ public class CallLogFrag extends Fragment {
         }
         return v ;
     }
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -102,9 +97,8 @@ public class CallLogFrag extends Fragment {
             }
             if (allgranted) {
                 // permission was granted 🙂
-
-                ArrayList<CalLog> callLogArrayList = new ArrayList<>();
-               callLogArrayList = Util.getCallLogsList(getActivity(),Contact_Id,Contact_Number);
+                ArrayList<ContactLogs> callLogArrayList = new ArrayList<>();
+               callLogArrayList = (ArrayList<ContactLogs>) HelperMethodes.getCallLogsList(getActivity(),Contact_Id,Contact_Number);
                 if (callLogArrayList != null) {
                     // app has permissions and we get call logs
                     callLogAdapter = new CallLogAdapter(getActivity(),callLogArrayList);
@@ -114,5 +108,4 @@ public class CallLogFrag extends Fragment {
             }
         }
     }
-
 }

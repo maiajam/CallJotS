@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
+import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
@@ -22,6 +23,9 @@ public class ReadDataThread extends Thread {
     private List<AllPhoneContact> Spec_contactList;
     private List<AllPhoneContact> All_Contact;
     private SpecialContactInfo Special_contact;
+    private List<ContactNoteEnitiy> allContactNote;
+    private ContactNoteEnitiy oneNote;
+    private int NoteId;
 
     public ReadDataThread(Handler h, Context context,int Type,String name) {
         mhandler = h;
@@ -62,11 +66,27 @@ public class ReadDataThread extends Thread {
                 message.arg1 = 1 ;
                 break;
             case Constant.GET_CONTACT_NOTES:
-                message.obj = roomDao.getAllContactsNotes();
+                allContactNote = roomDao.getAllContactsNotes();
+                message.obj =  allContactNote ;
                 break;
             case Constant.GET_ALL_NOTES:
-                message.obj = roomDao.getAllNote();
+                allContactNote = roomDao.getAllNote();
+                message.obj =  allContactNote ;
                 break;
+            case Constant.GET_NOTE_BY_ID:
+                oneNote =roomDao.getnoteById(NoteId);
+                message.obj = oneNote ;
+                break;
+            case Constant.ADD_NEW_NOTE:
+                roomDao.insert(oneNote);
+                message.arg1 = 1 ;
+                break;
+             case Constant.UPDATE_NOTE:
+                 roomDao.update(oneNote);
+                 message.arg1 = 1;
+                 break;
+
+
         }
         mhandler.sendMessage(message);
         }
@@ -78,5 +98,12 @@ public class ReadDataThread extends Thread {
 
     public void setSpecialContactInfo(SpecialContactInfo contactInfo) {
         Special_contact = contactInfo;
+    }
+    public void setNoteId(int noteId) {
+        NoteId = noteId;
+    }
+
+    public void setNote(ContactNoteEnitiy oneNote) {
+        this.oneNote = oneNote;
     }
 }

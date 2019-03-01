@@ -25,9 +25,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.activity.welcome"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,7 +33,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.ContactNotes"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.NewNoteActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <receiver android:name=".util.CallReciver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />

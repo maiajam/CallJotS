@@ -75,4 +75,6 @@
     <string name="NameExtra">Name</string>
     <string name="imageUrl">imageUrl</string>
     <string name="FirstPhone">PhoneNo</string>
+    <string name="NoteAdded">the Note has been adde succefully</string>
+    <string name="phoneNoExtra">phoneNo</string>
 </resources>

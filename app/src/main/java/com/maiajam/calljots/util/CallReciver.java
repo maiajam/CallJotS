@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
@@ -28,9 +29,10 @@ public class CallReciver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-
+        Toast.makeText(context,"work done",Toast.LENGTH_LONG).show();
 
         // recived call info
+        /*
        final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
        final String Contact_name = HelperMethodes.getContactName(NOCont, context);
@@ -49,11 +51,11 @@ public class CallReciver extends BroadcastReceiver {
             }
         });
 
-        */
-        h = new Handler() {
+
+//        h = new Handler() {
 
             @Override
-            public void handleMessage(Message msg) {
+        //    public void handleMessage(Message msg) {
 
                 if(Message.obtain() != null)
                 {
@@ -130,6 +132,7 @@ public class CallReciver extends BroadcastReceiver {
         {
 
         */
+
         }
 
 }

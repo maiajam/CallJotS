@@ -14,6 +14,8 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
 import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.ui.activity.ContactNotes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,14 +56,14 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                 @Override
                 public void onClick(View view) {
 
-                    /*
+
                     Intent intent = new Intent(con, ContactNotes.class);
                     intent.putExtra("name",name);
                     intent.putExtra("phoneNo",phoneNo);
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
                     con.startActivity(intent);
-                    */
+
                 }
             });
 

@@ -10,9 +10,11 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -24,9 +26,12 @@ import android.widget.TextView;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
+import com.maiajam.calljots.data.model.ContactLogs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
@@ -157,6 +162,65 @@ public class HelperMethodes {
         editor.putString("Name", contact_name);
         editor.putString("phoneNumber", (noCont));
         editor.commit();
+
+    }
+
+    public static List<ContactLogs> getCallLogsList(FragmentActivity activity, int contact_id, String contact_number) {
+
+
+        ArrayList<ContactLogs> list_Log = new ArrayList<>();
+        String Numer = contact_number.replaceAll("\\D+","");
+        Cursor calls = null;
+        Cursor contact = activity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,
+                ContactsContract.Contacts._ID + "=?", new String[]{String.valueOf(contact_id)}, null, null);
+
+        if (contact != null && contact.moveToNext()) {
+            String lookupKey = contact.getString(contact.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+            int contactId = contact.getInt(contact.getColumnIndex(ContactsContract.Contacts._ID));
+            calls = activity.getContentResolver().query(CallLog.Calls.CONTENT_URI
+                    , null
+                    , null
+                    , null
+                    , CallLog.Calls.DATE + " DESC");
+            int number = calls.getColumnIndex(CallLog.Calls.NUMBER);
+            int duration1 = calls.getColumnIndex(CallLog.Calls.DURATION);
+            int type1 = calls.getColumnIndex(CallLog.Calls.TYPE);
+            int date1 = calls.getColumnIndex(CallLog.Calls.DATE);
+
+            if (calls.moveToFirst() == true) {
+
+                do {
+                    String phNumber = calls.getString(number);
+                    String callDuration1 = calls.getString(duration1);
+                    String typeCallLog = calls.getString(type1);
+                    String dateCallLog = calls.getString(date1);
+                    String dir = null;
+                    int dircode = Integer.parseInt(typeCallLog);
+                    switch (dircode) {
+                        case CallLog.Calls.OUTGOING_TYPE:
+                            dir = "OUTGOING";
+                            break;
+                        case CallLog.Calls.INCOMING_TYPE:
+                            dir = "INCOMING";
+                            break;
+                        case CallLog.Calls.MISSED_TYPE:
+                            dir = "MISSED";
+                            break;
+                        default:
+                            dir = "MISSED";
+                            break;
+                    }
+
+                    if(Numer.equals(String.valueOf(phNumber)))
+                    {
+                        ContactLogs log = new ContactLogs(callDuration1, dateCallLog, dir);
+                        list_Log.add(log);
+                    }
+                } while (calls.moveToNext());
+            }
+        }
+        return list_Log ;
+
 
     }
 }

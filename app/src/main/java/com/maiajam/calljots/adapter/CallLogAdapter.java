@@ -1,6 +1,7 @@
 package com.maiajam.calljots.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.maiajam.calljots.R;
-import com.maiajam.calljots.data.local.db.dbhandler;
-import com.maiajam.calljots.data.model.CalLog;
+import com.maiajam.calljots.data.model.ContactLogs;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.Holder> 
 
 
     Context con;
-    List<CalLog> ListCallLog;
+    List<ContactLogs> ListCallLog;
     Holder holder;
     String NoteTitle,Note,Name;
     int Type,Id,stuts ;
@@ -33,7 +33,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.Holder> 
 
 
 
-   public CallLogAdapter(Context context, List<CalLog> List)
+   public CallLogAdapter(Context context, List<ContactLogs> List)
     {
         con = context ;
         ListCallLog = List ;
@@ -41,14 +41,14 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.Holder> 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.calllog_row,null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_calllog,null);
         return new Holder(v);
     }
 
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
 
-        CalLog calLog = ListCallLog.get(position);
+        ContactLogs calLog = ListCallLog.get(position);
 
         String date = new SimpleDateFormat("dd/MM/YY").format(new Date(Long.parseLong(calLog.getDate())));
         String Time = new SimpleDateFormat("hh:mm a").format(new Date(Long.parseLong(calLog.getDate())));
@@ -61,19 +61,31 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.Holder> 
 
         if(dir.equals("OUTGOING"))
         {
-            holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.income_call));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.income_call));
+            }else
+            {
+                holder.callType_img.setImageDrawable(con.getResources().getDrawable(R.drawable.income_call));
+            }
         }else if (   dir.equals("INCOMING") )
         {
-            holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.out));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.out));
+            }else
+            {
+                holder.callType_img.setImageDrawable(con.getResources().getDrawable(R.drawable.out));
+            }
 
         }else if (dir.equals("MISSED"))
         {
-            holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.missed));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.missed));
+            }else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.missed));
+                }
+            }
         }
-
-
-
-
     }
 
     @Override

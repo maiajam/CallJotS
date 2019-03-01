@@ -1,5 +1,6 @@
 package com.maiajam.calljots.ui.fragment;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,9 +23,14 @@ import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.ui.activity.NewNoteActivity;
+import com.maiajam.calljots.util.workmanger.myworker;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,7 +58,8 @@ public class AllNotestFrag extends Fragment {
     private Handler handler;
     private int ContactNoteIndecator;
     private ReadDataThread readThread;
-    private ContactNoteEnitiy allNotes;
+    private List<ContactNoteEnitiy> allNotes;
+    private String PhoneNo;
 
     public void AllNotesFrag() {
 
@@ -79,7 +86,7 @@ public class AllNotestFrag extends Fragment {
                     {
                         if(msg.obj != null )
                         {
-                            allNotes = (ContactNoteEnitiy) msg.obj;
+                            allNotes = (List<ContactNoteEnitiy>) msg.obj;
                             if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
                             {
                                 contNotesAdapter = new ContNotesAdapter(getContext(), Allnote,0);
@@ -114,15 +121,28 @@ public class AllNotestFrag extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
     @OnClick(R.id.addNewNote_fab)
     public void onViewClicked() {
+        if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
+        {
+            //add new note for a specail contact
+            startActivity(new Intent(getActivity(),NewNoteActivity.class)
+                    .putExtra(getString(R.string.NameExtra),Name)
+                    .putExtra(getString(R.string.phoneNoExtra),PhoneNo));
+        }else {
+            //add new personal note for the user
+            WorkManager workManager = WorkManager.getInstance();
+            OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(myworker.class).build();
+            workManager.enqueue(oneTimeWorkRequest);
+           // startActivity(new Intent(getActivity(),NewNoteActivity.class));
+        }
     }
 
-    public void SetFromWhere(String name)
+    public void SetFromWhere(String name,String phoneNo)
     {
         ContactNoteIndecator = Constant.ONE_CONTACT_NOTE;
         Name = name ;
+        PhoneNo = phoneNo ;
     }
 }
 

@@ -37,4 +37,9 @@ dependencies {
     //ButterKnife Dependency
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    //work manger dependency
+    implementation "android.arch.work:work-runtime:1.0.0-alpha02"
+
+
 }
