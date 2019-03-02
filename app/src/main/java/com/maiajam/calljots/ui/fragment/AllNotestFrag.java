@@ -1,7 +1,6 @@
 package com.maiajam.calljots.ui.fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,18 +18,14 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.AllNotesAdapter;
 import com.maiajam.calljots.adapter.ContNotesAdapter;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
-import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
-import com.maiajam.calljots.util.workmanger.myworker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -131,10 +126,7 @@ public class AllNotestFrag extends Fragment {
                     .putExtra(getString(R.string.phoneNoExtra),PhoneNo));
         }else {
             //add new personal note for the user
-            WorkManager workManager = WorkManager.getInstance();
-            OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(myworker.class).build();
-            workManager.enqueue(oneTimeWorkRequest);
-           // startActivity(new Intent(getActivity(),NewNoteActivity.class));
+            startActivity(new Intent(getActivity(),NewNoteActivity.class));
         }
     }
 

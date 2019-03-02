@@ -1,7 +1,9 @@
 package com.maiajam.calljots.ui.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -18,16 +20,23 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.ui.fragment.AllContactFrag;
 import com.maiajam.calljots.util.CallServiceForGround;
+import com.maiajam.calljots.util.workmanger.MyWorker;
+
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 
 public class welcome extends AppCompatActivity implements View.OnClickListener {
 
 
+    private static OneTimeWorkRequest CallRevicerRequest ;
     TextView welcom_text,start_txt;
     ImageView start_img;
     private int OVERLAY_PERMISSION_CODE = 100;
     Intent i ;
     private int READ_PHONE_STATE = 5;
+    SharedPreferences sp ;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +47,23 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
         start_txt = (TextView) findViewById(R.id.txtStart);
         start_img = (ImageView) findViewById(R.id.img_start);
 
-
         start_img.setOnClickListener(this);
         i = new Intent(getBaseContext(), CallServiceForGround.class);
 
+       sp = getBaseContext().getSharedPreferences("MyFirstVisit", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
+        if(sp.getBoolean("first",false))
+        {
+           startActivity(new Intent(welcome.this,MainActivity.class));
+        }else
+        {
+
+            editor.putBoolean("first", true);
+            editor.commit();
+            editor.apply();
+            CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
+        }
 
     }
 
@@ -52,12 +74,34 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (Settings.canDrawOverlays(getBaseContext())) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE);
+                    } else {
+                        WorkManager.getInstance().enqueue(CallRevicerRequest);
+                        startActivity(new Intent(welcome.this,MainActivity.class));
+                    }
+                } else {
+
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(intent, OVERLAY_PERMISSION_CODE);
+                    return;
+                }
+            }else {
+                WorkManager.getInstance().enqueue(CallRevicerRequest);
+                startActivity(new Intent(welcome.this,MainActivity.class));
+            }
+
+            /*
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Settings.canDrawOverlays(getBaseContext())) {
                     if (ContextCompat.checkSelfPermission(this,  Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE);
                     }else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             getBaseContext().startForegroundService(i);
-                            startActivity(new Intent(welcome.this,MainActivity.class));
+
                         }else
                         {
                             startActivity(new Intent(welcome.this,MainActivity.class));
@@ -75,6 +119,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
 
                 startActivity(new Intent(welcome.this,MainActivity.class));
             }
+            */
 
         }
 
@@ -88,14 +133,8 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (Settings.canDrawOverlays(this)) {
 
-                    Intent i = new Intent(getBaseContext(),CallServiceForGround.class);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        getBaseContext().startForegroundService(i);
-                        startActivity(new Intent(welcome.this,MainActivity.class));
-                    }else
-                    {
-                        startActivity(new Intent(welcome.this,MainActivity.class));
-                    }
+                    WorkManager.getInstance().enqueue(CallRevicerRequest);
+                    startActivity(new Intent(welcome.this,MainActivity.class));
                 }
             }
         }
@@ -106,19 +145,14 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
       switch (requestCode) {
 
           case 5:
-              // If request is cancelled, the result arrays are empty.
+              // If request is accepted, the result arrays not empty.
               if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
               {
-                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                      getBaseContext().startForegroundService(i);
-                      startActivity(new Intent(welcome.this,MainActivity.class));
-                  }else
-                  {
-                      startService(i);
-                      startActivity(new Intent(welcome.this,MainActivity.class));
-                      }
+                  WorkManager.getInstance().enqueue(CallRevicerRequest);
+                  startActivity(new Intent(welcome.this,MainActivity.class));
               } else {
-
+                    // the request is canceled then should show RequestPermissionRationale
+                 ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_PHONE_STATE);
 
               }
               return;

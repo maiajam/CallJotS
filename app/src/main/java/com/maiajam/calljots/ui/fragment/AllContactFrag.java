@@ -115,7 +115,7 @@ public class AllContactFrag extends Fragment {
 
         } else {
 
-            editor.putBoolean("first", true);
+            editor.putBoolean("first", false);
             editor.commit();
             editor.apply();
             if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {

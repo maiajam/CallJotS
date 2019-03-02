@@ -56,7 +56,6 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                 @Override
                 public void onClick(View view) {
 
-
                     Intent intent = new Intent(con, ContactNotes.class);
                     intent.putExtra("name",name);
                     intent.putExtra("phoneNo",phoneNo);

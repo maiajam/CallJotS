@@ -1,6 +1,8 @@
 package com.maiajam.calljots.helper;
 
 public interface Constant {
+
+    // thread cases constant
     int GET_CONTACTINFO_BY_NAME = 10;
     int GET_ALL_SPECIAL_CONTACT = 20;
     int GET_ALL_PHONE_CONTACT = 30;
@@ -11,6 +13,8 @@ public interface Constant {
     int GET_NOTE_BY_ID = 80;
     int ADD_NEW_NOTE = 90 ;
     int UPDATE_NOTE = 100;
+    int CHECK_IS_SPECIAL_CONTACT = 110 ;
+
 
     // permsion request
     int RequestCodeCallLog = 5 ;

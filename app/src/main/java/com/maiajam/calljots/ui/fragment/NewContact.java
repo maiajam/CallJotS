@@ -29,6 +29,7 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 
@@ -191,6 +192,7 @@ public class NewContact extends Fragment{
                             Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
                             AddToPhoneContact();
                             HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(), f, R.id.frame_newContact);
+
                         }
                     }
                     super.handleMessage(msg);
@@ -205,6 +207,10 @@ public class NewContact extends Fragment{
                         if (msg.obj != null) {
                             Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
                             AddToPhoneContact();
+                            // return back to the specail contact tab
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.putExtra("tab2", 1);
+                            startActivity(intent);
                         }
                     }
                     super.handleMessage(msg);

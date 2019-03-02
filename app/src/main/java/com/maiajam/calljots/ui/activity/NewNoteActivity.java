@@ -25,10 +25,17 @@ import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.util.workmanger.ReminerSchudleWorker;
+
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 public class NewNoteActivity extends AppCompatActivity {
 
@@ -47,6 +54,8 @@ public class NewNoteActivity extends AppCompatActivity {
     private ReadDataThread myReadThread;
     private Handler getNotehandler;
     private ReadDataThread getNoteThread;
+
+    private OneTimeWorkRequest OneTimeReq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +80,7 @@ public class NewNoteActivity extends AppCompatActivity {
         ContactPhoto =(ImageView)findViewById(R.id.conPhonto_NewNote_img);
         NoteTitle_ed =(EditText)findViewById(R.id.NoteTitle_newNote_ed);
         Note_ed =(EditText)findViewById(R.id.Note_newNote_ed);
+
         if(Name == null)
         {
             ContactName_txt.setVisibility(View.GONE);
@@ -148,6 +158,7 @@ public class NewNoteActivity extends AppCompatActivity {
             case R.id.action_Reminder :
                 RemindeMe = true ;
                 ShowDatePicker();
+                remindeMe(3);
                 break;
         }
         return true ;
@@ -193,13 +204,16 @@ public class NewNoteActivity extends AppCompatActivity {
             Mycalendar.set(Calendar.MINUTE,min);
         }
     };
-    private void Reminde(int Req) {
+    private void remindeMe(int time) {
+
+        OneTimeReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
+                .setInitialDelay(time,TimeUnit.MILLISECONDS)
+                .build();
+        WorkManager.getInstance().enqueue(OneTimeReq);
+        
     }
 
-
-
-
-
+    
     private void AddNote() throws ParseException {
             {
                 noteTitle = NoteTitle_ed.getText().toString();
@@ -233,7 +247,7 @@ public class NewNoteActivity extends AppCompatActivity {
                         if (NoteFrag == 1) {
                         // update the note
                                      if (RemindeMe) {
-                                         Reminde(((int) Calendar.getInstance().getTimeInMillis()));
+                                         remindeMe(((int) Calendar.getInstance().getTimeInMillis()));
                                         }
                                         contact_obj.setContact_Name(Name);
                                         contact_obj.setId(Id);

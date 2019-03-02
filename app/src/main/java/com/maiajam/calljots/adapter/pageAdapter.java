@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.maiajam.calljots.R;
+import com.maiajam.calljots.ui.fragment.AllNotestFrag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +41,13 @@ public class pageAdapter extends FragmentPagerAdapter {
         Fragment f = new Fragment();
         switch (position){
             case 0 :
-                f = new Fragment();
+                f = new AllNotestFrag();
                 Bundle bundle = new Bundle();
                 bundle.putString("name",Name);
                 bundle.putString("phoneNo",PhoneNo);
                 bundle.putString("image_uri",Image_uri);
                 bundle.putInt(context.getResources().getString(R.string.Contact_Id),Contact_Id);
+                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo);
                 f = fragmentList.get(position);
                 f.setArguments(bundle);
                 break;

@@ -1,7 +1,11 @@
 package com.maiajam.calljots.helper;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,6 +20,8 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
@@ -27,6 +33,8 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.model.ContactLogs;
+import com.maiajam.calljots.ui.activity.MainNewContactActivity;
+import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -222,5 +230,161 @@ public class HelperMethodes {
         return list_Log ;
 
 
+    }
+
+
+    public static String getContactImage(Context context,String PhoneNumber)
+    {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(PhoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.PHOTO_URI};
+
+        String contactPhoto = "";
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contactPhoto = cursor.getString(0);
+            }
+            cursor.close();
+
+
+        }
+
+        return contactPhoto;
+    }
+
+
+    public  static void CallNotifcation(Context context, int type,String name,String Note,String Actiontitel,String Numer,String imgUrl,int reminerIndecater)
+    {
+        Intent intent ;
+        PendingIntent pendingIntent ;
+        if(type == 1)
+        {
+            // this notifacation to notify the user to add a note for his specail contact
+            intent = new Intent(context, NewNoteActivity.class);
+            intent.putExtra("name",name);
+            intent.putExtra("phoneNo",Numer);
+            intent.putExtra("image_uri",imgUrl);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        }else if (type == 2)
+        {
+            // this notifacation to notify the user to add a new contact for his phone contact
+            intent = new Intent(context, MainNewContactActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        }else
+        {
+            // this notifacation to notify the user to add this contact to a specail contact list
+            intent = new Intent(context, MainNewContactActivity.class);
+            intent.putExtra(context.getResources().getString(R.string.NameExtra),name);
+            intent.putExtra(context.getResources().getString(R.string.FirstPhone),Numer);
+            intent.putExtra(context.getResources().getString(R.string.imageUrl),imgUrl);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence namE = context.getString(R.string.channel_name);
+            String description = context.getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("10", namE, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder ;
+        if(reminerIndecater == 1)
+        {
+             builder = new NotificationCompat.Builder(context,"v")
+                    .setSmallIcon(R.mipmap.logo)
+                    .setContentTitle( name + "Note")
+                    .setContentText(Note)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setCategory(NotificationCompat.CATEGORY_EVENT)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
+                    ;
+
+
+        }else
+        {
+            builder = new NotificationCompat.Builder(context,"v")
+                    .setSmallIcon(R.mipmap.logo)
+                    .setContentTitle(name + "Note")
+                    .setContentText(Note)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setCategory(NotificationCompat.CATEGORY_EVENT)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
+                    ;
+        }
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(1, builder.build());
+    }
+
+
+    public static void enableAddNoteDuringCall(Context context,String contact_name, String phoneNo) {
+
+        int FLAG;
+        if (Build.VERSION.SDK_INT >= 26) {
+
+            FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
+        }
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                FLAG,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.OPAQUE);
+
+        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+
+        ImageView contPhotot_img = (ImageView) v.findViewById(R.id.ContPhotToast_img);
+        ImageView StatusIcon_img = (ImageView) v.findViewById(R.id.status_img);
+
+        TextView ConName_txt = (TextView)v.findViewById(R.id.ContNameToa_txt);
+        TextView ConNo_txt = (TextView)v.findViewById(R.id.ContPhoNoToast_txt);
+        TextView FirsClass_txt = (TextView)v.findViewById(R.id.ContFirstClassi_txt);
+        TextView SecClass_txt = (TextView)v.findViewById(R.id.ContSecClass_txt);
+        TextView NoteTitle_txt = (TextView)v.findViewById(R.id.NoteTitle_Toast_txt);
+        TextView Status_txt = (TextView)v.findViewById(R.id.status_txt);
+        TextView CatTypeToa_txt =(TextView)v.findViewById(R.id.CatTypeToa_txt);
+
+        contPhotot_img.setImageDrawable(getBitmapImage(contact.getContactPhotoUri(),context));
+
+        // Add layout to window manager
+        wm.addView(v, params);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    sleep(1*1000);
+
+                    wm.removeView(v);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        thread.start();
     }
 }

@@ -85,7 +85,9 @@ public class ReadDataThread extends Thread {
                  roomDao.update(oneNote);
                  message.arg1 = 1;
                  break;
-
+              case Constant.CHECK_IS_SPECIAL_CONTACT:
+                  message.arg1 = roomDao.CheckIsSpec(mName);
+                  break;
 
         }
         mhandler.sendMessage(message);

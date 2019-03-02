@@ -9,7 +9,7 @@ import com.maiajam.calljots.util.CallReciver;
 
 import androidx.work.Worker;
 
-public class myworker extends Worker {
+public class MyWorker extends Worker {
 
     CallReciver reciver = new CallReciver();
     IntentFilter iNtent =  new IntentFilter("android.intent.action.PHONE_STATE");;
