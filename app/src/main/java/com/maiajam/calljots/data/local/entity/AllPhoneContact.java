@@ -1,8 +1,11 @@
 package com.maiajam.calljots.data.local.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.Nullable;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "AllPhoneContact")
 public class AllPhoneContact {
@@ -20,10 +23,9 @@ public class AllPhoneContact {
     private String contSecClassF;
     private String contAddress;
     private String contCompanyName;
+
     public AllPhoneContact() {
-
     }
-
     public AllPhoneContact(int contId, String contName, String contPhoneNo, int contIsSpec, String contactPhotoUri) {
         this.contId = contId;
         this.contName = contName;

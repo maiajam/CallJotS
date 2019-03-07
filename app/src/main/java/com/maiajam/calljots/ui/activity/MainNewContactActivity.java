@@ -1,5 +1,6 @@
 package com.maiajam.calljots.ui.activity;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,6 +12,8 @@ import com.maiajam.calljots.ui.fragment.NewContact;
 public class MainNewContactActivity extends AppCompatActivity {
 
     private String Name,FirstPhone,imagePath;
+    NewContact newContactFrg = new NewContact();
+    private int contactId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,17 +24,23 @@ public class MainNewContactActivity extends AppCompatActivity {
         if(extra!= null)
         {
             // add one of the phone contact to speail contact
-            Name = extra.getString(getString(R.string.NameExtra));
-            FirstPhone =  extra.getString(getString(R.string.FirstPhone));
+            Name = extra.getString("name");
+            FirstPhone =  extra.getString("phoneNo");
             imagePath = extra.getString(getString(R.string.imageUrl));
+            contactId = extra.getInt(getString(R.string.Contact_Id));
             final AddSpecialContactFrag f = new AddSpecialContactFrag();
-            f.setcontactInfo(Name, FirstPhone, imagePath);
-            HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),new NewContact(),R.id.frame_newContact);
+            f.setcontactInfo(Name, FirstPhone, imagePath,contactId);
+            HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
         }else
         {
             //add new contact
             HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),new NewContact(),R.id.frame_newContact);
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        newContactFrg.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

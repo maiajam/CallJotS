@@ -61,7 +61,7 @@ public class ContactNotes extends AppCompatActivity {
         ContactPhNo_txt.setText(PhoneNo);
 
         pageAdapter adapter = new pageAdapter(getSupportFragmentManager());
-        adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,Contact_Id);
+        adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,Contact_Id,Constant.ONE_CONTACT_NOTE,Constant.ONE_CONTACT_NOTE);
         adapter.AddFragment(new AllNotestFrag(), "Notes");
         adapter.AddFragment(callLogFrag, "Call Loge");
 

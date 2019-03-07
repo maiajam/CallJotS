@@ -53,16 +53,17 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
        sp = getBaseContext().getSharedPreferences("MyFirstVisit", Context.MODE_PRIVATE);
         editor = sp.edit();
 
-        if(sp.getBoolean("first",false))
+        if(sp.getBoolean("firstWelcome",true))
         {
-           startActivity(new Intent(welcome.this,MainActivity.class));
-        }else
-        {
-
-            editor.putBoolean("first", true);
+            // this is the first time visit the app
+            editor.putBoolean("firstWelcome", false);
             editor.commit();
             editor.apply();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
+
+        }else
+        {
+            startActivity(new Intent(welcome.this,MainActivity.class));
         }
 
     }
@@ -132,9 +133,13 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
         if (requestCode == OVERLAY_PERMISSION_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (Settings.canDrawOverlays(this)) {
-
-                    WorkManager.getInstance().enqueue(CallRevicerRequest);
-                    startActivity(new Intent(welcome.this,MainActivity.class));
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE);
+                    } else {
+                        WorkManager.getInstance().enqueue(CallRevicerRequest);
+                        startActivity(new Intent(welcome.this,MainActivity.class));
+                    }
                 }
             }
         }

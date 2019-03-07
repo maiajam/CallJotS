@@ -16,8 +16,6 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.SpecailConAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
-import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
-import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.ReadDataThread;
 
@@ -34,8 +32,6 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
     SpecailConAdapter adapter ;
     TextView txtNoItem,txtWelcome;
     List<AllPhoneContact> Spec_contactList;
-    List<SpecialContactInfo> searchList;
-    private RoomManger roomManger;
     ReadDataThread readDataThread ;
     Handler handler ;
     public void SpecialContactFrag()

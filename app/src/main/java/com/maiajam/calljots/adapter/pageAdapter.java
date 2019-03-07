@@ -15,6 +15,7 @@ import java.util.List;
 
 public class pageAdapter extends FragmentPagerAdapter {
 
+    private  int Indicator ;
     List<Fragment> fragmentList = new ArrayList<>();
     List<String> fragmentListTitle = new ArrayList<>();
     private String Name;
@@ -26,13 +27,14 @@ public class pageAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
-    public void setContactInfo(Context con,String name, String phoneNo, String image_uri, int contact_Id)
+    public void setContactInfo(Context con, String name, String phoneNo, String image_uri, int contact_Id, int oneContactNote, int indicator)
     {
      context = con ;
      Name = name ;
      PhoneNo = phoneNo ;
      Image_uri = image_uri ;
      Contact_Id = contact_Id ;
+     Indicator = indicator ;
     }
 
     @Override
@@ -47,8 +49,7 @@ public class pageAdapter extends FragmentPagerAdapter {
                 bundle.putString("phoneNo",PhoneNo);
                 bundle.putString("image_uri",Image_uri);
                 bundle.putInt(context.getResources().getString(R.string.Contact_Id),Contact_Id);
-                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo);
-                f = fragmentList.get(position);
+                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri);
                 f.setArguments(bundle);
                 break;
             case 1 :

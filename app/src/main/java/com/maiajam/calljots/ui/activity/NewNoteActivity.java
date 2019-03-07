@@ -65,8 +65,8 @@ public class NewNoteActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if (extra != null)
         {
-            Name = extra.getString("name");
-            PhoneNo = extra.getString("phoneNo");
+            Name = extra.getString(getString(R.string.NameExtra));
+            PhoneNo = extra.getString(getString(R.string.phoneNoExtra));
             Id = extra.getInt("id");
             NoteFrag = extra.getInt("NoteFragment");
             Image_Uri = extra.getString("image_uri");
@@ -81,12 +81,36 @@ public class NewNoteActivity extends AppCompatActivity {
         NoteTitle_ed =(EditText)findViewById(R.id.NoteTitle_newNote_ed);
         Note_ed =(EditText)findViewById(R.id.Note_newNote_ed);
 
+        contact_obj = new ContactNoteEnitiy();
+        if(NoteFrag == 1)
+        {
+
+            // indicate that this activivty have been opend to update the note
+            getNotehandler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+                    if(Message.obtain()!= null)
+                    {
+                        if(msg.obj != null)
+                        {
+                            contact_obj = (ContactNoteEnitiy) msg.obj;
+                            NoteTitle_ed.setText(contact_obj.getContact_NoteTitle().toString());
+                            Note_ed.setText(contact_obj.getContact_Note().toString());
+                        }
+                    }
+                    super.handleMessage(msg);
+                }
+            };
+
+            getNoteThread = new ReadDataThread(getNotehandler,getBaseContext(),Constant.GET_NOTE_BY_ID,null);
+            getNoteThread.setNoteId(Id);
+            getNoteThread.start();
+        }
         if(Name == null)
         {
             ContactName_txt.setVisibility(View.GONE);
             ContactPhone_txt.setVisibility(View.GONE);
             ContactPhoto.setVisibility(View.GONE);
-
         }else
         {
             if(Name.equals("Personal")){
@@ -100,28 +124,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 ContactPhone_txt.setText(PhoneNo);
                 ContactPhoto.setImageDrawable(HelperMethodes.getBitmapImage(Image_Uri,getBaseContext()));
             }
-            if(NoteFrag == 1)
-            {
-                // indicate that this activivty have been opend to update the note
-                getNotehandler = new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        if(Message.obtain()!= null)
-                        {
-                            if(msg.obj != null)
-                            {
-                                contact_obj = (ContactNoteEnitiy) msg.obj;
-                            }
-                        }
-                        super.handleMessage(msg);
-                    }
-                };
-                contact_obj = new ContactNoteEnitiy();
-                getNoteThread = new ReadDataThread(handler,getBaseContext(),Constant.GET_NOTE_BY_ID,null);
-                getNoteThread.start();
-                NoteTitle_ed.setText(contact_obj.getContact_NoteTitle().toString());
-                Note_ed.setText(contact_obj.getContact_Note().toString());
-            }
+
         }
     }
     @Override
@@ -148,12 +151,13 @@ public class NewNoteActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), getString(R.string.EnterNote), Toast.LENGTH_LONG).show();
                         } else {
                             AddNote();
+                            finish();
                         }
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                finish();
+
                 break;
             case R.id.action_Reminder :
                 RemindeMe = true ;
@@ -166,13 +170,12 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private void ShowDatePicker() {
 
-        DatePickerDialog picker =  new DatePickerDialog(getBaseContext(),setDate,Calendar.YEAR,Calendar.MONTH,Calendar.DAY_OF_MONTH);
+        DatePickerDialog picker =  new DatePickerDialog(NewNoteActivity.this,setDate,Calendar.YEAR,Calendar.MONTH,Calendar.DAY_OF_MONTH);
 
         picker.setButton(DialogInterface.BUTTON_POSITIVE, "Set Time", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
-                new TimePickerDialog(getBaseContext(),setTime,Calendar.HOUR_OF_DAY,Calendar.MINUTE,true).show();
+                new TimePickerDialog(NewNoteActivity.this,setTime,Calendar.HOUR_OF_DAY,Calendar.MINUTE,true).show();
             }
         });
 
@@ -222,6 +225,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 contact_obj = new ContactNoteEnitiy();
                 contact_obj.setContact_Note(Note);
                 contact_obj.setContact_NoteTitle(noteTitle);
+                contact_obj.setId(Id);
                 current_date = current_Calender.getTime();
                 contact_obj.setContact_LastCallTime(current_date);
 
@@ -239,6 +243,38 @@ public class NewNoteActivity extends AppCompatActivity {
                         super.handleMessage(msg);
                     }
                 };
+                if(NoteFrag == 1)
+                {// update the note
+                    if (RemindeMe) {
+                        remindeMe(((int) Calendar.getInstance().getTimeInMillis()));
+                    }
+                    if(Name == null)
+                    { // means this is a personal note not contact note and this page open from All notes page
+                        contact_obj.setContact_Name("Personal");
+                        Name = "Personal";
+                    }else {
+                        contact_obj.setContact_Name(Name);
+                        contact_obj.setId(Id);
+                    }
+                    myReadThread = new ReadDataThread(handler,getBaseContext(),Constant.UPDATE_NOTE_BY_ID,Name);
+                    myReadThread.setNoteId(Id);
+                    myReadThread.setNote(contact_obj);
+                    myReadThread.start();
+                    if(Name.equals("Personal"))
+                    {
+                        finish();
+                    }else
+                    {
+                        // after update the note return back to contact note activity
+                        Intent intent = new Intent(NewNoteActivity.this, ContactNotes.class);
+                        intent.putExtra("tab", 0);
+                        intent.putExtra("name", Name);
+                        String phoneNo = HelperMethodes.getContactInfo(getBaseContext()).getContPhoneNo();
+                        intent.putExtra("phoneNo", phoneNo);
+                        intent.putExtra("image_uri", Image_Uri);
+                        startActivity(intent);
+                    }
+                }
                 if(Name == null)
                 { // means this is a personal note not contact note and this page open from All notes page
                     contact_obj.setContact_Name("Personal");
@@ -246,30 +282,12 @@ public class NewNoteActivity extends AppCompatActivity {
 
                         if (NoteFrag == 1) {
                         // update the note
-                                     if (RemindeMe) {
-                                         remindeMe(((int) Calendar.getInstance().getTimeInMillis()));
-                                        }
-                                        contact_obj.setContact_Name(Name);
-                                        contact_obj.setId(Id);
-                                        myReadThread = new ReadDataThread(handler,getBaseContext(),Constant.UPDATE_NOTE,Name);
-                                        myReadThread.start();
-                                          if(Name.equals("Personal"))
-                                             {
-                                                finish();
-                                            }else
-                                            {
-                                                // after update the note return back to contact note activity
-                                                Intent intent = new Intent(NewNoteActivity.this, ContactNotes.class);
-                                                intent.putExtra("tab", 0);
-                                                intent.putExtra("name", Name);
-                                                intent.putExtra("phoneNo", PhoneNo);
-                                                intent.putExtra("image_uri", Image_Uri);
-                                                startActivity(intent);
-                                            }
+
                         } else {
                                 // add new note for specail contact
                             contact_obj.setContact_Name(Name);
                                 myReadThread = new ReadDataThread(handler,getBaseContext(),Constant.ADD_NEW_NOTE,Name);
+                                myReadThread.setNote(contact_obj);
                                 myReadThread.start();
                                 Intent intent = new Intent(NewNoteActivity.this, ContactNotes.class);
                                 intent.putExtra("tab", 0);

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,12 +15,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,8 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.SwipeContrlloerActions;
+import com.maiajam.calljots.helper.SwipeControler;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.util.NewContactObserver;
 import com.maiajam.calljots.helper.ReadDataThread;
@@ -60,6 +65,7 @@ public class AllContactFrag extends Fragment {
     private RoomManger roomManger;
     private Handler handler;
     private ReadDataThread myThread;
+    private SwipeControler swipeControler;
 
 
     public void AllContactFrag() {
@@ -82,23 +88,61 @@ public class AllContactFrag extends Fragment {
         SharedPreferences.Editor editor = sp.edit();
         //   editor.putInt("first",1);
         // editor.commit();
+        swipeControler = new SwipeControler(new SwipeContrlloerActions() {
+            @Override
+            public void onLeftClicked(int position) {
+
+            }
+
+            @Override
+            public void onRightClicked(int position) {
+                //ACTION CALL
+            }
+        });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeControler);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        if (sp.getBoolean("first", false)) {
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+              swipeControler.onDraw();
+            }
+        });
+
+
+        if (sp.getBoolean("first", true)) {
+            // this is the first time visit this page at the app
+            editor.putBoolean("first", false);
+            editor.commit();
+            editor.apply();
+            if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS},
+                        10);
+            } else {
+                Cr_phonesNo = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                loadPhone = new LoadPhone();
+            }
+            if (Cr_phonesNo != null) {
+                loadPhone.execute();
+            }
+
+        } else {
+
             NewContactObserver observer = new NewContactObserver(new Handler(), getContext());
             getContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
-          AsyncTask.execute(new Runnable() {
-              @Override
-              public void run() {
-                  roomManger = RoomManger.getInstance(getActivity());
-                  RoomDao roomDao = roomManger.roomDao();
-                  allPhoneContact = roomDao.getAllPhoneContact();
-                  allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    roomManger = RoomManger.getInstance(getActivity());
+                    RoomDao roomDao = roomManger.roomDao();
+                    allPhoneContact = roomDao.getAllPhoneContact();
+                    allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
 
                     handler.sendEmptyMessage(0);
-              }
-          });
+                }
+            });
 
             handler = new Handler(){
                 @Override
@@ -113,21 +157,6 @@ public class AllContactFrag extends Fragment {
                 }
             };
 
-        } else {
-
-            editor.putBoolean("first", false);
-            editor.commit();
-            editor.apply();
-            if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS},
-                        10);
-            } else {
-                Cr_phonesNo = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                loadPhone = new LoadPhone();
-            }
-            if (Cr_phonesNo != null) {
-                loadPhone.execute();
-            }
         }
 
         Add_b.setOnClickListener(new View.OnClickListener() {

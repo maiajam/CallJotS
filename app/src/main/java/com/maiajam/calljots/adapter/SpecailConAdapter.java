@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
-import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.ui.activity.ContactNotes;
+import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,17 +57,40 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
             holder.ContName_txt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    HelperMethodes.setContactNameInfo(con,name,phoneNo,contact.getContactPhotoUri(),contact.getContId());
                     Intent intent = new Intent(con, ContactNotes.class);
                     intent.putExtra("name",name);
                     intent.putExtra("phoneNo",phoneNo);
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
                     con.startActivity(intent);
-
                 }
             });
+            holder.lin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HelperMethodes.setContactNameInfo(con,name,phoneNo,contact.getContactPhotoUri(),contact.getContId());
+                    Intent intent = new Intent(con, ContactNotes.class);
+                    intent.putExtra("name",name);
+                    intent.putExtra("phoneNo",phoneNo);
+                    intent.putExtra("image_uri",contact.getContactPhotoUri());
+                    intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
+                    intent.putExtra(con.getResources().getString(R.string.Indecator),Constant.ONE_CONTACT_NOTE);
+                    con.startActivity(intent);
+                }
+            });
+            holder.AddToIcon_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                    Intent intent = new Intent(con, NewNoteActivity.class);
+                    intent.putExtra("name",name);
+                    intent.putExtra("phoneNo",phoneNo);
+                    intent.putExtra("image_uri",contact.getContactPhotoUri());
+                    intent.putExtra("id",contact.getContId());
+                    con.startActivity(intent);
+                }
+            });
             if(contact.getContactPhotoUri()!= null)
             {
                 holder.ContPhoto_img.setImageDrawable( HelperMethodes.getBitmapImage(contact.getContactPhotoUri(),con));
@@ -90,6 +115,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
 
         ImageView ContPhoto_img,PhoneIcon_img,AddToIcon_image;
         TextView ContName_txt,ContPhone_txt;
+        LinearLayout lin;
 
         public Holder(View itemView) {
             super(itemView);
@@ -98,6 +124,9 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
 
             ContPhoto_img =(ImageView)itemView.findViewById(R.id.ContPhoto_imgView);
             AddToIcon_image =(ImageView)itemView.findViewById(R.id.AddToSpec_img);
+
+            lin = (LinearLayout)itemView.findViewById(R.id.Allconiiitem_Lin);
+
         }
     }
 }

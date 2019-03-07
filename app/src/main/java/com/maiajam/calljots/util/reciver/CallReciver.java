@@ -1,4 +1,4 @@
-package com.maiajam.calljots.util;
+package com.maiajam.calljots.util.reciver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,9 +17,11 @@ import android.widget.Toast;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.util.history;
 
 /**
  * Created by maiAjam on 7/10/2018.
@@ -27,7 +29,7 @@ import com.maiajam.calljots.helper.ReadDataThread;
 
 public class CallReciver extends BroadcastReceiver {
 
-    private AllPhoneContact contact;
+    private DialerInfoAndNote contactNoteAndInfo;
     RoomManger roomManger;
 
     RoomDao roomDao ;
@@ -40,7 +42,6 @@ public class CallReciver extends BroadcastReceiver {
         Toast.makeText(context,"work done",Toast.LENGTH_LONG).show();
 
         // recived call info
-
        final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
        final String Contact_name = HelperMethodes.getContactName(NOCont, context);
@@ -54,15 +55,14 @@ public class CallReciver extends BroadcastReceiver {
                 public void handleMessage(Message msg) {
 
                     if (Message.obtain() != null) {
-                        contact = (AllPhoneContact) msg.obj;
+                        contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                         if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-
                             if (!Contact_name.isEmpty()) {
-                                if (contact.getContIsSpec() == 1) {
+                                if (contactNoteAndInfo.getContIsSpec() == 1) {
                                     // this contact is a special contact
-                                    HelperMethodes.drawContactInfo(context, contact);
+                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
                                 } else {
-                                    HelperMethodes.drawContactInfo(context, contact);
+                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
                                 }
                             }
                         }else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
@@ -71,7 +71,7 @@ public class CallReciver extends BroadcastReceiver {
                                     true, (ContentObserver) history);
                         }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
-                            HelperMethodes.enableAddNoteDuringCall(Contact_name,null);
+                            HelperMethodes.enableAddNoteDuringCall(context,null,null);
                          }
                         super.handleMessage(msg);
                     }

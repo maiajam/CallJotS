@@ -14,13 +14,21 @@ public interface Constant {
     int ADD_NEW_NOTE = 90 ;
     int UPDATE_NOTE = 100;
     int CHECK_IS_SPECIAL_CONTACT = 110 ;
+    int UPDATE_NOTE_BY_ID = 120;
+    int DELETE_NOTE_BY_time = 130 ;
+    int UPDATE_NOTE_IS_DONE = 140;
 
 
     // permsion request
     int RequestCodeCallLog = 5 ;
+    int REQUEST_CODE_READ_WRITE = 15;
 
     // else
     int ONE_CONTACT_NOTE = 200;
+    int GET_LAST_CONTACT_NOTES = 150 ;
+
+
+    ;
 
 
     ;

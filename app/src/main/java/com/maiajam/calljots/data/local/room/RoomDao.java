@@ -8,8 +8,10 @@ import android.arch.persistence.room.Update;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
-import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
+import com.maiajam.calljots.data.model.DialerInfoAndNote;
 
+
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -30,43 +32,40 @@ public interface RoomDao {
     @Insert
     public void insert(ContactNoteEnitiy contactNoteEnitiy);
 
-    @Update
-    public void update(ContactNoteEnitiy contactNoteEnitiy);
-
     @Delete
     public void delete(ContactNoteEnitiy contactNoteEnitiy);
 
-    @Query("SELECT * FROM ContactNote")
+    @Query("SELECT * FROM ContactNoteEnitiy")
     public List<ContactNoteEnitiy> getAllNote();
 
-    @Query("DELETE FROM ContactNote  WHERE Contact_LastCallTime = :Contact_LastCallTime")
-    public void deleteNote(String Contact_LastCallTime);
+    @Query("DELETE FROM ContactNoteEnitiy  WHERE Contact_LastCallTime = :Contact_LastCallTime")
+    public void deleteNote(Date Contact_LastCallTime);
 
-    @Query("UPDATE ContactNote SET Contact_NoteStuts = 1 WHERE id = :id")
-    public void updateNoteByID(int id);
+    @Query("UPDATE ContactNoteEnitiy SET Contact_NoteTitle = :title AND Contact_Note = :Note WHERE id = :id")
+    public void updateNoteByID(int id,String title,String Note);
 
-    @Query("SELECT * FROM ContactNote WHERE id = :Id")
+    @Query("UPDATE ContactNoteEnitiy SET Contact_NoteStuts = 1 WHERE id = :id")
+    public void updateDoneNoteByID(int id);
+
+    @Query("SELECT * FROM ContactNoteEnitiy WHERE id = :Id")
     public ContactNoteEnitiy getnoteById(int Id);
 
-    @Query("SELECT *  FROM  ContactNote WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id LIMIT 1  ")
+    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id LIMIT 1  ")
     public ContactNoteEnitiy getLastNote(String name);
 
-    @Query("SELECT *  FROM  ContactNote WHERE  Contact_Name = :name AND Contact_NoteTitle = :NoteTitle ")
+    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name AND Contact_NoteTitle = :NoteTitle ")
     public ContactNoteEnitiy ViewNote(String name, String NoteTitle);
 
-    @Query("UPDATE ContactNote SET Contact_NoteStuts = 1 WHERE id = :id ")
-    public void NoteIsDone(int id);
-
-    @Query("SELECT *  FROM  ContactNote ")
+    @Query("SELECT *  FROM  ContactNoteEnitiy ")
     public List<ContactNoteEnitiy> getAllContactsNotes();
 
-    @Insert
-    public void AddContact(SpecialContactInfo contact);
+    @Query("UPDATE AllPhoneContact SET contIsSpec = 1 WHERE id = :id")
+    public void AddContact(int id);
 
     @Query("SELECT * FROM AllPhoneContact WHERE contIsSpec = 1")
     public List<AllPhoneContact> getAllSpecContact();
 
-    @Query("SELECT * FROM AllPhoneContact WHERE contName = :Name ")
-    public AllPhoneContact getContactInfoByName(String Name);
+    @Query("SELECT AllPhoneContact.*,ContactNoteEnitiy.* FROM AllPhoneContact INNER JOIN ContactNoteEnitiy ON AllPhoneContact.contName = ContactNoteEnitiy.Contact_Name WHERE contName = :Name ")
+    public DialerInfoAndNote getContactInfoByName(String Name);
 
 }

@@ -55,6 +55,7 @@ public class AllNotestFrag extends Fragment {
     private ReadDataThread readThread;
     private List<ContactNoteEnitiy> allNotes;
     private String PhoneNo;
+    private String ImageUrl;
 
     public void AllNotesFrag() {
 
@@ -84,12 +85,12 @@ public class AllNotestFrag extends Fragment {
                             allNotes = (List<ContactNoteEnitiy>) msg.obj;
                             if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
                             {
-                                contNotesAdapter = new ContNotesAdapter(getContext(), Allnote,0);
+                                contNotesAdapter = new ContNotesAdapter(getContext(), allNotes,0);
                                 ContNoteRec.setAdapter(contNotesAdapter);
                                 contNotesAdapter.notifyDataSetChanged();
                             }else
                             {
-                                allNoteadapter = new AllNotesAdapter(getContext(), Allnote);
+                                allNoteadapter = new AllNotesAdapter(getContext(), (ArrayList<ContactNoteEnitiy>) allNotes);
                                 ContNoteRec.setAdapter(allNoteadapter);
                                allNoteadapter.notifyDataSetChanged();
                             }
@@ -123,18 +124,22 @@ public class AllNotestFrag extends Fragment {
             //add new note for a specail contact
             startActivity(new Intent(getActivity(),NewNoteActivity.class)
                     .putExtra(getString(R.string.NameExtra),Name)
-                    .putExtra(getString(R.string.phoneNoExtra),PhoneNo));
+                    .putExtra(getString(R.string.phoneNoExtra),PhoneNo)
+                    .putExtra("ImageUrl",ImageUrl));
         }else {
             //add new personal note for the user
             startActivity(new Intent(getActivity(),NewNoteActivity.class));
         }
     }
 
-    public void SetFromWhere(String name,String phoneNo)
+    public void SetFromWhere(String name,String phoneNo,String imageUrl)
     {
         ContactNoteIndecator = Constant.ONE_CONTACT_NOTE;
         Name = name ;
         PhoneNo = phoneNo ;
+        ImageUrl = imageUrl ;
     }
+
+
 }
 

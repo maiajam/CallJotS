@@ -1,12 +1,20 @@
 package com.maiajam.calljots.data.local.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.Nullable;
 
 import java.util.Date;
 
-@Entity(tableName = "ContactNote")
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+
+@Entity(foreignKeys = @ForeignKey(entity = AllPhoneContact.class,
+        parentColumns = "Id",
+        childColumns = "Id",
+        onDelete = CASCADE))
 public class ContactNoteEnitiy {
 
     @PrimaryKey(autoGenerate = true)
@@ -61,6 +69,7 @@ public class ContactNoteEnitiy {
     }
 
     //getter
+
 
 
     @Nullable

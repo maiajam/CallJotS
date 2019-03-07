@@ -1,11 +1,10 @@
 package com.maiajam.calljots.util.workmanger;
 
-import android.content.Context;
 import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.maiajam.calljots.util.CallReciver;
+import com.maiajam.calljots.util.reciver.CallReciver;
 
 import androidx.work.Worker;
 

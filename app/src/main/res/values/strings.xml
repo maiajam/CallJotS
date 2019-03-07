@@ -77,4 +77,6 @@
     <string name="FirstPhone">PhoneNo</string>
     <string name="NoteAdded">the Note has been adde succefully</string>
     <string name="phoneNoExtra">phoneNo</string>
+    <string name="Indecator">ContactInd</string>
+    <string name="Contact_Info">conactInfo</string>
 </resources>

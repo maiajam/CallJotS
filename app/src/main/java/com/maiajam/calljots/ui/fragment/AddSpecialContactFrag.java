@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maiajam.calljots.R;
-import com.maiajam.calljots.data.local.entity.SpecialContactInfo;
+import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.ui.activity.MainActivity;
@@ -29,8 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class AddSpecialContactFrag extends Fragment implements View.OnClickListener {
-
-
 
     String img_uri;
     String name, phoneNo;
@@ -114,9 +112,9 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
                 Toast.makeText(getContext(), "Please Enter the First Classifaction for This Contact", Toast.LENGTH_LONG).show();
                 return;
             }
-            SpecialContactInfo newContact = new SpecialContactInfo();
-            newContact.setContactName(name);
-            newContact.setContactPhoneNumber(phoneNo);
+            AllPhoneContact newContact = new AllPhoneContact();
+            newContact.setContName(name);
+            newContact.setContPhoneNo(phoneNo);
             newContact.setContFirstClassf(FirstClassfication);
             newContact.setContPrimaryClassf(CatType);
             newContact.setContSecClassF(SecClassification);
@@ -191,9 +189,10 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
         unbinder.unbind();
     }
 
-    public void setcontactInfo(String Name, String FirstPhone, String imagePath) {
+    public void setcontactInfo(String Name, String FirstPhone, String imagePath,int contact_id) {
 
         name = Name;
+        this.contact_id = contact_id ;
         phoneNo = FirstPhone;
         img_uri = imagePath ;
 

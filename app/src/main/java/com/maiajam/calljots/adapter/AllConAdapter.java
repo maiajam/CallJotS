@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,6 +54,7 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
        final String phoneNo = contact.getContPhoneNo();
        int Isspecail = contact.getContIsSpec();
        final int id = contact.getId();
+       final int contactId= contact.getContId();
 
         holder.ContName_txt.setText(name);
         holder.ContPhone_txt.setText(String.valueOf(phoneNo));
@@ -93,14 +95,15 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
         holder.AddToIcon_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddSpecialContactFrag f = new AddSpecialContactFrag();
-               con.startActivity(new Intent(con,MainNewContactActivity.class)
-                       .putExtra(con.getResources().getString(R.string.NameExtra),name)
-                       .putExtra(con.getResources().getString(R.string.FirstPhone),phoneNo)
-                       .putExtra(con.getResources().getString(R.string.imageUrl),contact.getContactPhotoUri()));
+                Intent intent = new Intent(con,MainNewContactActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("phoneNo",phoneNo);
+                intent.putExtra("id",id);
+                intent.putExtra(con.getResources().getString(R.string.imageUrl),contact.getContactPhotoUri());
+                intent.putExtra(con.getResources().getString(R.string.Contact_Id),contactId);
+                con.startActivity(intent);
             }
         });
-
     }
 
     @Override

@@ -42,7 +42,8 @@
         <activity
             android:name=".ui.activity.NewNoteActivity"
             android:theme="@style/AppTheme" />
-        <receiver android:name=".util.CallReciver">
+        <receiver android:name=".util.reciver.CallReciver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>

@@ -2,6 +2,7 @@ package com.maiajam.calljots.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.ReadDataThread;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
     int stuts,Id;
     holder h ;
     private RoomManger roomManger;
+    private Handler handler;
+    private ReadDataThread readDataThreaD;
 
     public AllNotesAdapter(Context context, ArrayList<ContactNoteEnitiy> allNotes)
     {
@@ -88,7 +93,6 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
 
         if(view == h.menuAll_img)
         {
-
             PopupMenu pop = new PopupMenu(context,h.menuAll_img);
             pop.getMenuInflater().inflate(R.menu.menu_pop_note,pop.getMenu());
 
@@ -100,7 +104,7 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                     RoomDao roomDao = roomManger.roomDao();
                     switch (id){
                         case R.id.action_delete :
-                            roomDao.deleteNote(new SimpleDateFormat("ddd dd/MM/YYYY hh:mm a").format(NoteDate).toString());
+                         //   roomDao.deleteNote(new SimpleDateFormat("ddd dd/MM/YYYY hh:mm a").format(NoteDate).toString());
                             AllNotes.remove(h.getAdapterPosition());
                             notifyItemRemoved(h.getAdapterPosition());
                             break;
@@ -114,7 +118,9 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                             break;
                         case R.id.action_markComplete :
                             contactNote.setContact_NoteStuts(1);
-                            roomDao.update(contactNote);
+                            readDataThreaD = new ReadDataThread(handler,context,Constant.UPDATE_NOTE_BY_ID,contactName);
+                            readDataThreaD.start();
+                        //    roomDao.update(contactNote);
                             AllNotes.set(h.getAdapterPosition(),contactNote);
                             notifyItemChanged(h.getAdapterPosition());
                             break;
