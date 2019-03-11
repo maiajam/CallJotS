@@ -28,8 +28,10 @@ public class GetAllPhoneContactThread extends Thread{
     private Cursor Cr_phonesNo;
     private RoomManger roomManger;
 
-    public GetAllPhoneContactThread(Context context) {
+
+    public GetAllPhoneContactThread(Context context,Cursor cursor) {
         mContext = context ;
+        Cr_phonesNo= cursor ;
     }
     @Override
     public void run() {

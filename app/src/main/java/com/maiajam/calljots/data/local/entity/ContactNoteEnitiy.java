@@ -1,8 +1,10 @@
 package com.maiajam.calljots.data.local.entity;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.Nullable;
 
@@ -13,13 +15,17 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(foreignKeys = @ForeignKey(entity = AllPhoneContact.class,
         parentColumns = "Id",
-        childColumns = "Id",
-        onDelete = CASCADE))
+        childColumns = "Note_Parent_Id",
+        onDelete = CASCADE),
+  indices = {@Index(value = "Note_Parent_Id")})
+
 public class ContactNoteEnitiy {
 
     @PrimaryKey(autoGenerate = true)
     private int Id;
 
+    @ColumnInfo(name = "Note_Parent_Id")
+    private int Note_Parent_Id;
     private int Contact_Id;
     private String Contact_Name;
     private String Contact_Note;
@@ -31,7 +37,10 @@ public class ContactNoteEnitiy {
 
     }
 
-    public ContactNoteEnitiy(int contact_Id, String contact_Name, String contact_Note, String contact_NoteTitle, int contact_NoteStuts, Date contact_LastCallTime) {
+    public ContactNoteEnitiy(int id, int note_Parent_Id, int contact_Id, String contact_Name,
+                             String contact_Note, String contact_NoteTitle, int contact_NoteStuts, Date contact_LastCallTime) {
+        Id = id;
+        Note_Parent_Id = note_Parent_Id;
         Contact_Id = contact_Id;
         Contact_Name = contact_Name;
         Contact_Note = contact_Note;
@@ -68,9 +77,16 @@ public class ContactNoteEnitiy {
         Contact_NoteTitle = contact_NoteTitle;
     }
 
+    public void setNote_Parent_Id(int note_Parent_Id) {
+        Note_Parent_Id = note_Parent_Id;
+    }
+
     //getter
 
 
+    public int getNote_Parent_Id() {
+        return Note_Parent_Id;
+    }
 
     @Nullable
     public int getId() {

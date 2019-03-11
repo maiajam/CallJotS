@@ -67,7 +67,7 @@ public class NewNoteActivity extends AppCompatActivity {
         {
             Name = extra.getString(getString(R.string.NameExtra));
             PhoneNo = extra.getString(getString(R.string.phoneNoExtra));
-            Id = extra.getInt("id");
+            Id = extra.getInt("ContId");
             NoteFrag = extra.getInt("NoteFragment");
             Image_Uri = extra.getString("image_uri");
         }
@@ -225,7 +225,8 @@ public class NewNoteActivity extends AppCompatActivity {
                 contact_obj = new ContactNoteEnitiy();
                 contact_obj.setContact_Note(Note);
                 contact_obj.setContact_NoteTitle(noteTitle);
-                contact_obj.setId(Id);
+                contact_obj.setContact_Id(Id);
+                contact_obj.setNote_Parent_Id(Id);
                 current_date = current_Calender.getTime();
                 contact_obj.setContact_LastCallTime(current_date);
 

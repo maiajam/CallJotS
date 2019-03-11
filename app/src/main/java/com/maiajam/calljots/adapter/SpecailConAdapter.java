@@ -50,6 +50,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
             final AllPhoneContact contact = ListCont.get(position);
             final String name = contact.getContName();
             final String phoneNo = contact.getContPhoneNo();
+            final int id = contact.getId();
             holder.ContName_txt.setText(name);
             holder.ContPhone_txt.setText(String.valueOf(phoneNo));
 
@@ -63,6 +64,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra("phoneNo",phoneNo);
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
+                    intent.putExtra("id",id);
                     con.startActivity(intent);
                 }
             });
@@ -75,6 +77,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra("phoneNo",phoneNo);
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
+                    intent.putExtra("id",id);
                     intent.putExtra(con.getResources().getString(R.string.Indecator),Constant.ONE_CONTACT_NOTE);
                     con.startActivity(intent);
                 }
@@ -87,7 +90,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra("name",name);
                     intent.putExtra("phoneNo",phoneNo);
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
-                    intent.putExtra("id",contact.getContId());
+                    intent.putExtra("id",contact.getId());
                     con.startActivity(intent);
                 }
             });

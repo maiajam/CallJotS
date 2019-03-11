@@ -3,6 +3,7 @@ package com.maiajam.calljots.data.local.room;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
@@ -29,7 +30,7 @@ public interface RoomDao {
     @Query("SELECT contIsSpec FROM AllPhoneContact WHERE contName = :name ")
     public int CheckIsSpec(String name);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insert(ContactNoteEnitiy contactNoteEnitiy);
 
     @Delete

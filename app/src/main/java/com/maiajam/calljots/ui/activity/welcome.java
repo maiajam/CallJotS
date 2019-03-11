@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.maiajam.calljots.R;
+import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.ui.fragment.AllContactFrag;
 import com.maiajam.calljots.util.CallServiceForGround;
 import com.maiajam.calljots.util.workmanger.MyWorker;
@@ -61,6 +62,13 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             editor.apply();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
 
+            if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.READ_CONTACTS},
+                        10);
+            } else {
+                // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
+                RoomManger roomManger = RoomManger.getInstance(getBaseContext());
+            }
         }else
         {
             startActivity(new Intent(welcome.this,MainActivity.class));
@@ -158,11 +166,17 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
               } else {
                     // the request is canceled then should show RequestPermissionRationale
                  ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_PHONE_STATE);
-
+              }
+          case 10:
+              if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                  RoomManger roomManger = RoomManger.getInstance(getBaseContext());
+              }else
+              {
+                  ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CONTACTS);
               }
               return;
       }
 
-
     }
+
 }

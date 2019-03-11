@@ -49,7 +49,7 @@ public class pageAdapter extends FragmentPagerAdapter {
                 bundle.putString("phoneNo",PhoneNo);
                 bundle.putString("image_uri",Image_uri);
                 bundle.putInt(context.getResources().getString(R.string.Contact_Id),Contact_Id);
-                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri);
+                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri,Contact_Id);
                 f.setArguments(bundle);
                 break;
             case 1 :

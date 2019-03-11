@@ -56,6 +56,7 @@ public class AllNotestFrag extends Fragment {
     private List<ContactNoteEnitiy> allNotes;
     private String PhoneNo;
     private String ImageUrl;
+    private int contId;
 
     public void AllNotesFrag() {
 
@@ -125,19 +126,23 @@ public class AllNotestFrag extends Fragment {
             startActivity(new Intent(getActivity(),NewNoteActivity.class)
                     .putExtra(getString(R.string.NameExtra),Name)
                     .putExtra(getString(R.string.phoneNoExtra),PhoneNo)
-                    .putExtra("ImageUrl",ImageUrl));
+                    .putExtra("ImageUrl",ImageUrl)
+                    .putExtra("Id",contId))
+                    ;
+
         }else {
             //add new personal note for the user
             startActivity(new Intent(getActivity(),NewNoteActivity.class));
         }
     }
 
-    public void SetFromWhere(String name,String phoneNo,String imageUrl)
+    public void SetFromWhere(String name,String phoneNo,String imageUrl,int ContId)
     {
         ContactNoteIndecator = Constant.ONE_CONTACT_NOTE;
         Name = name ;
         PhoneNo = phoneNo ;
         ImageUrl = imageUrl ;
+        contId = ContId;
     }
 
 

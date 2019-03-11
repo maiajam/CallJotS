@@ -31,6 +31,7 @@ public class ContactNotes extends AppCompatActivity {
 
     CallLogFrag callLogFrag = new CallLogFrag();
     private int Contact_Id;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class ContactNotes extends AppCompatActivity {
             PhoneNo = i.getExtras().getString("phoneNo");
             Image_uri =i.getExtras().getString("image_uri");
             Contact_Id = i.getExtras().getInt(getString(R.string.Contact_Id));
+            id = i.getExtras().getInt("Id");
             tab = i.getExtras().getInt("tab",0);
         }
 
@@ -61,7 +63,7 @@ public class ContactNotes extends AppCompatActivity {
         ContactPhNo_txt.setText(PhoneNo);
 
         pageAdapter adapter = new pageAdapter(getSupportFragmentManager());
-        adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,Contact_Id,Constant.ONE_CONTACT_NOTE,Constant.ONE_CONTACT_NOTE);
+        adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,id,Constant.ONE_CONTACT_NOTE,Constant.ONE_CONTACT_NOTE);
         adapter.AddFragment(new AllNotestFrag(), "Notes");
         adapter.AddFragment(callLogFrag, "Call Loge");
 

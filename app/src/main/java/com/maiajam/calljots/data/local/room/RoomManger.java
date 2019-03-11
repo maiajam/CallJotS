@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
@@ -21,35 +22,33 @@ public abstract class RoomManger extends RoomDatabase {
 
     private static RoomManger roomManger;
     private static Context mcontext;
-
     public abstract RoomDao roomDao();
 
 
     public static RoomManger getInstance(Context context) {
 
-        mcontext = context ;
+        mcontext = context;
         if (roomManger == null) {
             roomManger = Room.databaseBuilder(context.getApplicationContext(), RoomManger.class,
                     "callJots_database")
                     .fallbackToDestructiveMigration()
-                    .addCallback(roomMangerCallBacck)
+                    .addCallback(new RoomManger.Callback() {
+                        @Override
+                        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                            super.onCreate(db);
+                            Cursor Cr_phonesNo = mcontext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null, null, null,
+                                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                            new GetAllPhoneContactThread(mcontext, Cr_phonesNo).start();
+                        }
+
+                        @Override
+                        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                            super.onOpen(db);
+                        }
+                    })
                     .build();
         }
         return roomManger;
     }
-
-    private static RoomManger.Callback roomMangerCallBacck = new RoomManger.Callback(){
-
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-            new GetAllPhoneContactThread(mcontext).start();
-        }
-
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-        }
-    };
-
 }

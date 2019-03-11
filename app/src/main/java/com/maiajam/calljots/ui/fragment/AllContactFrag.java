@@ -56,9 +56,6 @@ public class AllContactFrag extends Fragment {
     public RecyclerView recyclerView;
     public List<AllPhoneContact> phoneList;
     public ArrayList<AllPhoneContact> search_list;
-    ArrayList<String> CeckChphoneList;
-    ArrayList<AllPhoneContact> phoneContactsList;
-    LoadPhone loadPhone = null;
     FloatingActionButton Add_b;
     public AllConAdapter allConAdapter;
     List<AllPhoneContact> allPhoneContact;
@@ -83,11 +80,6 @@ public class AllContactFrag extends Fragment {
         View view = inflater.inflate(R.layout.frag_allcont, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.AllCon_Rec);
         Add_b = (FloatingActionButton) view.findViewById(R.id.addNewContact_fab);
-
-        SharedPreferences sp = getContext().getSharedPreferences("MyFirstVisit", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        //   editor.putInt("first",1);
-        // editor.commit();
         swipeControler = new SwipeControler(new SwipeContrlloerActions() {
             @Override
             public void onLeftClicked(int position) {
@@ -111,25 +103,6 @@ public class AllContactFrag extends Fragment {
             }
         });
 
-
-        if (sp.getBoolean("first", true)) {
-            // this is the first time visit this page at the app
-            editor.putBoolean("first", false);
-            editor.commit();
-            editor.apply();
-            if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.READ_CONTACTS},
-                        10);
-            } else {
-                Cr_phonesNo = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                loadPhone = new LoadPhone();
-            }
-            if (Cr_phonesNo != null) {
-                loadPhone.execute();
-            }
-
-        } else {
-
             NewContactObserver observer = new NewContactObserver(new Handler(), getContext());
             getContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
             AsyncTask.execute(new Runnable() {
@@ -141,7 +114,7 @@ public class AllContactFrag extends Fragment {
                     allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
 
                     handler.sendEmptyMessage(0);
-                }
+                        }
             });
 
             handler = new Handler(){
@@ -157,8 +130,6 @@ public class AllContactFrag extends Fragment {
                 }
             };
 
-        }
-
         Add_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,19 +139,14 @@ public class AllContactFrag extends Fragment {
         });
         return view;
     }
-
-
     @Override
     public void onResume() {
         super.onResume();
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-
                 if(Message.obtain()!= null)
                 {
                     if(msg.obj != null)
@@ -198,117 +164,8 @@ public class AllContactFrag extends Fragment {
                 super.handleMessage(msg);
             }
         };
-
         myThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_PHONE_CONTACT,"");
         myThread.start();
-
     }
-
-    class LoadPhone extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-//            progressBar.setVisibility(View.VISIBLE);
-
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            CeckChphoneList = new ArrayList<>();
-            phoneList = new ArrayList<>();
-            phoneContactsList = new ArrayList<>();
-
-            if (Cr_phonesNo.moveToFirst()) {
-                do {
-
-                    AllPhoneContact Phonecontact = new AllPhoneContact();
-                    int contact_ID = Integer.parseInt(Cr_phonesNo.getString(Cr_phonesNo.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID)));
-                    Phonecontact.setContId(contact_ID);
-                    Phonecontact.setContName(Cr_phonesNo.getString(Cr_phonesNo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)));
-                    Phonecontact.setContactPhotoUri(Cr_phonesNo.getString(Cr_phonesNo.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO_URI)));
-                    Phonecontact.setContPhoneNo(Cr_phonesNo.getString(Cr_phonesNo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                    Bitmap contact_photo = getContactPhoto(Cr_phonesNo.getString(Cr_phonesNo.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO_URI)), contact_ID);
-
-                    if (!CeckChphoneList.contains(Phonecontact.getContName())) {
-                        roomManger = RoomManger.getInstance(getActivity());
-                        RoomDao roomDao = roomManger.roomDao();
-                        roomDao.AddPhoneContacts(Phonecontact);
-                        CeckChphoneList.add(Phonecontact.getContName());
-                        phoneContactsList.add(Phonecontact);
-                    }
-
-                } while (Cr_phonesNo.moveToNext());
-                Cr_phonesNo.close();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            //     progressBar.setVisibility(View.GONE);
-            allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(allConAdapter);
-            allConAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private Bitmap getContactPhoto(String image_Uri, int contact_ID) {
-
-        Bitmap photo = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.conphoto);
-
-        if (image_Uri != null) {
-            try {
-                photo = MediaStore.Images.Media
-                        .getBitmap(getContext().getContentResolver(),
-                                Uri.parse(image_Uri));
-
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return photo;
-
-
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 10: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    Cr_phonesNo = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                    LoadPhone loadPhone;
-                    loadPhone = new LoadPhone();
-                    loadPhone.execute();
-                } else {
-
-
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
-
-
 }
 
