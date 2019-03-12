@@ -15,10 +15,6 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
@@ -29,18 +25,15 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
-import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
@@ -89,63 +82,6 @@ public class HelperMethodes {
         }
         return roundDrawable;
     }
-
-    //
-    public static void drawContactInfo(final Context context, final DialerInfoAndNote contact) {
-
-        int FLAG;
-        if (Build.VERSION.SDK_INT >= 26) {
-
-            FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
-        }
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                PixelFormat.OPAQUE);
-
-        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
-
-        Handler h = new Handler()
-        {
-            @Override
-            public void handleMessage(Message msg) {
-                if(msg.obj != null)
-                {
-                    // fill data in the field
-                    addContentToTheView(context,v, (ContactNoteEnitiy) msg.obj,contact);
-                    wm.addView(v, params);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                sleep(10*1000);
-                                wm.removeView(v);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    thread.start();
-                }
-                super.handleMessage(msg);
-            }
-        };
-        ReadDataThread mythread = new ReadDataThread(h,context,Constant.GET_LAST_CONTACT_NOTES,contact.getContName());
-        mythread.start();
-        Looper.loop();
-    }
-
-
-
-
     @SuppressLint("MissingPermission")
     public static String getContactName(String phoneNumber, Context context) {
 
@@ -329,7 +265,6 @@ public class HelperMethodes {
         notificationManager.notify(1, builder.build());
     }
 
-
     public static void enableAddNoteDuringCall(Context context,String contact_name, String phoneNo) {
 
         int FLAG;
@@ -349,6 +284,7 @@ public class HelperMethodes {
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSPARENT);
 
+        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL ;
         final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
@@ -358,12 +294,9 @@ public class HelperMethodes {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 try {
                     sleep(10*1000);
-
                     wm.removeView(v);
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -372,74 +305,7 @@ public class HelperMethodes {
         thread.start();
     }
 
-    private static void addContentToTheView(Context context,View v, ContactNoteEnitiy contactNote,DialerInfoAndNote contact) {
 
-        ImageView contPhotot_img = (ImageView) v.findViewById(R.id.ContPhotToast_img);
-        ImageView StatusIcon_img = (ImageView) v.findViewById(R.id.status_img);
-
-        TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
-        TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
-        TextView FirsClass_txt = (TextView) v.findViewById(R.id.ContFirstClassi_txt);
-        TextView SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
-        TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
-        TextView Status_txt = (TextView) v.findViewById(R.id.status_txt);
-        //
-        if (contactNote == null) {
-            // this contact is not one of your speacal contact
-            SharedPreferences sharedPreferences = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
-            String phoneNo = sharedPreferences.getString("phoneNumber", null);
-            String name = sharedPreferences.getString("Name", null);
-            ConName_txt.setText(name);
-            ConNo_txt.setText(phoneNo);
-            NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
-            StatusIcon_img.setVisibility(View.INVISIBLE);
-            Status_txt.setVisibility(View.INVISIBLE);
-
-            View view = (View) v.findViewById(R.id.partView);
-            SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
-            NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
-            Status_txt = (TextView) v.findViewById(R.id.status_txt);
-
-            FirsClass_txt.setVisibility(View.GONE);
-            SecClass_txt.setVisibility(View.GONE);
-            Status_txt.setVisibility(View.GONE);
-            view.setVisibility(View.GONE);
-
-        } else {
-
-            String ContName = contact.getContName();
-            String first = contact.getContFirstClassf();
-            String Sec = contact.getContSecClassF();
-            String ContPhoneNo = String.valueOf(contact.getContPhoneNo());
-            String NoteTitle = contactNote.getContact_NoteTitle();
-            int status = contactNote.getContact_NoteStuts();
-
-
-            ConName_txt.setText(ContName);
-            ConNo_txt.setText(ContPhoneNo);
-            FirsClass_txt.setText(first);
-            SecClass_txt.setText(Sec);
-            ConNo_txt.setText(ContPhoneNo);
-            NoteTitle_txt.setText("'" + NoteTitle + "'");
-
-
-            if (status == 1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.check_done));
-                } else {
-                    StatusIcon_img.setImageDrawable(context.getResources().getDrawable(R.drawable.check_done));
-                }
-                Status_txt.setText("done");
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.pending));
-                } else {
-                    StatusIcon_img.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
-                }
-                Status_txt.setText("pending");
-            }
-        }
-    }
 
     public static void setContactNameInfo(Context context,String Name,String Phone,String ImgUrl,int ContId)
     {
@@ -465,11 +331,92 @@ public class HelperMethodes {
         contact.setContactPhotoUri(ImgUrl);
         contact.setContId(ContId);
         return contact ;
+    }
+    public static void drawInfo(Context context) {
 
+        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+        // fill data in the field
+        TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
+        TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
+        TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
+
+        ConName_txt.setText(getDailerInfo(context).getContName());
+        ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
+        NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
+        wm.addView(v, getWindoesMangerParam(context));
     }
 
-    public static void getphoneContactCursor(Context context)
-    {
+    private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact) {
 
+        ImageView contPhotot_img = (ImageView) v.findViewById(R.id.ContPhotToast_img);
+        ImageView StatusIcon_img = (ImageView) v.findViewById(R.id.status_img);
+        TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
+        TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
+        TextView FirsClass_txt = (TextView) v.findViewById(R.id.ContFirstClassi_txt);
+        TextView SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
+        TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
+        TextView Status_txt = (TextView) v.findViewById(R.id.status_txt);
+        //
+        String ContName = contact.getContName();
+        String first = contact.getContFirstClassf();
+        String Sec = contact.getContSecClassF();
+        String ContPhoneNo = String.valueOf(contact.getContPhoneNo());
+        String NoteTitle = contact.getContact_NoteTitle();
+        int status = contact.getContact_NoteStuts();
+
+        ConName_txt.setText(ContName);
+        ConNo_txt.setText(ContPhoneNo);
+        FirsClass_txt.setText(first);
+        SecClass_txt.setText(Sec);
+        ConNo_txt.setText(ContPhoneNo);
+        NoteTitle_txt.setText("'" + NoteTitle + "'");
+        if (status == 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.check_done));
+            } else {
+                StatusIcon_img.setImageDrawable(context.getResources().getDrawable(R.drawable.check_done));
+            }
+            Status_txt.setText("done");
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.pending));
+            } else {
+                StatusIcon_img.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
+            }
+            Status_txt.setText("pending");
+        }
+    }
+    //
+    public static void drawContactInfo(final Context context, final DialerInfoAndNote contact) {
+
+        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+        // fill data in the field
+        addContentToTheView(context,v,contact);
+        wm.addView(v, getWindoesMangerParam(context));
+    }
+
+    private static WindowManager.LayoutParams getWindoesMangerParam(Context context)
+    {
+        int FLAG;
+        if (Build.VERSION.SDK_INT >= 26) {
+            FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
+        }
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                FLAG,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSPARENT);
+
+        params.gravity = Gravity.CENTER_VERTICAL ;
+        return params ;
     }
 }

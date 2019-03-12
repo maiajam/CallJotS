@@ -26,14 +26,25 @@ public class AllPhoneContact {
 
     public AllPhoneContact() {
     }
-    public AllPhoneContact(int contId, String contName, String contPhoneNo, int contIsSpec, String contactPhotoUri) {
+
+    public AllPhoneContact(int id, int contId,
+                           String contName, String contPhoneNo,
+                           int contIsSpec, String contactPhotoUri,
+                           int contPrimaryClassf, String contFirstClassf,
+                           String contSecClassF, String contAddress,
+                           String contCompanyName) {
+        Id = id;
         this.contId = contId;
         this.contName = contName;
         this.contPhoneNo = contPhoneNo;
         this.contIsSpec = contIsSpec;
         this.contactPhotoUri = contactPhotoUri;
+        this.contPrimaryClassf = contPrimaryClassf;
+        this.contFirstClassf = contFirstClassf;
+        this.contSecClassF = contSecClassF;
+        this.contAddress = contAddress;
+        this.contCompanyName = contCompanyName;
     }
-
     // setter
     public void setContId(int contId) {
         this.contId = contId;

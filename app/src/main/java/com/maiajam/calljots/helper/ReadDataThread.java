@@ -46,10 +46,7 @@ public class ReadDataThread extends Thread {
         {
             case Constant.GET_CONTACTINFO_BY_NAME:
                 contactNoteAndInfo = roomDao.getContactInfoByName(mName);
-                if(contactNoteAndInfo != null)
-                {
-                    message.obj = contact ;
-                }
+                 message.obj = contactNoteAndInfo ;
                 break;
              case Constant.GET_ALL_SPECIAL_CONTACT:
                  Spec_contactList =roomDao.getAllSpecContact();
@@ -58,16 +55,6 @@ public class ReadDataThread extends Thread {
             case Constant.GET_ALL_PHONE_CONTACT:
                 All_Contact = roomDao.getAllPhoneContact();
                 message.obj = All_Contact ;
-                break;
-            case Constant.ADD_NEW_CONTACT:
-                roomDao.AddPhoneContacts(contact);
-                // added successfully
-                message.arg1 = 1;
-                break;
-            case Constant.ADD_TO_SPECIAL_CONTACT:
-                roomDao.AddContact(contact.getContId());
-                // added successfully
-                message.arg1 = 1 ;
                 break;
             case Constant.GET_CONTACT_NOTES:
                 allContactNote = roomDao.getAllContactsNotes();
@@ -80,6 +67,16 @@ public class ReadDataThread extends Thread {
             case Constant.GET_NOTE_BY_ID:
                 oneNote =roomDao.getnoteById(NoteId);
                 message.obj = oneNote ;
+                break;
+            case Constant.ADD_NEW_CONTACT:
+                roomDao.AddPhoneContacts(contact);
+                // added successfully
+                message.arg1 = 1;
+                break;
+            case Constant.ADD_TO_SPECIAL_CONTACT:
+                roomDao.AddContact(contact.getContId());
+                // added successfully
+                message.arg1 = 1 ;
                 break;
             case Constant.ADD_NEW_NOTE:
                 roomDao.insert(oneNote);

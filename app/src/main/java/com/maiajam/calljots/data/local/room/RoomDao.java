@@ -60,13 +60,15 @@ public interface RoomDao {
     @Query("SELECT *  FROM  ContactNoteEnitiy ")
     public List<ContactNoteEnitiy> getAllContactsNotes();
 
-    @Query("UPDATE AllPhoneContact SET contIsSpec = 1 WHERE id = :id")
-    public void AddContact(int id);
+    @Query("UPDATE AllPhoneContact SET contIsSpec = 1 WHERE contId = :contId")
+    public void AddContact(int contId);
 
     @Query("SELECT * FROM AllPhoneContact WHERE contIsSpec = 1")
     public List<AllPhoneContact> getAllSpecContact();
 
-    @Query("SELECT AllPhoneContact.*,ContactNoteEnitiy.* FROM AllPhoneContact INNER JOIN ContactNoteEnitiy ON AllPhoneContact.contName = ContactNoteEnitiy.Contact_Name WHERE contName = :Name ")
+    @Query("SELECT AllPhoneContact.*,ContactNoteEnitiy.* FROM AllPhoneContact INNER JOIN " +
+            "ContactNoteEnitiy ON AllPhoneContact.Id = ContactNoteEnitiy.Note_Parent_Id AND AllPhoneContact.contName = :Name " +
+            "ORDER BY ContactNoteEnitiy.Contact_LastCallTime  LIMIT 1")
     public DialerInfoAndNote getContactInfoByName(String Name);
 
 }

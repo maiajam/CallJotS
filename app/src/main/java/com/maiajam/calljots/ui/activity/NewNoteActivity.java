@@ -67,7 +67,7 @@ public class NewNoteActivity extends AppCompatActivity {
         {
             Name = extra.getString(getString(R.string.NameExtra));
             PhoneNo = extra.getString(getString(R.string.phoneNoExtra));
-            Id = extra.getInt("ContId");
+            Id = extra.getInt("Id");
             NoteFrag = extra.getInt("NoteFragment");
             Image_Uri = extra.getString("image_uri");
         }

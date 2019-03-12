@@ -21,19 +21,19 @@ public class pageAdapter extends FragmentPagerAdapter {
     private String Name;
     private String PhoneNo;
     private String Image_uri;
-    private int Contact_Id;
+    private int mId;
     Context context ;
     public pageAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public void setContactInfo(Context con, String name, String phoneNo, String image_uri, int contact_Id, int oneContactNote, int indicator)
+    public void setContactInfo(Context con, String name, String phoneNo, String image_uri, int Id, int oneContactNote, int indicator)
     {
      context = con ;
      Name = name ;
      PhoneNo = phoneNo ;
      Image_uri = image_uri ;
-     Contact_Id = contact_Id ;
+     mId = Id ;
      Indicator = indicator ;
     }
 
@@ -48,8 +48,8 @@ public class pageAdapter extends FragmentPagerAdapter {
                 bundle.putString("name",Name);
                 bundle.putString("phoneNo",PhoneNo);
                 bundle.putString("image_uri",Image_uri);
-                bundle.putInt(context.getResources().getString(R.string.Contact_Id),Contact_Id);
-                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri,Contact_Id);
+                bundle.putInt("Id",mId);
+                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri,mId);
                 f.setArguments(bundle);
                 break;
             case 1 :
@@ -57,7 +57,7 @@ public class pageAdapter extends FragmentPagerAdapter {
                 Bundle bundle2 = new Bundle();
                 bundle2.putString("name",Name);
                 bundle2.putString("phoneNo",PhoneNo);
-                bundle2.putInt(context.getResources().getString(R.string.Contact_Id),Contact_Id);
+               // bundle2.putInt(context.getResources().getString(R.string.Contact_Id),mId);
                 f = fragmentList.get(position);
                 f.setArguments(bundle2);
                 break;

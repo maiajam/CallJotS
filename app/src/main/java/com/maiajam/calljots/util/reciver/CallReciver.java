@@ -56,23 +56,27 @@ public class CallReciver extends BroadcastReceiver {
 
                     if (Message.obtain() != null) {
                         contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
+                        if(contactNoteAndInfo == null)
+                        {
+                            // this contact is not one of your speacal contact
+                            HelperMethodes.drawInfo(context);
+                            HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
+                            return;
+                        }
                         if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-                            if (!Contact_name.isEmpty()) {
-                                if (contactNoteAndInfo.getContIsSpec() == 1) {
-                                    // this contact is a special contact
-                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
-                                } else {
-                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
-                                }
-                            }
-                        }else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                            // rining state
+                            // this contact is a special contact
+                            HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
+                        }
+                        else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                             history = new history(new Handler(Looper.getMainLooper()),context);
                             context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                     true, (ContentObserver) history);
                         }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
                             HelperMethodes.enableAddNoteDuringCall(context,null,null);
-                         }
+                        }
+
                         super.handleMessage(msg);
                     }
                 }};
