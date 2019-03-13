@@ -416,7 +416,22 @@ public class HelperMethodes {
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSPARENT);
 
-        params.gravity = Gravity.CENTER_VERTICAL ;
+        params.gravity = Gravity.CENTER ;
         return params ;
+    }
+
+    public static void setParntIdNoteForPernol(Context context,int id) {
+
+        SharedPreferences sp = context.getSharedPreferences("PersonalNote", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("idParent", id);
+        editor.commit();
+    }
+
+    public static int getParntIdNoteForPernol(Context context)
+    {
+        SharedPreferences sp = context.getSharedPreferences("PersonalNote", Activity.MODE_PRIVATE);
+        int id = sp.getInt("idParent",0);
+        return id ;
     }
 }

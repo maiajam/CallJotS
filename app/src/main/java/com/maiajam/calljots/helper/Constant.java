@@ -17,15 +17,19 @@ public interface Constant {
     int UPDATE_NOTE_BY_ID = 120;
     int DELETE_NOTE_BY_time = 130 ;
     int UPDATE_NOTE_IS_DONE = 140;
+    int GET_LAST_CONTACT_NOTES = 150 ;
+    int GET_PERSONAL_NOTE_PARENT_ID = 160;
 
 
     // permsion request
     int RequestCodeCallLog = 5 ;
     int REQUEST_CODE_READ_WRITE = 15;
+    int MY_PERMISSIONS_REQUEST_CALL_PHONE = 25;
 
     // else
     int ONE_CONTACT_NOTE = 200;
-    int GET_LAST_CONTACT_NOTES = 150 ;
+
+
 
 
     ;

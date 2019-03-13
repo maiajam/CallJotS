@@ -15,11 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.maiajam.calljots.R;
+import com.maiajam.calljots.adapter.CallLogAdapter;
 import com.maiajam.calljots.adapter.pageAdapter;
+import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.ui.fragment.AllNotestFrag;
 import com.maiajam.calljots.ui.fragment.CallLogFrag;
+
+import java.util.ArrayList;
 
 public class ContactNotes extends AppCompatActivity {
 
@@ -63,7 +67,7 @@ public class ContactNotes extends AppCompatActivity {
         ContactPhNo_txt.setText(PhoneNo);
 
         pageAdapter adapter = new pageAdapter(getSupportFragmentManager());
-        adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,id,Constant.ONE_CONTACT_NOTE,Constant.ONE_CONTACT_NOTE);
+        adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,id,Contact_Id,Constant.ONE_CONTACT_NOTE);
         adapter.AddFragment(new AllNotestFrag(), "Notes");
         adapter.AddFragment(callLogFrag, "Call Loge");
 
@@ -76,20 +80,14 @@ public class ContactNotes extends AppCompatActivity {
         phone_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
 
-                intent.setData(Uri.parse("tel:" + PhoneNo));
+
                 if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
+                    ActivityCompat.requestPermissions(ContactNotes.this,
+                            new String[]{Manifest.permission.CALL_PHONE},
+                            Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
                 }
-                startActivity(intent);
+              callAction();
             }
         });
     }
@@ -97,7 +95,32 @@ public class ContactNotes extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE :
+                boolean allgranted = false;
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        allgranted = true;
+                    } else {
+                        allgranted = false;
+                        break;
+                    }
+                }
+                if (allgranted) {
+                    // permission was granted 🙂
+                   callAction();
+                }else
+                {
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, String.valueOf(new String[]{Manifest.permission.CALL_PHONE}));
+                }
+        }
         callLogFrag.onRequestPermissionsResult(requestCode,permissions,grantResults);
+    }
+
+    private void callAction() {
+        Intent CallAction = new Intent(Intent.ACTION_CALL);
+        CallAction.setData(Uri.parse("tel:" + PhoneNo));
+        startActivity(CallAction);
     }
 
     @Override

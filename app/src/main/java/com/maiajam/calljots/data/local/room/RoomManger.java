@@ -7,12 +7,18 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.GetAllPhoneContactThread;
+import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.ui.fragment.AllContactFrag;
 
 
@@ -23,7 +29,6 @@ public abstract class RoomManger extends RoomDatabase {
     private static RoomManger roomManger;
     private static Context mcontext;
     public abstract RoomDao roomDao();
-
 
     public static RoomManger getInstance(Context context) {
 
@@ -40,6 +45,7 @@ public abstract class RoomManger extends RoomDatabase {
                                     null, null, null,
                                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
                             new GetAllPhoneContactThread(mcontext, Cr_phonesNo).start();
+                            getTheParentIdForPersonalNote();
                         }
 
                         @Override
@@ -50,5 +56,22 @@ public abstract class RoomManger extends RoomDatabase {
                     .build();
         }
         return roomManger;
+    }
+
+    private static void getTheParentIdForPersonalNote() {
+
+        Handler h = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.obj != null)
+                {
+                    int id = (int) msg.obj;
+                    HelperMethodes.setParntIdNoteForPernol(mcontext,id);
+                }
+                super.handleMessage(msg);
+            }
+        };
+        ReadDataThread readThread = new ReadDataThread(h, mcontext, Constant.GET_PERSONAL_NOTE_PARENT_ID, null);
+        readThread.start();
     }
 }

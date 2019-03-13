@@ -91,6 +91,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra("phoneNo",phoneNo);
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra("Id",contact.getId());
+                    intent.putExtra("contact_Id",contact.getContId());
                     con.startActivity(intent);
                 }
             });

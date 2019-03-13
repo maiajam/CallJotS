@@ -66,6 +66,14 @@ public class GetAllPhoneContactThread extends Thread{
                 }
             } while (Cr_phonesNo.moveToNext());
             Cr_phonesNo.close();
+
+            roomManger = RoomManger.getInstance(mContext);
+            RoomDao roomDao = roomManger.roomDao();
+            AllPhoneContact personalContactRow = new AllPhoneContact();
+            personalContactRow.setContName("Personal");
+            phoneContactsList.add(personalContactRow);
+
+
                                         }
     }
 

@@ -56,7 +56,8 @@ public class AllNotestFrag extends Fragment {
     private List<ContactNoteEnitiy> allNotes;
     private String PhoneNo;
     private String ImageUrl;
-    private int contId;
+    private int Id;
+    private int ContId;
 
     public void AllNotesFrag() {
 
@@ -107,7 +108,7 @@ public class AllNotestFrag extends Fragment {
             readThread = new ReadDataThread(handler,getContext(),Constant.GET_CONTACT_NOTES,Name);
         }else {
             // view all the notes for all contact
-            readThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_NOTES,Name);
+            readThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_NOTES,null);
         }
         readThread.start();
         return view;
@@ -127,22 +128,23 @@ public class AllNotestFrag extends Fragment {
                     .putExtra(getString(R.string.NameExtra),Name)
                     .putExtra(getString(R.string.phoneNoExtra),PhoneNo)
                     .putExtra("ImageUrl",ImageUrl)
-                    .putExtra("Id",contId))
+                    .putExtra("Id",Id)
+                    .putExtra("contact_Id",ContId))
                     ;
-
         }else {
             //add new personal note for the user
             startActivity(new Intent(getActivity(),NewNoteActivity.class));
         }
     }
 
-    public void SetFromWhere(String name,String phoneNo,String imageUrl,int ContId)
+    public void SetFromWhere(String name, String phoneNo, String imageUrl, int mId, int mContId)
     {
         ContactNoteIndecator = Constant.ONE_CONTACT_NOTE;
         Name = name ;
         PhoneNo = phoneNo ;
         ImageUrl = imageUrl ;
-        contId = ContId;
+        Id = mId;
+        ContId = mContId ;
     }
 
 

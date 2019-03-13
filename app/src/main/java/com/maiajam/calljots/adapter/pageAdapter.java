@@ -23,11 +23,13 @@ public class pageAdapter extends FragmentPagerAdapter {
     private String Image_uri;
     private int mId;
     Context context ;
+    private int mContact_Id;
+
     public pageAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public void setContactInfo(Context con, String name, String phoneNo, String image_uri, int Id, int oneContactNote, int indicator)
+    public void setContactInfo(Context con, String name, String phoneNo, String image_uri, int Id, int contId, int indicator)
     {
      context = con ;
      Name = name ;
@@ -35,6 +37,7 @@ public class pageAdapter extends FragmentPagerAdapter {
      Image_uri = image_uri ;
      mId = Id ;
      Indicator = indicator ;
+     mContact_Id = contId ;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class pageAdapter extends FragmentPagerAdapter {
                 bundle.putString("phoneNo",PhoneNo);
                 bundle.putString("image_uri",Image_uri);
                 bundle.putInt("Id",mId);
-                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri,mId);
+                ((AllNotestFrag) f).SetFromWhere(Name,PhoneNo,Image_uri,mId,mContact_Id);
                 f.setArguments(bundle);
                 break;
             case 1 :

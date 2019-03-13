@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -19,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.ui.fragment.AllContactFrag;
 import com.maiajam.calljots.util.CallServiceForGround;
 import com.maiajam.calljots.util.workmanger.MyWorker;
@@ -61,13 +66,13 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             editor.commit();
             editor.apply();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-
             if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.READ_CONTACTS},
                         10);
             } else {
                 // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
                 RoomManger roomManger = RoomManger.getInstance(getBaseContext());
+
             }
         }else
         {
@@ -75,6 +80,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
         }
 
     }
+
 
     @Override
     public void onClick(View view) {
@@ -101,35 +107,6 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                 WorkManager.getInstance().enqueue(CallRevicerRequest);
                 startActivity(new Intent(welcome.this,MainActivity.class));
             }
-
-            /*
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Settings.canDrawOverlays(getBaseContext())) {
-                    if (ContextCompat.checkSelfPermission(this,  Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE);
-                    }else {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            getBaseContext().startForegroundService(i);
-
-                        }else
-                        {
-                            startActivity(new Intent(welcome.this,MainActivity.class));
-                            startService(i);
-                        }
-                    }
-
-                } else {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName()));
-                    startActivityForResult(intent, OVERLAY_PERMISSION_CODE);
-                    return;
-                }
-            }else {
-
-                startActivity(new Intent(welcome.this,MainActivity.class));
-            }
-            */
-
         }
 
     }

@@ -101,6 +101,9 @@ public class ReadDataThread extends Thread {
               case Constant.GET_LAST_CONTACT_NOTES:
                   roomDao.getLastNote(mName);
                   break;
+              case Constant.GET_PERSONAL_NOTE_PARENT_ID:
+                  message.obj = roomDao.getIdPersonalNote("Personal");
+                  break;
 
         }
         mhandler.sendMessage(message);
