@@ -25,6 +25,7 @@ import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.SharedPrefHelperMethodes;
 import com.maiajam.calljots.util.workmanger.ReminerSchudleWorker;
 
 import java.text.ParseException;
@@ -270,7 +271,7 @@ public class NewNoteActivity extends AppCompatActivity {
                     if(Contact_Id == 0)
                     { // means this is a personal note not contact note and this page open from All notes page
                         contact_obj.setContact_Name("Personal");
-                        contact_obj.setNote_Parent_Id(HelperMethodes.getParntIdNoteForPernol(getBaseContext()));
+                        contact_obj.setNote_Parent_Id(SharedPrefHelperMethodes.getParntIdNoteForPernol(getBaseContext()));
                     }else {
                         contact_obj.setContact_Name(Name);
                         Intent intent = new Intent(NewNoteActivity.this, ContactNotes.class);

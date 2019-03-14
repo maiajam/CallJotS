@@ -2,12 +2,20 @@ package com.maiajam.calljots.ui.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -18,12 +26,18 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.SharedPrefHelperMethodes;
 import com.maiajam.calljots.ui.fragment.AllContactFrag;
 import com.maiajam.calljots.ui.fragment.AllNotestFrag;
 import com.maiajam.calljots.ui.fragment.SpecialContactFrag;
+import com.maiajam.calljots.util.workmanger.MyWorker;
 
 import java.util.ArrayList;
+
+import androidx.work.OneTimeWorkRequest;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -37,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private AllContactFrag AlxlContact;
     private RoomManger roomManger;
     private AllPhoneContact contact;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(), new SpecialContactFrag(), R.id.frame);
+
+        sp = getBaseContext().getSharedPreferences("FirstVisit", Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -211,11 +230,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         allContactFrag.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
     }
-
-
 
 }

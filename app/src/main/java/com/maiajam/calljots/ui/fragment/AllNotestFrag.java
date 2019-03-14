@@ -74,46 +74,9 @@ public class AllNotestFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notes, container, false);
         unbinder = ButterKnife.bind(this, view);
         Allnote = new ArrayList<>();
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        ContNoteRec.setLayoutManager(layoutManager);
-            handler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    if(Message.obtain()!= null)
-                    {
-                        if(msg.obj != null )
-                        {
-                            allNotes = (List<ContactNoteEnitiy>) msg.obj;
-                            if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
-                            {
-                                contNotesAdapter = new ContNotesAdapter(getContext(), allNotes,0);
-                                ContNoteRec.setAdapter(contNotesAdapter);
-                                contNotesAdapter.notifyDataSetChanged();
-                            }else
-                            {
-                                allNoteadapter = new AllNotesAdapter(getContext(), (ArrayList<ContactNoteEnitiy>) allNotes);
-                                ContNoteRec.setAdapter(allNoteadapter);
-                               allNoteadapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                    super.handleMessage(msg);
-                }
-            };
-
-        if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
-        {
-            // view the contact notes
-            readThread = new ReadDataThread(handler,getContext(),Constant.GET_CONTACT_NOTES,Name);
-        }else {
-            // view all the notes for all contact
-            readThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_NOTES,null);
-        }
-        readThread.start();
+        setRecyContent();
         return view;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -136,7 +99,6 @@ public class AllNotestFrag extends Fragment {
             startActivity(new Intent(getActivity(),NewNoteActivity.class));
         }
     }
-
     public void SetFromWhere(String name, String phoneNo, String imageUrl, int mId, int mContId)
     {
         ContactNoteIndecator = Constant.ONE_CONTACT_NOTE;
@@ -146,7 +108,46 @@ public class AllNotestFrag extends Fragment {
         Id = mId;
         ContId = mContId ;
     }
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        setRecyContent();
+    }
+    public void setRecyContent()
+    {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        ContNoteRec.setLayoutManager(layoutManager);
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(Message.obtain()!= null)
+                {
+                    if(msg.obj != null )
+                    {
+                        allNotes = (List<ContactNoteEnitiy>) msg.obj;
+                        if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
+                        {
+                            contNotesAdapter = new ContNotesAdapter(getContext(), allNotes,0);
+                            ContNoteRec.setAdapter(contNotesAdapter);
+                            contNotesAdapter.notifyDataSetChanged();
+                        }else
+                        {
+                            allNoteadapter = new AllNotesAdapter(getContext(), (ArrayList<ContactNoteEnitiy>) allNotes);
+                            ContNoteRec.setAdapter(allNoteadapter);
+                            allNoteadapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                super.handleMessage(msg);
+            }
+        };
+        if(ContactNoteIndecator == Constant.ONE_CONTACT_NOTE)
+        {// view the contact notes
+            readThread = new ReadDataThread(handler,getContext(),Constant.GET_CONTACT_NOTES,Name);
+        }else {// view all the notes for all contact
+            readThread = new ReadDataThread(handler, getContext(), Constant.GET_ALL_NOTES, null);
+        }
+        readThread.start();
+    }
 }
 

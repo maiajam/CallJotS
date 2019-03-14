@@ -68,10 +68,10 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
             if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.READ_CONTACTS},
-                        10);
+                        Constant.REQUEST_CODE_READ_WRITE);
             } else {
                 // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
-                RoomManger roomManger = RoomManger.getInstance(getBaseContext());
+               RoomManger.getInstance(getBaseContext());
 
             }
         }else
@@ -134,7 +134,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
       switch (requestCode) {
 
-          case 5:
+          case Constant.REQ_READ_PHONE_STATE:
               // If request is accepted, the result arrays not empty.
               if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
               {
@@ -144,14 +144,15 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                     // the request is canceled then should show RequestPermissionRationale
                  ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_PHONE_STATE);
               }
-          case 10:
+              break;
+          case Constant.REQUEST_CODE_READ_WRITE:
               if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                  RoomManger roomManger = RoomManger.getInstance(getBaseContext());
+                   RoomManger.getInstance(getBaseContext());
               }else
               {
                   ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CONTACTS);
               }
-              return;
+              break;
       }
 
     }

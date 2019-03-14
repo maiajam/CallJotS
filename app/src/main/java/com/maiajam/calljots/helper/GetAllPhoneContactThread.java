@@ -72,6 +72,7 @@ public class GetAllPhoneContactThread extends Thread{
             AllPhoneContact personalContactRow = new AllPhoneContact();
             personalContactRow.setContName("Personal");
             phoneContactsList.add(personalContactRow);
+            SharedPrefHelperMethodes.setParntIdNoteForPernol(mContext, (int) roomDao.AddPhoneContacts(personalContactRow));
 
 
                                         }

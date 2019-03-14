@@ -28,8 +28,7 @@ public interface Constant {
 
     // else
     int ONE_CONTACT_NOTE = 200;
-
-
+    int REQ_READ_PHONE_STATE = 5 ;
 
 
     ;

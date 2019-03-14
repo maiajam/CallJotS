@@ -30,6 +30,17 @@ public abstract class RoomManger extends RoomDatabase {
     private static Context mcontext;
     public abstract RoomDao roomDao();
 
+    static RoomManger.Callback Roomcallback = new RoomManger.Callback(){
+
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            Cursor Cr_phonesNo = mcontext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null, null, null,
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+            new GetAllPhoneContactThread(mcontext, Cr_phonesNo).start();
+        }
+    };
     public static RoomManger getInstance(Context context) {
 
         mcontext = context;
@@ -37,41 +48,13 @@ public abstract class RoomManger extends RoomDatabase {
             roomManger = Room.databaseBuilder(context.getApplicationContext(), RoomManger.class,
                     "callJots_database")
                     .fallbackToDestructiveMigration()
-                    .addCallback(new RoomManger.Callback() {
-                        @Override
-                        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                            super.onCreate(db);
-                            Cursor Cr_phonesNo = mcontext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null, null, null,
-                                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                            new GetAllPhoneContactThread(mcontext, Cr_phonesNo).start();
-                            getTheParentIdForPersonalNote();
-                        }
-
-                        @Override
-                        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                            super.onOpen(db);
-                        }
-                    })
+                    .addCallback(Roomcallback)
                     .build();
         }
         return roomManger;
     }
 
-    private static void getTheParentIdForPersonalNote() {
 
-        Handler h = new Handler(Looper.getMainLooper()){
-            @Override
-            public void handleMessage(Message msg) {
-                if(msg.obj != null)
-                {
-                    int id = (int) msg.obj;
-                    HelperMethodes.setParntIdNoteForPernol(mcontext,id);
-                }
-                super.handleMessage(msg);
-            }
-        };
-        ReadDataThread readThread = new ReadDataThread(h, mcontext, Constant.GET_PERSONAL_NOTE_PARENT_ID, null);
-        readThread.start();
-    }
+
+
 }

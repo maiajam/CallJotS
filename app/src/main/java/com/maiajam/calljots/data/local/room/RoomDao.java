@@ -19,9 +19,9 @@ import java.util.List;
 public interface RoomDao {
 
     @Insert
-    public void AddPhoneContacts(AllPhoneContact allPhoneContact);
+    public long AddPhoneContacts(AllPhoneContact allPhoneContact);
 
-    @Query("SELECT * FROM AllPhoneContact")
+    @Query("SELECT * FROM AllPhoneContact WHERE NOT (contName = 'Personal')")
     public List<AllPhoneContact> getAllPhoneContact();
 
     @Query("UPDATE AllPhoneContact SET contIsSpec =  1  WHERE id = :id ")
