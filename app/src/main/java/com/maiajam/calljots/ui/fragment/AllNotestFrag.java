@@ -88,7 +88,7 @@ public class AllNotestFrag extends Fragment {
         {
             //add new note for a specail contact
             startActivity(new Intent(getActivity(),NewNoteActivity.class)
-                    .putExtra(getString(R.string.NameExtra),Name)
+                    .putExtra("name",Name)
                     .putExtra(getString(R.string.phoneNoExtra),PhoneNo)
                     .putExtra("ImageUrl",ImageUrl)
                     .putExtra("Id",Id)

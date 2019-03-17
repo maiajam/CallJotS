@@ -102,7 +102,8 @@ public class history extends ContentObserver {
             managedCursor.close();
             String imgUri = HelperMethodes.getContactImage(context,phNumber);
             String name = HelperMethodes.getContactName(phNumber,context);
-            showDialge(phNumber, name, callDuration, date, Dir,imgUri);
+            int contactId = HelperMethodes.getContactId(phNumber,context);
+            showDialge(phNumber, name, callDuration, date, Dir,imgUri,contactId);
         }
 
 
@@ -111,7 +112,7 @@ public class history extends ContentObserver {
 
 
 
-    private void showDialge(final String Number, final String name, String callDuration, String date, int dir, final String imgUri) {
+    private void showDialge(final String Number, final String name, String callDuration, String date, int dir, final String imgUri,int ContactId) {
 
         switch (dir){
             case 1 :
@@ -122,7 +123,9 @@ public class history extends ContentObserver {
                 if(name == null)
                 {
                     // new contact
-                    HelperMethodes.CallNotifcation(context,2,Number,context.getString(R.string.newCon),context.getString(R.string.addCont),Number,imgUri,0);
+                    HelperMethodes.CallNotifcation(context,2,Number
+                            ,context.getString(R.string.newCon),context.getString(R.string.addCont),
+                            Number,imgUri,0,HelperMethodes.getContactId(Number,context));
                 }else
                 {
                     // check is this contact a special contact
@@ -134,12 +137,14 @@ public class history extends ContentObserver {
                             {
                                 // its a speacail contact ... so add a note for this calllog
                                 HelperMethodes.CallNotifcation(context,1,name,
-                                        context.getString(R.string.savNote),context.getString(R.string.addNote),Number,imgUri,0);
+                                        context.getString(R.string.savNote),context.getString(R.string.addNote),Number,imgUri,
+                                        0,HelperMethodes.getContactId(Number,context));
                             }else
                             {
                                 // its is not a speacail contact ... add it to specal then add a note for hime
                                 HelperMethodes.CallNotifcation(context,0,name,
-                                        context.getString(R.string.addToSpec),context.getString(R.string.AddTospec),Number,imgUri,0);
+                                        context.getString(R.string.addToSpec),context.getString(R.string.AddTospec),Number,imgUri,
+                                        0,HelperMethodes.getContactId(Number,context));
                             }
                             super.handleMessage(msg);
                         }

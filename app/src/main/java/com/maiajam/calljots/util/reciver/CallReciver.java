@@ -39,42 +39,48 @@ public class CallReciver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-        Toast.makeText(context,"work done",Toast.LENGTH_LONG).show();
-
         // recived call info
        final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+
        final String Contact_name = HelperMethodes.getContactName(NOCont, context);
        // save dialer info at shared prefrence
         HelperMethodes.saveDialerInfo(context,Contact_name,NOCont);
 
         if(!TextUtils.isEmpty(Contact_name)){
 
+
             h = new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
 
                     if (Message.obtain() != null) {
-                        contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
-                        if(contactNoteAndInfo == null)
-                        {
-                            // this contact is not one of your speacal contact
-                            HelperMethodes.drawInfo(context);
-                            HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
-                            return;
-                        }
+
                         if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                             // rining state
                             // this contact is a special contact
-                            HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
+                            if(msg.obj == null){
+                                // this contact is not one of your speacal contact
+                                HelperMethodes.drawInfo(context);
+                            }else {
+                                HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
+                            }
                         }
                         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+
                             history = new history(new Handler(Looper.getMainLooper()),context);
                             context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                     true, (ContentObserver) history);
                         }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
-                            HelperMethodes.enableAddNoteDuringCall(context,null,null);
+                            if(msg.obj == null){
+                                // this contact is not one of your speacal contact
+                                HelperMethodes.drawInfo(context);
+                            }else {
+
+                                HelperMethodes.enableAddNoteDuringCall(context,null,null);
+                            }
+
                         }
 
                         super.handleMessage(msg);
@@ -82,56 +88,12 @@ public class CallReciver extends BroadcastReceiver {
                 }};
 
                 // get contact info for the dialer from database
-                final ReadDataThread myThread = new ReadDataThread(h, context, Constant.GET_CONTACTINFO_BY_NAME, Contact_name);
+            final ReadDataThread myThread = new ReadDataThread(h, context, Constant.GET_CONTACTINFO_BY_NAME, Contact_name);
             myThread.start();
 
             }else
         {// new number .. not one of the contact phone number... no toast msg
         }
-
-
-
-
-
-      /*  if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-
-            if(!Contact_name.isEmpty())
-            {
-                if (contact.getContIsSpec()== 1) {
-                    // this contact is a special contact
-                        HelperMethodes.drawContactInfo(context,contact);
-
-                } else {
-
-                    HelperMethodes.drawContactInfo(context,contact);
-
-
-                   // context.startActivity(new Intent(context,TransparentActivity.class).putExtra("name",Contact_name));
-
-                }
-
-            }else
-            {
-                //   // new number ... no toast msg
-            }
-
-        }else if(state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-
-
-            HandlerThread thread = new HandlerThread("MyHandlerThread");
-            thread.start();
-            // creates the handler using the passed looper
-            Handler handler = new Handler(thread.getLooper());
-            // creates the content observer which handles onChange on a worker thread
-           history h = new history(handler,context);
-
-            context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,true,h);
-
-
-        }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK))
-        {
-
-        */
         }
         }
 

@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.maiajam.calljots.R;
@@ -86,9 +87,7 @@ public class HelperMethodes {
     public static String getContactName(String phoneNumber, Context context) {
 
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
-
         String contactName = "";
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
@@ -99,6 +98,23 @@ public class HelperMethodes {
         }
 
         return contactName;
+    }
+
+    public static int getContactId(String phoneNumber,Context context)
+    {
+
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+        String[] projection = new String[]{ContactsContract.PhoneLookup.CONTACT_ID};
+        int COntactId = 0;
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                COntactId = cursor.getInt(0);
+            }
+            cursor.close();
+        }
+
+        return COntactId;
     }
 
     public static void saveDialerInfo(Context context, String contact_name, String noCont) {
@@ -193,7 +209,7 @@ public class HelperMethodes {
     }
 
 
-    public  static void CallNotifcation(Context context, int type,String name,String Note,String Actiontitel,String Numer,String imgUrl,int reminerIndecater)
+    public  static void CallNotifcation(Context context, int type,String name,String Note,String Actiontitel,String Numer,String imgUrl,int reminerIndecater,int conId)
     {
         Intent intent ;
         PendingIntent pendingIntent ;
@@ -217,9 +233,10 @@ public class HelperMethodes {
         {
             // this notifacation to notify the user to add this contact to a specail contact list
             intent = new Intent(context, MainNewContactActivity.class);
-            intent.putExtra(context.getResources().getString(R.string.NameExtra),name);
-            intent.putExtra(context.getResources().getString(R.string.FirstPhone),Numer);
-            intent.putExtra(context.getResources().getString(R.string.imageUrl),imgUrl);
+            intent.putExtra("name",name);
+            intent.putExtra("phoneNo",Numer);
+            intent.putExtra(context.getString(R.string.imageUrl),imgUrl);
+            intent.putExtra(context.getString(R.string.Contact_Id),conId);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         }
@@ -242,23 +259,25 @@ public class HelperMethodes {
         {
              builder = new NotificationCompat.Builder(context,"v")
                     .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle( name + "Note")
+                    .setContentTitle( name + " Note")
                     .setContentText(Note)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
+                    .setAutoCancel(true)
                     ;
         }else
         {
             builder = new NotificationCompat.Builder(context,"v")
                     .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle(name + "Note")
+                    .setContentTitle(name + "  Note")
                     .setContentText(Note)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
+                    .setAutoCancel(true)
                     ;
         }
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
@@ -269,12 +288,10 @@ public class HelperMethodes {
 
         int FLAG;
         if (Build.VERSION.SDK_INT >= 26) {
-
             FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
         }
-
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -290,7 +307,6 @@ public class HelperMethodes {
         final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // Add layout to window manager
         wm.addView(v, params);
-
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -304,8 +320,6 @@ public class HelperMethodes {
         });
         thread.start();
     }
-
-
 
     public static void setContactNameInfo(Context context,String Name,String Phone,String ImgUrl,int ContId)
     {
@@ -341,11 +355,18 @@ public class HelperMethodes {
         TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
         TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
+        View pView =(View)v.findViewById(R.id.partView);
+        LinearLayout linStuts = (LinearLayout)v.findViewById(R.id.linStuts);
+        LinearLayout linClass = (LinearLayout)v.findViewById(R.id.linClassifcation);
 
         ConName_txt.setText(getDailerInfo(context).getContName());
         ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
         NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
+        linClass.setVisibility(View.GONE);
+        linStuts.setVisibility(View.GONE);
+        pView.setVisibility(View.GONE);
         wm.addView(v, getWindoesMangerParam(context));
+        removeView(wm,v);
     }
 
     private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact) {
@@ -397,6 +418,8 @@ public class HelperMethodes {
         // fill data in the field
         addContentToTheView(context,v,contact);
         wm.addView(v, getWindoesMangerParam(context));
+        removeView(wm,v);
+
     }
 
     private static WindowManager.LayoutParams getWindoesMangerParam(Context context)
@@ -434,4 +457,22 @@ public class HelperMethodes {
         int id = sp.getInt("idParent",0);
         return id ;
     }
+
+    private static void removeView(final WindowManager wm, final View v)
+    {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sleep(10*1000);
+                    wm.removeView(v);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
 }

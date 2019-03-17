@@ -59,6 +59,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private OneTimeWorkRequest OneTimeReq;
     private int Contact_Id;
+    private int NoteId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +69,15 @@ public class NewNoteActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if (extra != null)
         {
-            Name = extra.getString(getString(R.string.NameExtra));
+            Name = extra.getString("name");
             PhoneNo = extra.getString(getString(R.string.phoneNoExtra));
             Id = extra.getInt("Id");
             Contact_Id = extra.getInt("contact_Id");
             NoteFrag = extra.getInt("NoteFragment");
+            NoteId= extra.getInt("Note_Id");
             Image_Uri = extra.getString("image_uri");
         }
-        // current time of this note
+            // current time of this note
         current_Calender = Calendar.getInstance();
         ContactName_txt = (TextView)findViewById(R.id.ContName_NewNote_txt);
         ContactPhone_txt =(TextView)findViewById(R.id.ContPhone_NewNote_txt);
@@ -103,7 +105,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 }
             };
             getNoteThread = new ReadDataThread(getNotehandler,getBaseContext(),Constant.GET_NOTE_BY_ID,null);
-            getNoteThread.setNoteId(Id);
+            getNoteThread.setNoteId(NoteId);
             getNoteThread.start();
         }
         if(Contact_Id == 0)
@@ -138,7 +140,6 @@ public class NewNoteActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(),getString(R.string.EnterNoteTitle),Toast.LENGTH_LONG).show();
                     }else {
                         if (TextUtils.isEmpty(Note_ed.getText().toString())) {
-
                             Toast.makeText(getBaseContext(), getString(R.string.EnterNote), Toast.LENGTH_LONG).show();
                         } else {
                             AddNote();
@@ -199,12 +200,10 @@ public class NewNoteActivity extends AppCompatActivity {
         }
     };
     private void remindeMe(int time) {
-
         OneTimeReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
                 .setInitialDelay(time,TimeUnit.MILLISECONDS)
                 .build();
         WorkManager.getInstance().enqueue(OneTimeReq);
-        
     }
 
     
@@ -213,7 +212,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 noteTitle = NoteTitle_ed.getText().toString();
                 Note = Note_ed.getText().toString();
                 Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                contact_obj = new ContactNoteEnitiy();
+                ContactNoteEnitiy contact_obj = new ContactNoteEnitiy();
                 contact_obj.setContact_Note(Note);
                 contact_obj.setContact_NoteTitle(noteTitle);
                 contact_obj.setContact_Id(Contact_Id);
@@ -274,6 +273,7 @@ public class NewNoteActivity extends AppCompatActivity {
                         contact_obj.setNote_Parent_Id(SharedPrefHelperMethodes.getParntIdNoteForPernol(getBaseContext()));
                     }else {
                         contact_obj.setContact_Name(Name);
+                        contact_obj.setNote_Parent_Id(Id);
                         Intent intent = new Intent(NewNoteActivity.this, ContactNotes.class);
                         intent.putExtra("tab", 0);
                         intent.putExtra("name", Name);

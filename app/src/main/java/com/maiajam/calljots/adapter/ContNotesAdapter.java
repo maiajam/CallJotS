@@ -66,7 +66,8 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
         final String NoteTitle,Note ;
         final int NoteId,stuts ;
        final ContactNoteEnitiy contactNote = ListNotes.get(position);
-        int Id = contactNote.getId();
+        final int Id = contactNote.getId();
+        final int contactId = contactNote.getContact_Id();
         NoteTitle = contactNote.getContact_NoteTitle();
         Note = contactNote.getContact_Note();
         Name = contactNote.getContact_Name();
@@ -100,9 +101,11 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
             public void onClick(View view) {
 
                 Intent i = new Intent(con, NewNoteActivity.class);
-                i.putExtra("id",NoteId);
+                i.putExtra("Note_Id",NoteId);
                 i.putExtra("NoteFragment",1);
                 i.putExtra("name", Name);
+                i.putExtra("Id",contactNote.getNote_Parent_Id());
+                i.putExtra("contact_Id",contactId);
                 i.putExtra("phoneNo",PhoneNo);
                 i.putExtra("image_uri",img_uri);
                 con.startActivity(i);

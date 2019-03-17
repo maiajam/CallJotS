@@ -22,7 +22,7 @@ public class ReminerSchudleWorker extends Worker {
     @Override
     public WorkerResult doWork() {
 
-        HelperMethodes.CallNotifcation(mContext,0,mName,mNote,mActionTitle,null,null,1);
+        HelperMethodes.CallNotifcation(mContext,0,mName,mNote,mActionTitle,null,null,1,0);
         return WorkerResult.SUCCESS;
     }
 }
