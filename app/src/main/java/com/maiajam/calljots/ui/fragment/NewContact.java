@@ -73,6 +73,7 @@ public class NewContact extends Fragment{
     Unbinder unbinder;
     private Handler handler;
     private ReadDataThread readThread;
+    private String PhoneNO;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,12 +83,11 @@ public class NewContact extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_new_contact, container, false);
         unbinder = ButterKnife.bind(this, view);
+        ContactFirstPhoneNewContactEd.setText(PhoneNO);
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -266,5 +266,9 @@ public class NewContact extends Fragment{
             }
         }
 
+    }
+
+    public void setPhoneNo(String firstPhone) {
+        PhoneNO = firstPhone ;
     }
 }

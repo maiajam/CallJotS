@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -79,6 +80,7 @@ public class AllContactFrag extends Fragment {
 
         View view = inflater.inflate(R.layout.frag_allcont, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.AllCon_Rec);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Contact");
         Add_b = (FloatingActionButton) view.findViewById(R.id.addNewContact_fab);
         swipeControler = new SwipeControler(new SwipeContrlloerActions() {
             @Override

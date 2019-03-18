@@ -12,6 +12,7 @@ import com.maiajam.calljots.data.model.DialerInfoAndNote;
 
 ;import java.util.Date;
 import java.util.List;
+import java.util.jar.Attributes;
 
 public class ReadDataThread extends Thread {
 
@@ -57,7 +58,7 @@ public class ReadDataThread extends Thread {
                 message.obj = All_Contact ;
                 break;
             case Constant.GET_CONTACT_NOTES:
-                allContactNote = roomDao.getAllContactsNotes();
+                allContactNote = roomDao.getAllContactsNotes(mName);
                 message.obj =  allContactNote ;
                 break;
             case Constant.GET_ALL_NOTES:

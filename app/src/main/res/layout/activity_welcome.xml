@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="@dimen/marginTop"
         android:src="@drawable/l"
         />
 
@@ -49,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/welcomMargen"
         android:src="@drawable/getstarted" />
 
 </LinearLayout>

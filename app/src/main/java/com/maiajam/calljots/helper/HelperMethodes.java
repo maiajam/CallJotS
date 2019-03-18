@@ -214,34 +214,29 @@ public class HelperMethodes {
         Intent intent ;
         PendingIntent pendingIntent ;
         if(type == 1)
-        {
-            // this notifacation to notify the user to add a note for his specail contact
+        {// this notifacation to notify the user to add a note for his specail contact
             intent = new Intent(context, NewNoteActivity.class);
             intent.putExtra("name",name);
             intent.putExtra("phoneNo",Numer);
             intent.putExtra("image_uri",imgUrl);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
         }else if (type == 2)
-        {
-            // this notifacation to notify the user to add a new contact for his phone contact
+        {// this notifacation to notify the user to add a new contact for his phone contact
             intent = new Intent(context, MainNewContactActivity.class);
+            intent.putExtra("phoneNo",Numer);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }else
-        {
-            // this notifacation to notify the user to add this contact to a specail contact list
+        {// this notifacation to notify the user to add this contact to a specail contact list
             intent = new Intent(context, MainNewContactActivity.class);
             intent.putExtra("name",name);
             intent.putExtra("phoneNo",Numer);
             intent.putExtra(context.getString(R.string.imageUrl),imgUrl);
             intent.putExtra(context.getString(R.string.Contact_Id),conId);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence namE = context.getString(R.string.channel_name);
             String description = context.getString(R.string.channel_description);

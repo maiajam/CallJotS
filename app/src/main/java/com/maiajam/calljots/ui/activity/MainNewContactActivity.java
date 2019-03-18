@@ -3,6 +3,7 @@ package com.maiajam.calljots.ui.activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.helper.HelperMethodes;
@@ -23,17 +24,25 @@ public class MainNewContactActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if(extra!= null)
         {
-            // add one of the phone contact to speail contact
             Name = extra.getString("name");
-            FirstPhone =  extra.getString("phoneNo");
-            imagePath = extra.getString(getString(R.string.imageUrl));
-            contactId = extra.getInt(getString(R.string.Contact_Id));
-            final AddSpecialContactFrag f = new AddSpecialContactFrag();
-            f.setcontactInfo(Name, FirstPhone, imagePath,contactId);
-            HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
+            if(TextUtils.isEmpty(Name))
+            { // add new contact
+                FirstPhone =  extra.getString("phoneNo");
+                final NewContact f = new NewContact();
+                f.setPhoneNo(FirstPhone);
+                HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
+            }else{
+                // add one of the phone contact to speail contact
+                FirstPhone =  extra.getString("phoneNo");
+                imagePath = extra.getString(getString(R.string.imageUrl));
+                contactId = extra.getInt(getString(R.string.Contact_Id));
+                final AddSpecialContactFrag f = new AddSpecialContactFrag();
+                f.setcontactInfo(Name, FirstPhone, imagePath,contactId);
+                HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
+            }
+
         }else
-        {
-            //add new contact
+        {//add new contact
             HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),new NewContact(),R.id.frame_newContact);
         }
 

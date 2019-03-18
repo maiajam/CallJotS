@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
@@ -26,7 +26,8 @@
       android:textColor="@color/colorPrimary"
       android:visibility="gone"
       android:fontFamily="@font/blackoblique"
-      android:text="@string/specWelcome_txt"/>
+      android:text="@string/specWelcome_txt"
+      />
   <TextView
       android:layout_marginRight="5dp"
       android:layout_marginLeft="5dp"
@@ -41,4 +42,17 @@
       android:visibility="gone"
       android:fontFamily="@font/semibold"
       android:text="@string/NoContact"/>
-</LinearLayout>
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/addNewSpecContact_fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:layout_margin="@dimen/fab_margin"
+      android:background="@color/colorPrimary"
+      android:visibility="visible"
+      app:backgroundTint="@color/colorPrimary"
+      app:srcCompat="@drawable/add_contact"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+</android.support.constraint.ConstraintLayout>

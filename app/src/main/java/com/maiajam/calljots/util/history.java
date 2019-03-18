@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.maiajam.calljots.R;
@@ -120,15 +121,13 @@ public class history extends ContentObserver {
                Toast.makeText(context,"missed",Toast.LENGTH_LONG).show();
             case 2:
                 // incoming call and missed call
-                if(name == null)
-                {
-                    // new contact
+                if(TextUtils.isEmpty(name))
+                {// new contact
                     HelperMethodes.CallNotifcation(context,2,Number
                             ,context.getString(R.string.newCon),context.getString(R.string.addCont),
                             Number,imgUri,0,HelperMethodes.getContactId(Number,context));
                 }else
-                {
-                    // check is this contact a special contact
+                {// check is this contact a special contact
                     handler = new Handler(){
 
                         @Override

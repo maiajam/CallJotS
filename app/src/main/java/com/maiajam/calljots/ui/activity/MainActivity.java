@@ -2,6 +2,7 @@ package com.maiajam.calljots.ui.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private AllPhoneContact contact;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,4 +236,23 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         allContactFrag.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @Override
+    public void onBackPressed() {
+        final AlertDialog.Builder d = new AlertDialog.Builder(this);
+        d.setMessage("هل أنت متأكد من الخروج ؟");
+        d.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                System.exit(0);
+            }
+        });
+        d.setNegativeButton("كلا", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog = d.create();
+        dialog.show();
+    }
 }

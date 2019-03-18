@@ -91,9 +91,18 @@ public class CallReciver extends BroadcastReceiver {
             final ReadDataThread myThread = new ReadDataThread(h, context, Constant.GET_CONTACTINFO_BY_NAME, Contact_name);
             myThread.start();
 
-            }else
-        {// new number .. not one of the contact phone number... no toast msg
-        }
+            }else{// new number .. not one of the contact phone number... no toast msg.
+
+            if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                    // add to phone contact
+                history = new history(new Handler(Looper.getMainLooper()), context);
+                context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
+                        true, (ContentObserver) history);
+            }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+                // during the call draw the logo and enable the user to add a tp phone contact then add a new note for this contact
+                    HelperMethodes.enableAddNoteDuringCall(context,null,null);
+                }
+            }
         }
         }
 
