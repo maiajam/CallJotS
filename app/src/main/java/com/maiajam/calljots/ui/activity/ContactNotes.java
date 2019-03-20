@@ -113,8 +113,12 @@ public class ContactNotes extends AppCompatActivity {
                 {
                     ActivityCompat.shouldShowRequestPermissionRationale(this, String.valueOf(new String[]{Manifest.permission.CALL_PHONE}));
                 }
+                break;
+            case Constant.RequestCodeCallLog :
+                callLogFrag.onRequestPermissionsResult(requestCode,permissions,grantResults);
+                break;
         }
-        callLogFrag.onRequestPermissionsResult(requestCode,permissions,grantResults);
+
     }
 
     private void callAction() {

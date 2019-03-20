@@ -56,12 +56,9 @@ public class CallLogFrag extends Fragment {
         Contact_Id = getArguments().getInt(getString(R.string.Contact_Id));
         Contact_Number = getArguments().getString("phoneNo");
 
-      if(ActivityCompat.checkSelfPermission(getActivity(),
-              Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CONTACTS) ==
-                        PackageManager.PERMISSION_GRANTED)
+      if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED &&
+              ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED )
         {
-
             requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG},
                     Constant.RequestCodeCallLog);
         }else {
