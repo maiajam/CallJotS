@@ -25,10 +25,11 @@ public interface Constant {
     int RequestCodeCallLog = 5 ;
     int REQUEST_CODE_READ_WRITE = 15;
     int MY_PERMISSIONS_REQUEST_CALL_PHONE = 25;
+    int REQ_READ_PHONE_STATE = 35 ;
 
     // else
     int ONE_CONTACT_NOTE = 200;
-    int REQ_READ_PHONE_STATE = 5 ;
+
 
 
     ;

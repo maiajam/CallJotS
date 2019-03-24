@@ -70,12 +70,14 @@ public class ReadDataThread extends Thread {
                 message.obj = oneNote ;
                 break;
             case Constant.ADD_NEW_CONTACT:
-                roomDao.AddPhoneContacts(contact);
+                // get id
+                message.arg2 = (int) roomDao.AddPhoneContacts(contact);
                 // added successfully
                 message.arg1 = 1;
                 break;
             case Constant.ADD_TO_SPECIAL_CONTACT:
-                roomDao.AddContact(contact.getContId());
+                roomDao.setContAsSpec(contact);
+             //   roomDao.AddContact(contact.getContId());
                 // added successfully
                 message.arg1 = 1 ;
                 break;

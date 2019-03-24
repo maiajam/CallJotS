@@ -70,6 +70,7 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
     private Handler handler;
     private String CompanyName;
     private String CompanyAdress;
+    private int parentId;
 
     public AddSpecialContactFrag() {
 
@@ -120,6 +121,7 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
             newContact.setContSecClassF(SecClassification);
             newContact.setContactPhotoUri(img_uri);
             newContact.setContId(contact_id);
+            newContact.setId(parentId);
             if (CatType == 3) {
 
                 CompanyName = CompanyNameEd.getText().toString();
@@ -189,12 +191,13 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
         unbinder.unbind();
     }
 
-    public void setcontactInfo(String Name, String FirstPhone, String imagePath,int contact_id) {
+    public void setcontactInfo(String Name, String FirstPhone, String imagePath, int contact_id, int id) {
 
         name = Name;
         this.contact_id = contact_id ;
         phoneNo = FirstPhone;
         img_uri = imagePath ;
+        parentId = id ;
 
     }
 }

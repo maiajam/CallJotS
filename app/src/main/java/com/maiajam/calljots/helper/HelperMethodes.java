@@ -364,7 +364,7 @@ public class HelperMethodes {
         removeView(wm,v);
     }
 
-    private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact) {
+    private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact, int hint) {
 
         ImageView contPhotot_img = (ImageView) v.findViewById(R.id.ContPhotToast_img);
         ImageView StatusIcon_img = (ImageView) v.findViewById(R.id.status_img);
@@ -387,7 +387,32 @@ public class HelperMethodes {
         FirsClass_txt.setText(first);
         SecClass_txt.setText(Sec);
         ConNo_txt.setText(ContPhoneNo);
-        NoteTitle_txt.setText("'" + NoteTitle + "'");
+        if(hint == 1)
+        {
+            // this special contact dosnt has any note
+            NoteTitle_txt.setText("'" + NoteTitle + "'");
+            StatusIcon_img.setVisibility(View.GONE);
+            Status_txt.setVisibility(View.GONE);
+
+        }else
+        {
+            NoteTitle_txt.setText("'" + NoteTitle + "'");
+            if (status == 1) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.check_done));
+                } else {
+                    StatusIcon_img.setImageDrawable(context.getResources().getDrawable(R.drawable.check_done));
+                }
+                Status_txt.setText("done");
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.pending));
+                } else {
+                    StatusIcon_img.setImageDrawable(context.getResources().getDrawable(R.drawable.pending));
+                }
+                Status_txt.setText("pending");
+            }
+        }
         if (status == 1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 StatusIcon_img.setImageDrawable(context.getDrawable(R.drawable.check_done));
@@ -405,13 +430,13 @@ public class HelperMethodes {
         }
     }
     //
-    public static void drawContactInfo(final Context context, final DialerInfoAndNote contact) {
+    public static void drawContactInfo(final Context context, final DialerInfoAndNote contact, int hint) {
 
         final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
-        addContentToTheView(context,v,contact);
+        addContentToTheView(context,v,contact,hint);
         wm.addView(v, getWindoesMangerParam(context));
         removeView(wm,v);
 

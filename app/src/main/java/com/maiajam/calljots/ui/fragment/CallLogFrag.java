@@ -56,8 +56,8 @@ public class CallLogFrag extends Fragment {
         Contact_Id = getArguments().getInt(getString(R.string.Contact_Id));
         Contact_Number = getArguments().getString("phoneNo");
 
-      if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED &&
-              ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED )
+      if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED &&
+              ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED )
         {
             requestPermissions(new String[]{Manifest.permission.READ_CALL_LOG},
                     Constant.RequestCodeCallLog);
@@ -80,17 +80,15 @@ public class CallLogFrag extends Fragment {
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == Constant.RequestCodeCallLog) {
             boolean allgranted = false;
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    allgranted = true;
-                } else {
-                    allgranted = false;
-                    break;
-                }
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+             allgranted = true ;
+            }else {
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE);
             }
             if (allgranted) {
                 // permission was granted 🙂

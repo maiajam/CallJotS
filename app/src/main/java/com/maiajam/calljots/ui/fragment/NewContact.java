@@ -15,7 +15,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -29,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.maiajam.calljots.R;
-import com.maiajam.calljots.adapter.CallLogAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
@@ -156,17 +154,13 @@ public class NewContact extends Fragment{
         }
         AllPhoneContact Newcontact = new AllPhoneContact();
         Newcontact.setContName(Name);
-        // Newcontact.setI(imagePath);
         Newcontact.setContPhoneNo(FirstPhone);
-        int contId = new Random().nextInt(500);
+        final int contId = new Random().nextInt(500);
         Newcontact.setContId(contId);
-
         if (AddasSpecNewContactCh.isChecked()) {
             // add as special contact
             Newcontact.setContIsSpec(1);
 
-            final AddSpecialContactFrag f = new AddSpecialContactFrag();
-            f.setcontactInfo(Name, FirstPhone, imagePath,contId);
             handler = new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
@@ -175,8 +169,9 @@ public class NewContact extends Fragment{
                             // start fragment add special contact info after add the contact
                             Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
                             AddToPhoneContact();
+                            final AddSpecialContactFrag f = new AddSpecialContactFrag();
+                            f.setcontactInfo(Name, FirstPhone, imagePath,contId, msg.arg2);
                             HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(), f, R.id.frame_newContact);
-
                         }
                     }
                     super.handleMessage(msg);

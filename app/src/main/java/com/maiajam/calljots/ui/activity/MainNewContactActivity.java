@@ -15,6 +15,7 @@ public class MainNewContactActivity extends AppCompatActivity {
     private String Name,FirstPhone,imagePath;
     NewContact newContactFrg = new NewContact();
     private int contactId;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,9 @@ public class MainNewContactActivity extends AppCompatActivity {
                 FirstPhone =  extra.getString("phoneNo");
                 imagePath = extra.getString(getString(R.string.imageUrl));
                 contactId = extra.getInt(getString(R.string.Contact_Id));
+                id = extra.getInt("id");
                 final AddSpecialContactFrag f = new AddSpecialContactFrag();
-                f.setcontactInfo(Name, FirstPhone, imagePath,contactId);
+                f.setcontactInfo(Name, FirstPhone, imagePath,contactId,id);
                 HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
             }
 

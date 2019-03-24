@@ -46,10 +46,7 @@ public class CallReciver extends BroadcastReceiver {
        final String Contact_name = HelperMethodes.getContactName(NOCont, context);
        // save dialer info at shared prefrence
         HelperMethodes.saveDialerInfo(context,Contact_name,NOCont);
-
         if(!TextUtils.isEmpty(Contact_name)){
-
-
             h = new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
@@ -63,11 +60,19 @@ public class CallReciver extends BroadcastReceiver {
                                 // this contact is not one of your speacal contact
                                 HelperMethodes.drawInfo(context);
                             }else {
-                                HelperMethodes.drawContactInfo(context, contactNoteAndInfo);
+                                contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
+                                if(contactNoteAndInfo.getContact_Note()!= null)
+                                {
+                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo,0);
+                                }else
+                                {
+                                    // dont have any note for this special contact yet
+                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo,1);
+                                }
+
                             }
                         }
                         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-
                             history = new history(new Handler(Looper.getMainLooper()),context);
                             context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                     true, (ContentObserver) history);

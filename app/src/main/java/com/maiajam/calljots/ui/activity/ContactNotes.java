@@ -80,12 +80,11 @@ public class ContactNotes extends AppCompatActivity {
         phone_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ContactNotes.this,
-                            new String[]{Manifest.permission.CALL_PHONE},
+
+                    ActivityCompat.requestPermissions(ContactNotes.this, new String[]{Manifest.permission.CALL_PHONE},
                             Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
+
                 }
               callAction();
             }
@@ -95,29 +94,8 @@ public class ContactNotes extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE :
-                boolean allgranted = false;
-                for (int i = 0; i < grantResults.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        allgranted = true;
-                    } else {
-                        allgranted = false;
-                        break;
-                    }
-                }
-                if (allgranted) {
-                    // permission was granted 🙂
-                   callAction();
-                }else
-                {
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, String.valueOf(new String[]{Manifest.permission.CALL_PHONE}));
-                }
-                break;
-            case Constant.RequestCodeCallLog :
                 callLogFrag.onRequestPermissionsResult(requestCode,permissions,grantResults);
-                break;
-        }
+
 
     }
 
@@ -125,13 +103,5 @@ public class ContactNotes extends AppCompatActivity {
         Intent CallAction = new Intent(Intent.ACTION_CALL);
         CallAction.setData(Uri.parse("tel:" + PhoneNo));
         startActivity(CallAction);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.RequestCodeCallLog && callLogFrag != null){
-            callLogFrag.onActivityResult(requestCode, resultCode, data);
-        }
     }
 }

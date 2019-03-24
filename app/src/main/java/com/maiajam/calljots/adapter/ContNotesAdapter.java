@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,114 +66,108 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
 
         final String NoteTitle,Note ;
         final int NoteId,stuts ;
-       final ContactNoteEnitiy contactNote = ListNotes.get(position);
-        final int Id = contactNote.getId();
-        final int contactId = contactNote.getContact_Id();
-        NoteTitle = contactNote.getContact_NoteTitle();
-        Note = contactNote.getContact_Note();
-        Name = contactNote.getContact_Name();
-        stuts = contactNote.getContact_NoteStuts();
-        NoteDate = new SimpleDateFormat("EEE dd/MM/yyyy",Locale.getDefault()).format(contactNote.getContact_LastCallTime());
-
-        NoteId = Id ;
-        if(Type == 1)
-        {
-            // this fragment has been opend from the main activivty
-            holder.NoteDetials.setText(Name);
-            holder.contact_img.setVisibility(View.VISIBLE);
-        }else
-        {
-            holder.NoteDetials.setText(Note);
-            holder.contact_img.setVisibility(View.GONE);
-        }
-        holder.NoteTitle_txt.setText(NoteTitle);
-        holder.NoteDate_txt.setText(NoteDate);
-
-        if(stuts == 0)
-        {
-            holder.check_done_img.setVisibility(View.INVISIBLE);
-        }else
-        {
-            holder.check_done_img.setVisibility(View.VISIBLE);
-        }
-
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent(con, NewNoteActivity.class);
-                i.putExtra("Note_Id",NoteId);
-                i.putExtra("NoteFragment",1);
-                i.putExtra("name", Name);
-                i.putExtra("Id",contactNote.getNote_Parent_Id());
-                i.putExtra("contact_Id",contactId);
-                i.putExtra("phoneNo",PhoneNo);
-                i.putExtra("image_uri",img_uri);
-                con.startActivity(i);
-
-            }
-        });
-        holder.menu_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            final ContactNoteEnitiy contactNote = ListNotes.get(position);
+            final int Id = contactNote.getId();
+            final int contactId = contactNote.getContact_Id();
+            NoteTitle = contactNote.getContact_NoteTitle();
+            Note = contactNote.getContact_Note();
+        if(!TextUtils.isEmpty(NoteTitle)) {
+            Name = contactNote.getContact_Name();
+            stuts = contactNote.getContact_NoteStuts();
+            NoteDate = new SimpleDateFormat("EEE dd/MM/yyyy", Locale.getDefault()).format(contactNote.getContact_LastCallTime());
 
 
-                handler = new Handler(){
+                NoteId = Id;
+                if (Type == 1) {
+                    // this fragment has been opend from the main activivty
+                    holder.NoteDetials.setText(Name);
+                    holder.contact_img.setVisibility(View.VISIBLE);
+                } else {
+                    holder.NoteDetials.setText(Note);
+                    holder.contact_img.setVisibility(View.GONE);
+                }
+                holder.NoteTitle_txt.setText(NoteTitle);
+                holder.NoteDate_txt.setText(NoteDate);
+
+                if (stuts == 0) {
+                    holder.check_done_img.setVisibility(View.INVISIBLE);
+                } else {
+                    holder.check_done_img.setVisibility(View.VISIBLE);
+                }
+
+                holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void handleMessage(Message msg) {
-                        if(msg.arg1 == 1)
-                        {
-                            // the note is updated by the thread
-                            contactNote.setContact_NoteStuts(1);
-                            ListNotes.set(holder.getAdapterPosition(),contactNote);
-                            notifyItemChanged(holder.getAdapterPosition());
-                        }else
-                        {
-                            // the note is deleted
-                            ListNotes.remove(holder.getAdapterPosition());
-                            notifyItemRemoved(holder.getAdapterPosition());
-                        }
-                        super.handleMessage(msg);
-                    }
-                };
-                PopupMenu pop = new PopupMenu(con,holder.menu_img);
-                pop.getMenuInflater().inflate(R.menu.menu_pop_note,pop.getMenu());
+                    public void onClick(View view) {
 
-                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        int id = menuItem.getItemId();
-                        switch (id){
-                            case R.id.action_delete :
-                                myThread = new ReadDataThread(handler,con,Constant.DELETE_NOTE_BY_time,null);
-                                myThread.setNoteDate(contactNote.getContact_LastCallTime());
-                                myThread.start();
-                                break;
-                            case R.id.action_edit :
-                                Intent i = new Intent(con, NewNoteActivity.class);
-                                i.putExtra("id",NoteId);
-                                i.putExtra("NoteFragment",1);
-                                i.putExtra(con.getString(R.string.NameExtra), Name);
-                                i.putExtra(con.getString(R.string.phoneNoExtra),PhoneNo);
-                                i.putExtra("image_uri",img_uri);
-                                con.startActivity(i);
-                                break;
-                            case R.id.action_markComplete :
-                                myThread = new ReadDataThread(handler,con,Constant.UPDATE_NOTE_IS_DONE,null);
-                                myThread.setNoteId(NoteId);
-                                myThread.start();
-                                break;
-                        }
-                        return true;
+                        Intent i = new Intent(con, NewNoteActivity.class);
+                        i.putExtra("Note_Id", NoteId);
+                        i.putExtra("NoteFragment", 1);
+                        i.putExtra("name", Name);
+                        i.putExtra("Id", contactNote.getNote_Parent_Id());
+                        i.putExtra("contact_Id", contactId);
+                        i.putExtra("phoneNo", PhoneNo);
+                        i.putExtra("image_uri", img_uri);
+                        con.startActivity(i);
+
                     }
                 });
-                pop.show();
+                holder.menu_img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
+
+                        handler = new Handler() {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                if (msg.arg1 == 1) {
+                                    // the note is updated by the thread
+                                    contactNote.setContact_NoteStuts(1);
+                                    ListNotes.set(holder.getAdapterPosition(), contactNote);
+                                    notifyItemChanged(holder.getAdapterPosition());
+                                } else {
+                                    // the note is deleted
+                                    ListNotes.remove(holder.getAdapterPosition());
+                                    notifyItemRemoved(holder.getAdapterPosition());
+                                }
+                                super.handleMessage(msg);
+                            }
+                        };
+                        PopupMenu pop = new PopupMenu(con, holder.menu_img);
+                        pop.getMenuInflater().inflate(R.menu.menu_pop_note, pop.getMenu());
+
+                        pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                int id = menuItem.getItemId();
+                                switch (id) {
+                                    case R.id.action_delete:
+                                        myThread = new ReadDataThread(handler, con, Constant.DELETE_NOTE_BY_time, null);
+                                        myThread.setNoteDate(contactNote.getContact_LastCallTime());
+                                        myThread.start();
+                                        break;
+                                    case R.id.action_edit:
+                                        Intent i = new Intent(con, NewNoteActivity.class);
+                                        i.putExtra("id", NoteId);
+                                        i.putExtra("NoteFragment", 1);
+                                        i.putExtra(con.getString(R.string.NameExtra), Name);
+                                        i.putExtra(con.getString(R.string.phoneNoExtra), PhoneNo);
+                                        i.putExtra("image_uri", img_uri);
+                                        con.startActivity(i);
+                                        break;
+                                    case R.id.action_markComplete:
+                                        myThread = new ReadDataThread(handler, con, Constant.UPDATE_NOTE_IS_DONE, null);
+                                        myThread.setNoteId(NoteId);
+                                        myThread.start();
+                                        break;
+                                }
+                                return true;
+                            }
+                        });
+                        pop.show();
+                    }
+                });
             }
-        });
-
     }
-
     @Override
     public int getItemCount() {
         return ListNotes.size();

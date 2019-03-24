@@ -3,8 +3,10 @@ package com.maiajam.calljots.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,26 +63,25 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
         NoteTitle = contactNote.getContact_NoteTitle();
         NoteDate = contactNote.getContact_LastCallTime();
         stuts = contactNote.getContact_NoteStuts();
-        Id= contactNote.getId();
-        if(contactName.equals("Personal"))
-        {
-            //holder.contactName.setText(contactName);
-            holder.contactName.setTextColor(context.getResources().getColor(R.color.new_y));
-        }
-        holder.contactName.setText(contactName);
-        holder.noteTitle_txt.setText(NoteTitle);
-        String date = new SimpleDateFormat("ddd dd/MM/YYYY hh:mm a").format(NoteDate).toString();
-        holder.NoteDate_text.setText(date);
+        if(!TextUtils.isEmpty(NoteTitle)) {
+            Id = contactNote.getId();
+            if (contactName.equals("Personal")) {
+                //holder.contactName.setText(contactName);
+                holder.contactName.setTextColor(context.getResources().getColor(R.color.new_y));
+            }
+            holder.contactName.setText(contactName);
+            holder.noteTitle_txt.setText(NoteTitle);
+            String date = new SimpleDateFormat("ddd dd/MM/YYYY hh:mm a").format(NoteDate).toString();
+            holder.NoteDate_text.setText(date);
 
-        if(stuts == 1)
-        {
-            holder.check_done_img.setVisibility(View.VISIBLE);
-        }else
-        {
-            holder.check_done_img.setVisibility(View.GONE);
+            if (stuts == 1) {
+                holder.check_done_img.setVisibility(View.VISIBLE);
+            } else {
+                holder.check_done_img.setVisibility(View.GONE);
+            }
+            holder.menuAll_img.setOnClickListener(this);
+            holder.cardView.setOnClickListener(this);
         }
-        holder.menuAll_img.setOnClickListener(this);
-        holder.cardView.setOnClickListener(this);
     }
 
     @Override
@@ -104,9 +105,11 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                     RoomDao roomDao = roomManger.roomDao();
                     switch (id){
                         case R.id.action_delete :
-                         //   roomDao.deleteNote(new SimpleDateFormat("ddd dd/MM/YYYY hh:mm a").format(NoteDate).toString());
-                            AllNotes.remove(h.getAdapterPosition());
-                            notifyItemRemoved(h.getAdapterPosition());
+                            readDataThreaD = new ReadDataThread(handler,context,Constant.DELETE_NOTE_BY_time,null);
+
+                            readDataThreaD.setNoteDate(contactNote.getContact_LastCallTime());
+                            readDataThreaD.start();
+
                             break;
                         case R.id.action_edit :
                           /*  Intent i = new Intent(context, NewNoteActivity.class);
@@ -119,12 +122,15 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                         case R.id.action_markComplete :
                             contactNote.setContact_NoteStuts(1);
                             readDataThreaD = new ReadDataThread(handler,context,Constant.UPDATE_NOTE_BY_ID,contactName);
+                            handler = new Handler(){
+                                @Override
+                                public void handleMessage(Message msg) {
+                                    AllNotes.set(h.getAdapterPosition(),contactNote);
+                                    notifyItemChanged(h.getAdapterPosition());
+                                }
+                            };
                             readDataThreaD.start();
-                        //    roomDao.update(contactNote);
-                            AllNotes.set(h.getAdapterPosition(),contactNote);
-                            notifyItemChanged(h.getAdapterPosition());
                             break;
-
                     }
                     return true;
                 }

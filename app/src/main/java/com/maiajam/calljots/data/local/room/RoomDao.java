@@ -26,7 +26,7 @@ public abstract class RoomDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insert(ContactNoteEnitiy contactNoteEnitiy);
 
-    @Query("UPDATE AllPhoneContact SET contIsSpec = 1 WHERE contId = :contId ; INSERT INTO Contact ContactNoteEnitiy")
+    @Query("UPDATE AllPhoneContact SET contIsSpec = 1 WHERE contId = :contId ")
     public abstract void AddContact(int contId);
 
     // get
@@ -36,7 +36,7 @@ public abstract class RoomDao {
     @Query("SELECT * FROM ContactNoteEnitiy WHERE id = :Id")
     public abstract ContactNoteEnitiy getnoteById(int Id);
 
-    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id LIMIT 1  ")
+    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id DESC LIMIT 1  ")
     public abstract ContactNoteEnitiy getLastNote(String name);
 
     @Query("SELECT *  FROM  ContactNoteEnitiy WHERE Contact_Name = :name")
@@ -58,12 +58,11 @@ public abstract class RoomDao {
     // delete
     @Query("DELETE FROM ContactNoteEnitiy  WHERE Contact_LastCallTime = :Contact_LastCallTime")
     public abstract void deleteNote(Date Contact_LastCallTime);
-    @Delete
-    public abstract void delete(ContactNoteEnitiy contactNoteEnitiy);
+
 
     // else
     @Query("UPDATE AllPhoneContact SET contIsSpec =  1  WHERE id = :id ")
-    public abstract void SetIsSpecialContact(int id);
+    public abstract int SetIsSpecialContact(int id);
 
     @Query("SELECT contIsSpec FROM AllPhoneContact WHERE contName = :name ")
     public abstract int CheckIsSpec(String name);
@@ -77,13 +76,15 @@ public abstract class RoomDao {
     @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name AND Contact_NoteTitle = :NoteTitle ")
     public abstract ContactNoteEnitiy ViewNote(String name, String NoteTitle);
 
-
     @Transaction
-     void setContAsSpec(int Id)
+     public void setContAsSpec(AllPhoneContact contact)
     {
-        SetIsSpecialContact(Id);
+        SetIsSpecialContact(contact.getId());
         ContactNoteEnitiy ContactNoteEnit = new ContactNoteEnitiy();
-        ContactNoteEnit.setId(Id);
+        ContactNoteEnit.setNote_Parent_Id(contact.getId());
+        ContactNoteEnit.setContact_Id(contact.getContId());
+        ContactNoteEnit.setContact_Name(contact.getContName());
+        
         insert(ContactNoteEnit);
     }
 }
