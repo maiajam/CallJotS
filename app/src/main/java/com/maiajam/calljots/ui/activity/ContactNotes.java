@@ -59,9 +59,6 @@ public class ContactNotes extends AppCompatActivity {
         ContactPhNo_txt = (TextView) findViewById(R.id.SpecContPhoneNo_txt);
 
         SPviewPager = (ViewPager) findViewById(R.id.ContactNot_viewPager);
-
-
-
         ContactPhoto_img.setImageDrawable(HelperMethodes.getBitmapImage(Image_uri,getBaseContext()));
         ContactName_txt.setText(Name);
         ContactPhNo_txt.setText(PhoneNo);
@@ -80,13 +77,16 @@ public class ContactNotes extends AppCompatActivity {
         phone_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
                     ActivityCompat.requestPermissions(ContactNotes.this, new String[]{Manifest.permission.CALL_PHONE},
                             Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
 
+                }else {
+                    callAction();
                 }
-              callAction();
+
             }
         });
     }

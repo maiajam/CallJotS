@@ -31,7 +31,6 @@ import java.util.Locale;
 /**
  * Created by maiAjam on 5/7/2018.
  */
-
 public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Holder>{
 
     Context con;
@@ -40,14 +39,11 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
     String NoteDate ;
     android.support.v7.widget.CardView CardView ;
     String Name,PhoneNo ;
-
     int Type;
    String img_uri;
     private RoomManger roomManger;
     private ReadDataThread myThread;
     private Handler handler;
-
-
     public ContNotesAdapter(Context context, List<ContactNoteEnitiy> List, int type)
     {
         con = context ;
@@ -60,22 +56,20 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
         holder = new Holder(v);
         return holder;
     }
-
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
 
         final String NoteTitle,Note ;
         final int NoteId,stuts ;
-            final ContactNoteEnitiy contactNote = ListNotes.get(position);
-            final int Id = contactNote.getId();
-            final int contactId = contactNote.getContact_Id();
-            NoteTitle = contactNote.getContact_NoteTitle();
-            Note = contactNote.getContact_Note();
+        final ContactNoteEnitiy contactNote = ListNotes.get(position);
+        final int Id = contactNote.getId();
+        final int contactId = contactNote.getContact_Id();
+        NoteTitle = contactNote.getContact_NoteTitle();
+        Note = contactNote.getContact_Note();
         if(!TextUtils.isEmpty(NoteTitle)) {
             Name = contactNote.getContact_Name();
             stuts = contactNote.getContact_NoteStuts();
             NoteDate = new SimpleDateFormat("EEE dd/MM/yyyy", Locale.getDefault()).format(contactNote.getContact_LastCallTime());
-
 
                 NoteId = Id;
                 if (Type == 1) {
@@ -114,8 +108,6 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
                 holder.menu_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
                         handler = new Handler() {
                             @Override
                             public void handleMessage(Message msg) {
@@ -166,7 +158,9 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
                         pop.show();
                     }
                 });
-            }
+            }else {
+            holder.cardView.setVisibility(View.GONE);
+        }
     }
     @Override
     public int getItemCount() {

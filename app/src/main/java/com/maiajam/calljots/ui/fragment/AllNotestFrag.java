@@ -77,10 +77,18 @@ public class AllNotestFrag extends Fragment {
         setRecyContent();
         return view;
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Allnote = new ArrayList<>();
+        setRecyContent();
     }
     @OnClick(R.id.addNewNote_fab)
     public void onViewClicked() {
@@ -108,11 +116,7 @@ public class AllNotestFrag extends Fragment {
         Id = mId;
         ContId = mContId ;
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        setRecyContent();
-    }
+
     public void setRecyContent()
     {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

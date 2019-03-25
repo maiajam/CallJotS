@@ -36,7 +36,7 @@ public abstract class RoomDao {
     @Query("SELECT * FROM ContactNoteEnitiy WHERE id = :Id")
     public abstract ContactNoteEnitiy getnoteById(int Id);
 
-    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id DESC LIMIT 1  ")
+    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id ASC LIMIT 1  ")
     public abstract ContactNoteEnitiy getLastNote(String name);
 
     @Query("SELECT *  FROM  ContactNoteEnitiy WHERE Contact_Name = :name")
@@ -47,7 +47,7 @@ public abstract class RoomDao {
 
     @Query("SELECT AllPhoneContact.*,ContactNoteEnitiy.* FROM AllPhoneContact INNER JOIN " +
             "ContactNoteEnitiy ON AllPhoneContact.Id = ContactNoteEnitiy.Note_Parent_Id AND AllPhoneContact.contName = :Name " +
-            "ORDER BY ContactNoteEnitiy.Contact_LastCallTime  LIMIT 1")
+            "ORDER BY ContactNoteEnitiy.Contact_LastCallTime DESC LIMIT 1")
     public abstract DialerInfoAndNote getContactInfoByName(String Name);
 
     @Query("SELECT Id FROM AllPhoneContact WHERE contName = :name")
@@ -84,7 +84,6 @@ public abstract class RoomDao {
         ContactNoteEnit.setNote_Parent_Id(contact.getId());
         ContactNoteEnit.setContact_Id(contact.getContId());
         ContactNoteEnit.setContact_Name(contact.getContName());
-        
         insert(ContactNoteEnit);
     }
 }

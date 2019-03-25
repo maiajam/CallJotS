@@ -31,10 +31,7 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
 
     Context context ;
     ArrayList<ContactNoteEnitiy> AllNotes ;
-    ContactNoteEnitiy contactNote ;
-    String contactName,NoteTitle;
-    Date NoteDate;
-    int stuts,Id;
+
     holder h ;
     private RoomManger roomManger;
     private Handler handler;
@@ -57,7 +54,10 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
     @Override
     public void onBindViewHolder(holder holder, int position)
     {
-
+        final ContactNoteEnitiy contactNote ;
+        final String contactName,NoteTitle;
+        Date NoteDate;
+        int stuts,Id;
         contactNote = AllNotes.get(position);
         contactName = contactNote.getContact_Name();
         NoteTitle = contactNote.getContact_NoteTitle();
@@ -79,8 +79,64 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
             } else {
                 holder.check_done_img.setVisibility(View.GONE);
             }
-            holder.menuAll_img.setOnClickListener(this);
+            holder.menuAll_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenu pop = new PopupMenu(context,h.menuAll_img);
+                    pop.getMenuInflater().inflate(R.menu.menu_pop_note,pop.getMenu());
+
+                    pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            int id = menuItem.getItemId();
+                            roomManger = RoomManger.getInstance(context);
+                            RoomDao roomDao = roomManger.roomDao();
+                            switch (id){
+                                case R.id.action_delete :
+
+                                    handler = new Handler(){
+                                        @Override
+                                        public void handleMessage(Message msg) {
+                                            AllNotes.remove(h.getAdapterPosition());
+                                            notifyItemChanged(h.getAdapterPosition());
+                                        }
+                                    };
+                                    readDataThreaD = new ReadDataThread(handler,context,Constant.DELETE_NOTE_BY_time,null);
+                                    readDataThreaD.setNoteDate(contactNote.getContact_LastCallTime());
+                                    readDataThreaD.start();
+
+                                    break;
+                                case R.id.action_edit :
+                          /*  Intent i = new Intent(context, NewNoteActivity.class);
+                            i.putExtra("id",Id);
+                            i.putExtra("NoteFragment",1);
+                            i.putExtra("name", contactName);
+                            context.startActivity(i);
+                            */
+                                    break;
+                                case R.id.action_markComplete :
+                                    contactNote.setContact_NoteStuts(1);
+                                    handler = new Handler(){
+                                        @Override
+                                        public void handleMessage(Message msg) {
+                                            AllNotes.set(h.getAdapterPosition(),contactNote);
+                                            notifyItemChanged(h.getAdapterPosition());
+                                        }
+                                    };
+                                    readDataThreaD = new ReadDataThread(handler,context,Constant.UPDATE_NOTE_BY_ID,contactName);
+                                    readDataThreaD.setNote(contactNote);
+                                    readDataThreaD.start();
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                    pop.show();
+                }
+            });
             holder.cardView.setOnClickListener(this);
+        }else {
+            holder.cardView.setVisibility(View.GONE);
         }
     }
 
@@ -91,60 +147,6 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
 
     @Override
     public void onClick(View view) {
-
-        if(view == h.menuAll_img)
-        {
-            PopupMenu pop = new PopupMenu(context,h.menuAll_img);
-            pop.getMenuInflater().inflate(R.menu.menu_pop_note,pop.getMenu());
-
-            pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    int id = menuItem.getItemId();
-                    roomManger = RoomManger.getInstance(context);
-                    RoomDao roomDao = roomManger.roomDao();
-                    switch (id){
-                        case R.id.action_delete :
-                            readDataThreaD = new ReadDataThread(handler,context,Constant.DELETE_NOTE_BY_time,null);
-
-                            readDataThreaD.setNoteDate(contactNote.getContact_LastCallTime());
-                            readDataThreaD.start();
-
-                            break;
-                        case R.id.action_edit :
-                          /*  Intent i = new Intent(context, NewNoteActivity.class);
-                            i.putExtra("id",Id);
-                            i.putExtra("NoteFragment",1);
-                            i.putExtra("name", contactName);
-                            context.startActivity(i);
-                            */
-                            break;
-                        case R.id.action_markComplete :
-                            contactNote.setContact_NoteStuts(1);
-                            readDataThreaD = new ReadDataThread(handler,context,Constant.UPDATE_NOTE_BY_ID,contactName);
-                            handler = new Handler(){
-                                @Override
-                                public void handleMessage(Message msg) {
-                                    AllNotes.set(h.getAdapterPosition(),contactNote);
-                                    notifyItemChanged(h.getAdapterPosition());
-                                }
-                            };
-                            readDataThreaD.start();
-                            break;
-                    }
-                    return true;
-                }
-            });
-            pop.show();
-
-        }else if(view == h.cardView)
-        {
-           /* Intent ViewNote_Int = new Intent(context,ViewNote.class);
-            ViewNote_Int.putExtra("name",contactName );
-            ViewNote_Int.putExtra("noteTitle",NoteTitle);
-            context.startActivity(ViewNote_Int);
-            */
-        }
         }
 
 

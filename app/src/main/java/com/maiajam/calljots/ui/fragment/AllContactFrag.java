@@ -1,5 +1,6 @@
 package com.maiajam.calljots.ui.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,12 +33,16 @@ import android.widget.ProgressBar;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.AllConAdapter;
+import com.maiajam.calljots.adapter.CallLogAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.SwipeContrlloerActions;
 import com.maiajam.calljots.helper.SwipeControler;
+import com.maiajam.calljots.ui.activity.ContactNotes;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.util.NewContactObserver;
 import com.maiajam.calljots.helper.ReadDataThread;
@@ -64,16 +70,14 @@ public class AllContactFrag extends Fragment {
     private Handler handler;
     private ReadDataThread myThread;
     private SwipeControler swipeControler;
-
+    private String PhonNo;
 
     public void AllContactFrag() {
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -85,12 +89,18 @@ public class AllContactFrag extends Fragment {
         swipeControler = new SwipeControler(new SwipeContrlloerActions() {
             @Override
             public void onLeftClicked(int position) {
-
             }
-
             @Override
             public void onRightClicked(int position) {
                 //ACTION CALL
+                PhonNo = allPhoneContact.get(position).getContPhoneNo();
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
+                            Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
+                }else {
+                    callAction(allPhoneContact.get(position).getContPhoneNo());
+                }
+
             }
         });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeControler);
@@ -104,7 +114,6 @@ public class AllContactFrag extends Fragment {
               swipeControler.onDraw();
             }
         });
-
             NewContactObserver observer = new NewContactObserver(new Handler(), getContext());
             getContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
             AsyncTask.execute(new Runnable() {
@@ -169,5 +178,31 @@ public class AllContactFrag extends Fragment {
         myThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_PHONE_CONTACT,"");
         myThread.start();
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE) {
+            boolean allgranted = false;
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                allgranted = true ;
+            }else {
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE);
+            }
+            if (allgranted) {
+                // permission was granted 🙂
+              callAction(PhonNo);
+            }
+        }
+
+    }
+
+    private void callAction(String PhoneNo) {
+        Intent CallAction = new Intent(Intent.ACTION_CALL);
+        CallAction.setData(Uri.parse("tel:" + PhoneNo));
+        startActivity(CallAction);
+    }
+
+
 }
 

@@ -27,7 +27,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
     private final SwipeContrlloerActions actions;
     private boolean swipeBack;
     private ButtonsState buttonShowedState = ButtonsState.GONE;
-    private static final float buttonWidth = 300;
+    private static final float buttonWidth = 200;
     private RectF buttonInstance;
     private RecyclerView.ViewHolder currentItemViewHolder = null;
 
@@ -67,9 +67,15 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
                             int actionState, boolean isCurrentlyActive) {
         drawButton(c,viewHolder);
         if (actionState == ACTION_STATE_SWIPE) {
-            setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            if (buttonShowedState != ButtonsState.GONE) {
+                if (buttonShowedState == ButtonsState.LEFT_VISIBLE) dX = Math.max(dX, buttonWidth);
+                if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) dX = Math.min(dX, -buttonWidth);
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+            else {
+                setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
         }
-
 
         if (buttonShowedState == ButtonsState.GONE) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -85,23 +91,12 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
 
-        RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
+
+        RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getRight() + buttonWidthWithoutPadding, itemView.getBottom());
         p.setColor(Color.BLUE);
         c.drawRoundRect(leftButton, corners, corners, p);
-        drawText("EDIT", c, leftButton, p);
-
-        RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        p.setColor(Color.RED);
-        c.drawRoundRect(rightButton, corners, corners, p);
-        drawText("DELETE", c, rightButton, p);
-
+        drawText("Call", c, leftButton, p);
         buttonInstance = null;
-        if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
-            buttonInstance = leftButton;
-        }
-        else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-            buttonInstance = rightButton;
-        }
     }
 
     private void drawText(String edit, Canvas c, RectF button, Paint p) {
@@ -184,6 +179,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
                     swipeBack = false;
                     buttonShowedState = ButtonsState.GONE;
                 }
+
 
 
                 return false;
