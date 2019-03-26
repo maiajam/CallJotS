@@ -89,7 +89,7 @@ public class ReadDataThread extends Thread {
                   message.arg1 = roomDao.CheckIsSpec(mName);
                   break;
                case Constant.UPDATE_NOTE_BY_ID:
-                   roomDao.updateNoteByID(oneNote.getId(),oneNote.getContact_NoteTitle(),oneNote.getContact_Note());
+                   roomDao.updateNoteByID(NoteId,oneNote.getContact_NoteTitle(),oneNote.getContact_Note());
                    // arg value to indicate that this thread update the note
                    message.arg1 = 1;
                    break;

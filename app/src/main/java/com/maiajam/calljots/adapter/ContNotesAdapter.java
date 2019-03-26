@@ -62,8 +62,9 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
         final String NoteTitle,Note ;
         final int NoteId,stuts ;
         final ContactNoteEnitiy contactNote = ListNotes.get(position);
-        final int Id = contactNote.getId();
+        final int parentNote_Id = contactNote.getNote_Parent_Id();
         final int contactId = contactNote.getContact_Id();
+        NoteId = contactNote.getId();
         NoteTitle = contactNote.getContact_NoteTitle();
         Note = contactNote.getContact_Note();
         if(!TextUtils.isEmpty(NoteTitle)) {
@@ -71,7 +72,6 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
             stuts = contactNote.getContact_NoteStuts();
             NoteDate = new SimpleDateFormat("EEE dd/MM/yyyy", Locale.getDefault()).format(contactNote.getContact_LastCallTime());
 
-                NoteId = Id;
                 if (Type == 1) {
                     // this fragment has been opend from the main activivty
                     holder.NoteDetials.setText(Name);
@@ -139,10 +139,12 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
                                         break;
                                     case R.id.action_edit:
                                         Intent i = new Intent(con, NewNoteActivity.class);
-                                        i.putExtra("id", NoteId);
+                                        i.putExtra("Id", parentNote_Id);
                                         i.putExtra("NoteFragment", 1);
-                                        i.putExtra(con.getString(R.string.NameExtra), Name);
+                                        i.putExtra("name", Name);
+                                        i.putExtra("contact_Id",contactId);
                                         i.putExtra(con.getString(R.string.phoneNoExtra), PhoneNo);
+                                        i.putExtra("Note_Id",NoteId);
                                         i.putExtra("image_uri", img_uri);
                                         con.startActivity(i);
                                         break;

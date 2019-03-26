@@ -244,7 +244,7 @@ public class NewContact extends Fragment{
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == Constant.REQUEST_CODE_READ_WRITE) {
+        if (requestCode == Constant.REQUEST_CODE_WRITE) {
             boolean allgranted = false;
             for (int i = 0; i < grantResults.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {

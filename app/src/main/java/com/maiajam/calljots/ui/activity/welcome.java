@@ -8,9 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -43,6 +40,9 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
     private int READ_PHONE_STATE = 5;
     SharedPreferences sp ;
     SharedPreferences.Editor editor;
+    private static final String[] READ_CONTACT_PERMISSIONS =
+            new String[]{Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.WRITE_CONTACTS};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,9 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             editor.commit();
             editor.apply();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-            if (ContextCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.READ_CONTACTS},
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,READ_CONTACT_PERMISSIONS,
                         Constant.REQUEST_CODE_READ_WRITE);
             } else {
                 // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
@@ -150,7 +151,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                    RoomManger.getInstance(getBaseContext());
               }else
               {
-                  ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CONTACTS);
+
               }
               break;
       }
