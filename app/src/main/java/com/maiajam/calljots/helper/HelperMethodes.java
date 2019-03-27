@@ -20,6 +20,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -53,10 +54,12 @@ public class HelperMethodes {
 
 
 
-    public static void beginTransAction(FragmentTransaction fragmentTransaction, Fragment fragment, int frame) {
+    public static void beginTransAction(FragmentTransaction fragmentTransaction,FragmentManager fragmentManager, Fragment fragment, int frame) {
         FragmentTransaction ft = fragmentTransaction;
+        FragmentManager manager = fragmentManager;
         ft.replace(frame, fragment);
         ft.commit();
+        manager.popBackStack();
     }
 
     public static Drawable getBitmapImage(String contactPhotoUri, Context con) {
@@ -390,7 +393,7 @@ public class HelperMethodes {
         if(hint == 1)
         {
             // this special contact dosnt has any note
-            NoteTitle_txt.setText("'" + NoteTitle + "'");
+            NoteTitle_txt.setText("you dont have any note for this contact");
             StatusIcon_img.setVisibility(View.GONE);
             Status_txt.setVisibility(View.GONE);
 
@@ -485,7 +488,7 @@ public class HelperMethodes {
             @Override
             public void run() {
                 try {
-                    sleep(10*1000);
+                    sleep(5*1000);
                     wm.removeView(v);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

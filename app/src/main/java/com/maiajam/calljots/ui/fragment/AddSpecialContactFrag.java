@@ -122,6 +122,7 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
             newContact.setContactPhotoUri(img_uri);
             newContact.setContId(contact_id);
             newContact.setId(parentId);
+            newContact.setContIsSpec(1);
             if (CatType == 3) {
 
                 CompanyName = CompanyNameEd.getText().toString();
@@ -137,7 +138,7 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
                 }
                 newContact.setContCompanyName(CompanyName);
                 newContact.setContAddress(CompanyAdress);
-
+                newContact.setContIsSpec(1);
             }
             handler = new Handler() {
                 @Override

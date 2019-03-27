@@ -32,7 +32,6 @@ public class ContactNotes extends AppCompatActivity {
     ViewPager SPviewPager;
     String Name, PhoneNo,Image_uri;
     int tab;
-
     CallLogFrag callLogFrag = new CallLogFrag();
     private int Contact_Id;
     private int id;

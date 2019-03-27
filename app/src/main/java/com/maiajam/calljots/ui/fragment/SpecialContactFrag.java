@@ -124,6 +124,6 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
 
     @OnClick(R.id.addNewSpecContact_fab)
     public void onViewClicked() {
-        HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(),new AllContactFrag(),R.id.frame);
+        HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(),getFragmentManager(),new AllContactFrag(),R.id.frame);
     }
 }

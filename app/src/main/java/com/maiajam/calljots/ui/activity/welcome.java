@@ -66,9 +66,9 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             editor.commit();
             editor.apply();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,READ_CONTACT_PERMISSIONS,
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ){
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
                         Constant.REQUEST_CODE_READ_WRITE);
             } else {
                 // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
@@ -98,7 +98,6 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                         startActivity(new Intent(welcome.this,MainActivity.class));
                     }
                 } else {
-
                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:" + getPackageName()));
                     startActivityForResult(intent, OVERLAY_PERMISSION_CODE);

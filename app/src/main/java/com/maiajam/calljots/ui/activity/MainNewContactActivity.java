@@ -31,7 +31,7 @@ public class MainNewContactActivity extends AppCompatActivity {
                 FirstPhone =  extra.getString("phoneNo");
                 final NewContact f = new NewContact();
                 f.setPhoneNo(FirstPhone);
-                HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
+                HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),getSupportFragmentManager(),f,R.id.frame_newContact);
             }else{
                 // add one of the phone contact to speail contact
                 FirstPhone =  extra.getString("phoneNo");
@@ -40,12 +40,12 @@ public class MainNewContactActivity extends AppCompatActivity {
                 id = extra.getInt("id");
                 final AddSpecialContactFrag f = new AddSpecialContactFrag();
                 f.setcontactInfo(Name, FirstPhone, imagePath,contactId,id);
-                HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),f,R.id.frame_newContact);
+                HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),getSupportFragmentManager(),f,R.id.frame_newContact);
             }
 
         }else
         {//add new contact
-            HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),new NewContact(),R.id.frame_newContact);
+            HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),getSupportFragmentManager(),new NewContact(),R.id.frame_newContact);
         }
 
     }

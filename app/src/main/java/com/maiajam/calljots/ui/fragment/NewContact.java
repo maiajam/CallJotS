@@ -171,7 +171,7 @@ public class NewContact extends Fragment{
                             AddToPhoneContact();
                             final AddSpecialContactFrag f = new AddSpecialContactFrag();
                             f.setcontactInfo(Name, FirstPhone, imagePath,contId, msg.arg2);
-                            HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(), f, R.id.frame_newContact);
+                            HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(),getFragmentManager(), f, R.id.frame_newContact);
                         }
                     }
                     super.handleMessage(msg);

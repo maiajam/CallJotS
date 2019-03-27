@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         toolbar.setTitle("Special Contact");
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigationView);
-        HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(), new SpecialContactFrag(), R.id.frame);
+        HelperMethodes.beginTransAction(getSupportFragmentManager().beginTransaction(),getSupportFragmentManager(), new SpecialContactFrag(), R.id.frame);
 
         sp = getBaseContext().getSharedPreferences("FirstVisit", Context.MODE_PRIVATE);
         editor = sp.edit();
