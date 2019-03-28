@@ -78,13 +78,13 @@ public class CallReciver extends BroadcastReceiver {
                                     true, (ContentObserver) history);
                         }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
-                            if(msg.obj == null){
+                         //   if(msg.obj == null){
                                 // this contact is not one of your speacal contact
-                                HelperMethodes.drawInfo(context);
-                            }else {
+                           //     HelperMethodes.drawInfo(context);
+                            //}else {
 
-                                HelperMethodes.enableAddNoteDuringCall(context,null,null);
-                            }
+                              //  HelperMethodes.enableAddNoteDuringCall(context,null,null);
+                          //  }
 
                         }
 

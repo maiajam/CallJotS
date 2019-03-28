@@ -60,6 +60,7 @@ public class pageAdapter extends FragmentPagerAdapter {
                 Bundle bundle2 = new Bundle();
                 bundle2.putString("name",Name);
                 bundle2.putString("phoneNo",PhoneNo);
+                bundle2.putInt(context.getResources().getString(R.string.Contact_Id),mContact_Id);
                // bundle2.putInt(context.getResources().getString(R.string.Contact_Id),mId);
                 f = fragmentList.get(position);
                 f.setArguments(bundle2);

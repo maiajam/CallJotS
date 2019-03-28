@@ -1,5 +1,6 @@
 package com.maiajam.calljots.helper;
 
+import android.content.Context;
 import android.drm.DrmStore;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,9 +13,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import com.maiajam.calljots.R;
+
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
-import static android.view.Gravity.LEFT;
-import static android.view.Gravity.RIGHT;
+import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
+import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
 
 enum ButtonsState {
     GONE,
@@ -29,10 +32,14 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
     private ButtonsState buttonShowedState = ButtonsState.GONE;
     private static final float buttonWidth = 200;
     private RectF buttonInstance;
+    private int hint ;
     private RecyclerView.ViewHolder currentItemViewHolder = null;
+    private Context context ;
 
-    public SwipeControler(SwipeContrlloerActions swipeContrlloerActions) {
+    public SwipeControler(Context mContext, SwipeContrlloerActions swipeContrlloerActions, int mhint) {
         this.actions = swipeContrlloerActions;
+        hint = mhint ;
+        context = mContext ;
     }
 
     @Override
@@ -76,40 +83,55 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
                 setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }
-
         if (buttonShowedState == ButtonsState.GONE) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
         currentItemViewHolder = viewHolder;
     }
-
     private void drawButton(Canvas c, RecyclerView.ViewHolder viewHolder) {
 
         float buttonWidthWithoutPadding = buttonWidth - 20;
-        float corners = 16;
+        float corners = 0;
 
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
 
 
-        RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getRight() + buttonWidthWithoutPadding, itemView.getBottom());
-        p.setColor(Color.BLUE);
-        c.drawRoundRect(leftButton, corners, corners, p);
-        drawText("Call", c, leftButton, p);
         buttonInstance = null;
+        if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
+            RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(),
+                    itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
+            p.setColor(context.getResources().getColor(R.color.new_y));
+            c.drawRoundRect(leftButton, corners, corners, p);
+            if(hint == 1)
+            {
+                drawText("Call", c, leftButton, p);
+                buttonInstance = leftButton;
+            }else
+            {
+                drawText("Edit", c, leftButton, p);
+                buttonInstance = leftButton;
+            }
+        }
+        else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+            RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding,
+                    itemView.getTop(), itemView.getRight(), itemView.getBottom());
+            p.setColor(Color.RED);
+            c.drawRoundRect(rightButton, corners, corners, p);
+            drawText("Delete", c, rightButton, p);
+            buttonInstance = rightButton;
+        }
     }
 
     private void drawText(String edit, Canvas c, RectF button, Paint p) {
 
-        float textSize = 60;
+        float textSize = 40;
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
         p.setTextSize(textSize);
-
         float textWidth = p.measureText(edit);
         c.drawText(edit, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p);
     }
-
     private void setTouchListener(final Canvas c,
                                   final RecyclerView recyclerView,
                                   final RecyclerView.ViewHolder viewHolder,
@@ -133,8 +155,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
             }
 
         });
-}
-
+    }
     private void setTouchDownListener(final Canvas c,
                                       final RecyclerView recyclerView,
                                       final RecyclerView.ViewHolder viewHolder,
@@ -150,7 +171,6 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
             }
         });
     }
-
     private void setTouchUpListener(final Canvas c,
                                     final RecyclerView recyclerView,
                                     final RecyclerView.ViewHolder viewHolder,
@@ -179,23 +199,16 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
                     swipeBack = false;
                     buttonShowedState = ButtonsState.GONE;
                 }
-
-
-
                 return false;
             }
         });
-
-
     }
-
     private void setItemsClickable(RecyclerView recyclerView,
                                    boolean isClickable) {
         for (int i = 0; i < recyclerView.getChildCount(); ++i) {
             recyclerView.getChildAt(i).setClickable(isClickable);
         }
     }
-
 
     @Override
     public void onDraw() {

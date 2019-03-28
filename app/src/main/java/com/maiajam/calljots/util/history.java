@@ -156,9 +156,4 @@ public class history extends ContentObserver {
 
     }
 
-    private void ShowToast_ContactNote(int number, String name, String callDuration, String date, int dir) {
-
-       // ContactInfo_Toast toast = new ContactInfo_Toast(context,);
-
-    }
 }

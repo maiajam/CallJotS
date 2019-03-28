@@ -144,12 +144,6 @@ public class HelperMethodes {
         ArrayList<ContactLogs> list_Log = new ArrayList<>();
         String Numer = contact_number.replaceAll("\\D+","");
         Cursor calls = null;
-        Cursor contact = activity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,
-                ContactsContract.Contacts._ID + "=?", new String[]{String.valueOf(contact_id)}, null, null);
-
-        if (contact != null && contact.moveToNext()) {
-            String lookupKey = contact.getString(contact.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-            int contactId = contact.getInt(contact.getColumnIndex(ContactsContract.Contacts._ID));
             calls = activity.getContentResolver().query(CallLog.Calls.CONTENT_URI
                     , null
                     , null
@@ -190,7 +184,6 @@ public class HelperMethodes {
                         list_Log.add(log);
                     }
                 } while (calls.moveToNext());
-            }
         }
         return list_Log ;
     }

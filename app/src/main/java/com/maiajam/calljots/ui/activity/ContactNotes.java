@@ -94,8 +94,6 @@ public class ContactNotes extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 callLogFrag.onRequestPermissionsResult(requestCode,permissions,grantResults);
-
-
     }
 
     private void callAction() {

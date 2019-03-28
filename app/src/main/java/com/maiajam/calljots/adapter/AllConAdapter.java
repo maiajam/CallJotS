@@ -90,7 +90,12 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
                     holder.ContPhoto_img.setImageDrawable( con.getResources().getDrawable(R.drawable.conphoto));
                 }
             }
+        holder.PhoneIcon_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
 
         holder.AddToIcon_image.setOnClickListener(new View.OnClickListener() {
             @Override
