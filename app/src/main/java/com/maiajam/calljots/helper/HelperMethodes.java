@@ -209,6 +209,7 @@ public class HelperMethodes {
     {
         Intent intent ;
         PendingIntent pendingIntent ;
+        String chanellId = "10" ;
         if(type == 1)
         {// this notifacation to notify the user to add a note for his specail contact
             intent = new Intent(context, NewNoteActivity.class);
@@ -237,7 +238,7 @@ public class HelperMethodes {
             CharSequence namE = context.getString(R.string.channel_name);
             String description = context.getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("10", namE, importance);
+            NotificationChannel channel = new NotificationChannel(chanellId, namE, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -256,6 +257,7 @@ public class HelperMethodes {
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
+                     .setChannelId(chanellId)
                     .setAutoCancel(true)
                     ;
         }else
@@ -268,11 +270,13 @@ public class HelperMethodes {
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
+                    .setChannelId(chanellId)
                     .setAutoCancel(true)
                     ;
         }
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(1, builder.build());
+        int notifyId = 1;
+        notificationManager.notify(notifyId, builder.build());
     }
 
     public static void enableAddNoteDuringCall(Context context,String contact_name, String phoneNo) {
