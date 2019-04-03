@@ -91,11 +91,11 @@ public class AllContactFrag extends Fragment {
             public void onLeftClicked(int position) {
                 //ACTION CALL
                 PhonNo = allPhoneContact.get(position).getContPhoneNo();
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    callAction(allPhoneContact.get(position).getContPhoneNo());
+                }else {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
                             Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
-                }else {
-                    callAction(allPhoneContact.get(position).getContPhoneNo());
                 }
             }
             @Override
@@ -204,5 +204,8 @@ public class AllContactFrag extends Fragment {
     }
 
 
+    public void revertSwipe(int index) {
+        allConAdapter.notifyItemChanged(index);
+    }
 }
 
