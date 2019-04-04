@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chauthai.swipereveallayout.SwipeRevealLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:mode="same_level"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/NoPermission_txt"
+        android:text="@string/NoPermission"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="100dp"
+        android:textColor="#ffffff"
+        android:visibility="gone"/>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

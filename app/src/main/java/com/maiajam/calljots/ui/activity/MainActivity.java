@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public void onBackPressed() {
         final AlertDialog.Builder d = new AlertDialog.Builder(this);
-        d.setMessage("هل أنت متأكد من الخروج ؟");
+        d.setMessage(getString(R.string.exit));
         d.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

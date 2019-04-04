@@ -42,5 +42,7 @@ dependencies {
     //work manger dependency
     implementation "android.arch.work:work-runtime:1.0.0-alpha02"
 
+    //swipe item recycleview
+    implementation  "com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1"
 
 }

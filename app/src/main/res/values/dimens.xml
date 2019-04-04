@@ -4,4 +4,5 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="welcomMargen">10dp</dimen>
     <dimen name="marginTop">72dp</dimen>
+    <dimen name="welcomMargendpixxh">2dp</dimen>
 </resources>

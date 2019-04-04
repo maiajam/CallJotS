@@ -1,79 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:mode="same_level"
 
-    tools:context=".ui.fragment.AllContactFrag"
-    >
+    tools:context=".ui.fragment.AllContactFrag">
 
+    <FrameLayout
+        android:id="@+id/delete_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:background="#ffcc0000">
 
-    <LinearLayout
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:text="Call"/>
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:id = "@+id/Allconiiitem_Lin"
-        android:orientation="horizontal"
-        >
-       <ImageView
-           android:layout_weight="0.25"
-           android:layout_width="50dp"
-           android:layout_height="50dp"
-           android:visibility="visible"
-           android:id ="@+id/ContPhoto_imgView"
-           android:src="@drawable/conphoto"/>
+        android:id="@+id/front_layout"
+        android:layout_height="70dp">
 
         <LinearLayout
-
-            android:layout_marginLeft="10dp"
-            android:layout_weight="0.90"
+            android:id="@+id/Allconiiitem_Lin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="mai waleed "
-                android:textSize="20sp"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:fontFamily="@font/bold"
-                android:id="@+id/ContName_txt"/>
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ContPhoto_imgView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="0.25"
+                android:src="@drawable/conphoto"
+                android:visibility="visible" />
+
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.90"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_weight="0.90"
-                    android:text="0799585969 "
+                    android:id="@+id/ContName_txt"
                     android:layout_width="match_parent"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/semibold"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ContPhoneNo_txt"/>
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/bold"
+                    android:text="mai waleed "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/ContPhoneNo_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.90"
+                        android:fontFamily="@font/semibold"
+                        android:text="0799585969 "
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
+            <ImageView
 
+                android:id="@+id/AddToSpec_img"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_weight="0.10"
+                android:src="@drawable/addspec"
+                android:textAlignment="viewEnd" />
         </LinearLayout>
 
-        <ImageView
-
-            android:layout_weight="0.10"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/AddToSpec_img"
-            android:textAlignment="viewEnd"
-            android:layout_gravity="end"
-            android:src="@drawable/addspec"
-            />
-    </LinearLayout>
+    </FrameLayout>
 
 
-</RelativeLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

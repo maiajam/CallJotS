@@ -31,6 +31,7 @@ import com.maiajam.calljots.util.workmanger.ReminerSchudleWorker;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -158,7 +159,10 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private void ShowDatePicker() {
 
-        DatePickerDialog picker =  new DatePickerDialog(NewNoteActivity.this,setDate,Calendar.YEAR,Calendar.MONTH,Calendar.DAY_OF_MONTH);
+        int Year ,month,DayofMounth;
+        Calendar calendar = Calendar.getInstance();
+
+        DatePickerDialog picker =  new DatePickerDialog(NewNoteActivity.this,setDate, calendar.get(Calendar.YEAR),GregorianCalendar.MONTH,GregorianCalendar.DAY_OF_MONTH);
 
         picker.setButton(DialogInterface.BUTTON_POSITIVE, "Set Time", new DialogInterface.OnClickListener() {
             @Override

@@ -86,34 +86,10 @@ public class AllContactFrag extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.AllCon_Rec);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Contact");
         Add_b = (FloatingActionButton) view.findViewById(R.id.addNewContact_fab);
-        swipeControler = new SwipeControler(getContext(),new SwipeContrlloerActions() {
-            @Override
-            public void onLeftClicked(int position) {
-                //ACTION CALL
-                PhonNo = allPhoneContact.get(position).getContPhoneNo();
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    callAction(allPhoneContact.get(position).getContPhoneNo());
-                }else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
-                            Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
-                }
-            }
-            @Override
-            public void onRightClicked(int position) {
 
-            }
-        },1);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeControler);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-              swipeControler.onDraw();
-            }
-        });
             NewContactObserver observer = new NewContactObserver(new Handler(), getContext());
             getContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, observer);
             AsyncTask.execute(new Runnable() {

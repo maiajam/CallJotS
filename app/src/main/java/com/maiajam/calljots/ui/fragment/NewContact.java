@@ -15,6 +15,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -132,7 +133,12 @@ public class NewContact extends Fragment{
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
                 break;
             case R.id.AddasSpec_NewContact_b:
-                AddNewContact();
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    AddNewContact();
+                }else {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_CONTACTS},
+                            Constant.REQUEST_CODE_WRITE);
+                }
                 break;
         }
     }
@@ -168,7 +174,6 @@ public class NewContact extends Fragment{
                         if (msg.arg1 == 1) {
                             // start fragment add special contact info after add the contact
                             Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
-                            AddToPhoneContact();
                             final AddSpecialContactFrag f = new AddSpecialContactFrag();
                             f.setcontactInfo(Name, FirstPhone, imagePath,contId, msg.arg2);
                             HelperMethodes.beginTransAction(getFragmentManager().beginTransaction(),getFragmentManager(), f, R.id.frame_newContact);
@@ -185,7 +190,6 @@ public class NewContact extends Fragment{
                     if (Message.obtain() != null) {
                         if (msg.arg1 == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
-                            AddToPhoneContact();
                             // return back to the All contact tab
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.putExtra("tab2", 1);
@@ -196,24 +200,9 @@ public class NewContact extends Fragment{
                 }
             };
         }
-
         readThread = new ReadDataThread(handler, getActivity(), Constant.ADD_NEW_CONTACT, null);
         readThread.setContactInfo(Newcontact);
         readThread.start();
-
-    }
-
-
-
-    private void AddToPhoneContact() {
-
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(READ_CONTACT_PERMISSIONS, Constant.REQUEST_CODE_READ_WRITE);
-
-        } else {
-            AddTheContact();
-        }
     }
 
     private void AddTheContact() {
@@ -257,7 +246,6 @@ public class NewContact extends Fragment{
             if (allgranted) {
                 // permission was granted 🙂
                 AddTheContact();
-
             }
         }
 

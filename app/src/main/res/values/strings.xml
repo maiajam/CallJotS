@@ -79,4 +79,5 @@
     <string name="phoneNoExtra">phoneNo</string>
     <string name="Indecator">ContactInd</string>
     <string name="Contact_Info">conactInfo</string>
+    <string name="exit">are you sure you want to exit ?</string>
 </resources>

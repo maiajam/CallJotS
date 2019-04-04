@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.HelperMethodes;
@@ -31,6 +35,7 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
 
     Context con;
     List<AllPhoneContact> ListCont = new ArrayList<>();
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
     int Type  ;
 
@@ -90,12 +95,7 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
                     holder.ContPhoto_img.setImageDrawable( con.getResources().getDrawable(R.drawable.conphoto));
                 }
             }
-        holder.PhoneIcon_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
 
         holder.AddToIcon_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +109,9 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
                 con.startActivity(intent);
             }
         });
+
+        viewBinderHelper.bind(holder.swipeRevealLayout,contact.getContPhoneNo());
+        holder.binde(contact);
     }
 
     @Override
@@ -118,16 +121,45 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
 
     class  Holder extends RecyclerView.ViewHolder{
 
+       SwipeRevealLayout swipeRevealLayout ;
+       View CallLayout ,frontLayout ;
         ImageView ContPhoto_img,PhoneIcon_img,AddToIcon_image;
         TextView ContName_txt,ContPhone_txt;
 
         public Holder(View itemView) {
             super(itemView);
 
+            swipeRevealLayout = (SwipeRevealLayout)itemView.findViewById(R.id.main_content);
+            CallLayout =(View)itemView.findViewById(R.id.delete_layout);
+            frontLayout =(View)itemView.findViewById(R.id.front_layout);
             ContName_txt =(TextView)itemView.findViewById(R.id.ContName_txt);
             ContPhone_txt = (TextView)itemView.findViewById(R.id.ContPhoneNo_txt);
             ContPhoto_img =(ImageView)itemView.findViewById(R.id.ContPhoto_imgView);
             AddToIcon_image =(ImageView)itemView.findViewById(R.id.AddToSpec_img);
         }
+
+        public void binde(final AllPhoneContact contact) {
+
+            CallLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  callAction(contact.getContPhoneNo());
+                }
+            });
+
+            frontLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
     }
+
+    private void callAction(String PhoneNo) {
+        Intent CallAction = new Intent(Intent.ACTION_CALL);
+        CallAction.setData(Uri.parse("tel:" + PhoneNo));
+        con.startActivity(CallAction);
+    }
+
 }

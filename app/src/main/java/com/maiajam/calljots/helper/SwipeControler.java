@@ -14,10 +14,13 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.maiajam.calljots.R;
+import com.maiajam.calljots.ui.fragment.AllContactFrag;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
+import static android.support.v7.widget.helper.ItemTouchHelper.END;
 import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
+import static android.support.v7.widget.helper.ItemTouchHelper.START;
 
 enum ButtonsState {
     GONE,
@@ -35,6 +38,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
     private int hint ;
     private RecyclerView.ViewHolder currentItemViewHolder = null;
     private Context context ;
+    private AllContactFrag mListener = new AllContactFrag();
 
     public SwipeControler(Context mContext, SwipeContrlloerActions swipeContrlloerActions, int mhint) {
         this.actions = swipeContrlloerActions;
@@ -44,7 +48,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(0, LEFT | RIGHT);
+        return makeMovementFlags(0, START | END);
     }
 
     @Override
@@ -73,6 +77,10 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
                             float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
         drawButton(c,viewHolder);
+        if (currentItemViewHolder != null && currentItemViewHolder != viewHolder) {
+            mListener.revertSwipe(currentItemViewHolder.getAdapterPosition());
+        }
+        currentItemViewHolder = viewHolder;
         if (actionState == ACTION_STATE_SWIPE) {
             if (buttonShowedState != ButtonsState.GONE) {
                 if (buttonShowedState == ButtonsState.LEFT_VISIBLE) dX = Math.max(dX, buttonWidth);
@@ -86,7 +94,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
         if (buttonShowedState == ButtonsState.GONE) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
-        currentItemViewHolder = viewHolder;
+
     }
     private void drawButton(Canvas c, RecyclerView.ViewHolder viewHolder) {
 

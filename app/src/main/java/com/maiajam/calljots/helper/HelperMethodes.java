@@ -217,11 +217,12 @@ public class HelperMethodes {
             intent.putExtra("phoneNo",Numer);
             intent.putExtra("image_uri",imgUrl);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }else if (type == 2)
         {// this notifacation to notify the user to add a new contact for his phone contact
             intent = new Intent(context, MainNewContactActivity.class);
             intent.putExtra("phoneNo",Numer);
+            intent.putExtra("",conId);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }else
@@ -231,6 +232,7 @@ public class HelperMethodes {
             intent.putExtra("phoneNo",Numer);
             intent.putExtra(context.getString(R.string.imageUrl),imgUrl);
             intent.putExtra(context.getString(R.string.Contact_Id),conId);
+            intent.putExtra("id",)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
