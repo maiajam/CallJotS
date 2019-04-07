@@ -4,17 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.CallLog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
@@ -38,7 +34,6 @@ public class CallReciver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-
         // recived call info
        final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE );
        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
@@ -73,9 +68,17 @@ public class CallReciver extends BroadcastReceiver {
                             }
                         }
                         else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-                            history = new history(new Handler(Looper.getMainLooper()),context);
-                            context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
-                                    true, (ContentObserver) history);
+                            if(msg.obj == null){
+                                // this contact is not one of your speacal contact
+                                history = new history(new Handler(Looper.getMainLooper()),context,contactNoteAndInfo);
+                                context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
+                                        true, (ContentObserver) history);
+                            }else {
+                                contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
+                                history = new history(new Handler(Looper.getMainLooper()),context,contactNoteAndInfo);
+                                context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
+                                        true, (ContentObserver) history);
+                            }
                         }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
                          //   if(msg.obj == null){
@@ -100,7 +103,7 @@ public class CallReciver extends BroadcastReceiver {
 
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                     // add to phone contact
-                history = new history(new Handler(Looper.getMainLooper()), context);
+                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo);
                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                         true, (ContentObserver) history);
             }else if(state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {

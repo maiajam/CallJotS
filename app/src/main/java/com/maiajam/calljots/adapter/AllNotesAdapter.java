@@ -21,6 +21,7 @@ import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,41 +30,42 @@ import java.util.Date;
 public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder> implements View.OnClickListener {
 
 
-    Context context ;
-    ArrayList<ContactNoteEnitiy> AllNotes ;
+    Context context;
+    ArrayList<ContactNoteEnitiy> AllNotes;
 
-    holder h ;
+    holder h;
     private RoomManger roomManger;
     private Handler handler;
     private ReadDataThread readDataThreaD;
 
-    public AllNotesAdapter(Context context, ArrayList<ContactNoteEnitiy> allNotes)
-    {
-        this.context = context ;
-        this.AllNotes = allNotes ;
+    public AllNotesAdapter(Context context, ArrayList<ContactNoteEnitiy> allNotes) {
+        this.context = context;
+        this.AllNotes = allNotes;
     }
+
     @Override
     public holder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_allnote,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_allnote, parent, false);
         h = new holder(v);
         return h;
 
     }
 
     @Override
-    public void onBindViewHolder(holder holder, int position)
-    {
-        final ContactNoteEnitiy contactNote ;
-        final String contactName,NoteTitle;
+    public void onBindViewHolder(holder holder, int position) {
+        final ContactNoteEnitiy contactNote;
+        final String contactName, NoteTitle;
         Date NoteDate;
-        int stuts,Id;
+        final int stuts, Id;
         contactNote = AllNotes.get(position);
         contactName = contactNote.getContact_Name();
         NoteTitle = contactNote.getContact_NoteTitle();
         NoteDate = contactNote.getContact_LastCallTime();
         stuts = contactNote.getContact_NoteStuts();
-        if(!TextUtils.isEmpty(NoteTitle)) {
+        final int contactId= contactNote.getContact_Id();
+        final int parentNote_Id = contactNote.getNote_Parent_Id();
+        if (!TextUtils.isEmpty(NoteTitle)) {
             Id = contactNote.getId();
             if (contactName.equals("Personal")) {
                 //holder.contactName.setText(contactName);
@@ -82,60 +84,60 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
             holder.menuAll_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PopupMenu pop = new PopupMenu(context,h.menuAll_img);
-                    pop.getMenuInflater().inflate(R.menu.menu_pop_note,pop.getMenu());
+                    PopupMenu pop = new PopupMenu(context, h.menuAll_img);
+                    pop.getMenuInflater().inflate(R.menu.menu_pop_note, pop.getMenu());
 
                     pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
-                            int id = menuItem.getItemId();
+                            int Itemid = menuItem.getItemId();
                             roomManger = RoomManger.getInstance(context);
                             RoomDao roomDao = roomManger.roomDao();
-                            switch (id){
-                                case R.id.action_delete :
-
-                                    handler = new Handler(){
+                            switch (Itemid) {
+                                case R.id.action_delete:
+                                    handler = new Handler() {
                                         @Override
                                         public void handleMessage(Message msg) {
                                             AllNotes.remove(h.getAdapterPosition());
                                             notifyItemChanged(h.getAdapterPosition());
                                         }
                                     };
-                                    readDataThreaD = new ReadDataThread(handler,context,Constant.DELETE_NOTE_BY_time,null);
+                                    readDataThreaD = new ReadDataThread(handler, context, Constant.DELETE_NOTE_BY_time, null);
                                     readDataThreaD.setNoteDate(contactNote.getContact_LastCallTime());
                                     readDataThreaD.start();
 
                                     break;
-                                case R.id.action_edit :
-                          /*  Intent i = new Intent(context, NewNoteActivity.class);
-                            i.putExtra("id",Id);
-                            i.putExtra("NoteFragment",1);
-                            i.putExtra("name", contactName);
-                            context.startActivity(i);
-                            */
+                                case R.id.action_edit:
+                                    Intent i = new Intent(context, NewNoteActivity.class);
+                                    i.putExtra("Id", parentNote_Id);
+                                    i.putExtra("NoteFragment", 1);
+                                    i.putExtra("name",contactName );
+                                    i.putExtra("contact_Id",contactId);
+                                    i.putExtra("Note_Id",contactNote.getId());
+                                    context.startActivity(i);
                                     break;
-                                case R.id.action_markComplete :
+                                case R.id.action_markComplete:
                                     contactNote.setContact_NoteStuts(1);
-                                    handler = new Handler(){
+                                    handler = new Handler() {
                                         @Override
                                         public void handleMessage(Message msg) {
-                                            AllNotes.set(h.getAdapterPosition(),contactNote);
+                                            AllNotes.set(h.getAdapterPosition(), contactNote);
                                             notifyItemChanged(h.getAdapterPosition());
                                         }
                                     };
-                                    readDataThreaD = new ReadDataThread(handler,context,Constant.UPDATE_NOTE_BY_ID,contactName);
+                                    readDataThreaD = new ReadDataThread(handler, context, Constant.UPDATE_NOTE_BY_ID, contactName);
                                     readDataThreaD.setNote(contactNote);
                                     readDataThreaD.start();
                                     break;
                             }
-                            return true;
+                            return false;
                         }
                     });
                     pop.show();
                 }
             });
             holder.cardView.setOnClickListener(this);
-        }else {
+        } else {
             holder.cardView.setVisibility(View.GONE);
         }
     }
@@ -147,24 +149,24 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
 
     @Override
     public void onClick(View view) {
-        }
+    }
 
 
-    class holder extends RecyclerView.ViewHolder{
+    class holder extends RecyclerView.ViewHolder {
 
-        TextView noteTitle_txt,NoteDate_text,contactName,NoteTaken_txt;
-        ImageView menuAll_img,check_done_img;
-        CardView cardView ;
+        TextView noteTitle_txt, NoteDate_text, contactName, NoteTaken_txt;
+        ImageView menuAll_img, check_done_img;
+        CardView cardView;
 
         public holder(View itemView) {
             super(itemView);
-            cardView =(CardView)itemView.findViewById(R.id.ContactNotAll_CardView);
-            noteTitle_txt = (TextView)itemView.findViewById(R.id.NoteTitleAll_row_txt);
-            NoteDate_text=(TextView)itemView.findViewById(R.id.NoteDateAllNote_row_txt);
-            menuAll_img = (ImageView)itemView.findViewById(R.id.menuAll_row_imageView);
-            check_done_img =(ImageView)itemView.findViewById(R.id.checkDoneAll_row_img);
-            NoteTaken_txt=(TextView)itemView.findViewById(R.id.NoteTokenAll_row_txt);
-            contactName = (TextView)itemView.findViewById(R.id.ContactNoteName_txt);
+            cardView = (CardView) itemView.findViewById(R.id.ContactNotAll_CardView);
+            noteTitle_txt = (TextView) itemView.findViewById(R.id.NoteTitleAll_row_txt);
+            NoteDate_text = (TextView) itemView.findViewById(R.id.NoteDateAllNote_row_txt);
+            menuAll_img = (ImageView) itemView.findViewById(R.id.menuAll_row_imageView);
+            check_done_img = (ImageView) itemView.findViewById(R.id.checkDoneAll_row_img);
+            NoteTaken_txt = (TextView) itemView.findViewById(R.id.NoteTokenAll_row_txt);
+            contactName = (TextView) itemView.findViewById(R.id.ContactNoteName_txt);
         }
     }
 }

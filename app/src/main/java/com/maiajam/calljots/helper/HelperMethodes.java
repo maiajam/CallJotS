@@ -26,6 +26,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,7 @@ import com.maiajam.calljots.ui.activity.NewNoteActivity;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -59,7 +61,7 @@ public class HelperMethodes {
         FragmentManager manager = fragmentManager;
         ft.replace(frame, fragment);
         ft.commit();
-        manager.popBackStack();
+        manager.popBackStackImmediate();
     }
 
     public static Drawable getBitmapImage(String contactPhotoUri, Context con) {
@@ -203,9 +205,11 @@ public class HelperMethodes {
 
         return contactPhoto;
     }
-
-
-    public  static void CallNotifcation(Context context, int type,String name,String Note,String Actiontitel,String Numer,String imgUrl,int reminerIndecater,int conId)
+    public  static void CallNotifcation(Context context, int type,
+                                        String name,String Note,
+                                        String Actiontitel,String Numer,
+                                        String imgUrl,int reminerIndecater,
+                                        int conId,int id)
     {
         Intent intent ;
         PendingIntent pendingIntent ;
@@ -216,13 +220,16 @@ public class HelperMethodes {
             intent.putExtra("name",name);
             intent.putExtra("phoneNo",Numer);
             intent.putExtra("image_uri",imgUrl);
+            intent.putExtra("contact_Id",conId);
+            intent.putExtra("Id",id);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }else if (type == 2)
         {// this notifacation to notify the user to add a new contact for his phone contact
             intent = new Intent(context, MainNewContactActivity.class);
             intent.putExtra("phoneNo",Numer);
-            intent.putExtra("",conId);
+            intent.putExtra("contact_Id",conId);
+            intent.putExtra("Id",id);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }else
@@ -232,7 +239,7 @@ public class HelperMethodes {
             intent.putExtra("phoneNo",Numer);
             intent.putExtra(context.getString(R.string.imageUrl),imgUrl);
             intent.putExtra(context.getString(R.string.Contact_Id),conId);
-            intent.putExtra("id",)
+            intent.putExtra("id",id);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
@@ -247,13 +254,12 @@ public class HelperMethodes {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-
         NotificationCompat.Builder builder ;
         if(reminerIndecater == 1)
         {
              builder = new NotificationCompat.Builder(context,"v")
                     .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle( name + " Note")
+                    .setContentTitle( name)
                     .setContentText(Note)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
@@ -266,7 +272,7 @@ public class HelperMethodes {
         {
             builder = new NotificationCompat.Builder(context,"v")
                     .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle(name + "  Note")
+                    .setContentTitle(name)
                     .setContentText(Note)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
@@ -277,8 +283,7 @@ public class HelperMethodes {
                     ;
         }
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        int notifyId = 1;
-        notificationManager.notify(notifyId, builder.build());
+        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 
     public static void enableAddNoteDuringCall(Context context,String contact_name, String phoneNo) {
@@ -461,7 +466,7 @@ public class HelperMethodes {
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSPARENT);
 
-        params.gravity = Gravity.CENTER ;
+        params.gravity = Gravity.BOTTOM;
         return params ;
     }
 

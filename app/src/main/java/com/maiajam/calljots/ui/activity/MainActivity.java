@@ -240,13 +240,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void onBackPressed() {
         final AlertDialog.Builder d = new AlertDialog.Builder(this);
         d.setMessage(getString(R.string.exit));
-        d.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+        d.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                System.exit(0);
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
             }
         });
-        d.setNegativeButton("كلا", new DialogInterface.OnClickListener() {
+        d.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

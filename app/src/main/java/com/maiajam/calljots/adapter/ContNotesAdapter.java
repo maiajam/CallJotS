@@ -154,7 +154,7 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
                                         myThread.start();
                                         break;
                                 }
-                                return true;
+                                return false;
                             }
                         });
                         pop.show();
@@ -185,10 +185,6 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
             check_done_img =(ImageView)itemView.findViewById(R.id.checkDone_row_img);
             NoteTaken=(TextView)itemView.findViewById(R.id.NoteToken_row_txt);
             contact_img=(ImageView)itemView.findViewById(R.id.ContactPhoto_all_imageView);
-
-
         }
-
-
     }
 }
