@@ -95,6 +95,7 @@ public class ReadDataThread extends Thread {
                    break;
                 case Constant.UPDATE_NOTE_IS_DONE:
                     roomDao.updateDoneNoteByID(NoteId);
+                    message.arg1 = 1 ;
                     break;
                 case Constant.DELETE_NOTE_BY_time:
                     roomDao.deleteNote(noteDate);

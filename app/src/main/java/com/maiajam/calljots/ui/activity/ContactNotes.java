@@ -101,4 +101,11 @@ public class ContactNotes extends AppCompatActivity {
         CallAction.setData(Uri.parse("tel:" + PhoneNo));
         startActivity(CallAction);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        startActivity(new Intent(ContactNotes.this,MainActivity.class));
+    }
 }

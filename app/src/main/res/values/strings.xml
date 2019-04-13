@@ -30,9 +30,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="NoteToken">Note token on:  </string>
+    <string name="NoteToken">Note token on :  </string>
     <string name="Notetitle">Note Title</string>
-    <string name="starthere">write your notes about 4wwwwwwwwwwwwwwwwe1q231this calls</string>
+    <string name="starthere">write your notes about </string>
     <string name="EnterNoteTitle">please Enter Note title ...</string>
     <string name="EnterNote">please enter the note ..</string>
     <string name="family_cat">Family</string>
@@ -66,16 +66,16 @@
     <string name="typeEmail">Type Contact Email</string>
     <string name="typeSecPhone">Type Second Phone Number</string>
     <string name="typeFirstPhone">Type First Phone Number</string>
-    <string name="AddASspec">Add ad Specal contact</string>
+    <string name="AddASspec">Add as a Specal contact</string>
     <string name="Addcont">Add Contact</string>
     <string name="Name">Please enter the name</string>
     <string name="phone">please enter the first phone</string>
     <string name="Contact_Id">contact_Id</string>
-    <string name="AddDone">your contact is addedly</string>
+    <string name="AddDone">your contact has been added succefully</string>
     <string name="NameExtra">Name</string>
     <string name="imageUrl">imageUrl</string>
     <string name="FirstPhone">PhoneNo</string>
-    <string name="NoteAdded">the Note has been adde succefully</string>
+    <string name="NoteAdded">the Note has been added succefully</string>
     <string name="phoneNoExtra">phoneNo</string>
     <string name="Indecator">ContactInd</string>
     <string name="Contact_Info">conactInfo</string>

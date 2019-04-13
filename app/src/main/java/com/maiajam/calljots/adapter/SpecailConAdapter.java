@@ -65,6 +65,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
                     intent.putExtra("Id",id);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     con.startActivity(intent);
                 }
             });
@@ -79,6 +80,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
                     intent.putExtra("Id",id);
                     intent.putExtra(con.getResources().getString(R.string.Indecator),Constant.ONE_CONTACT_NOTE);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     con.startActivity(intent);
                 }
             });
@@ -92,6 +94,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                     intent.putExtra("image_uri",contact.getContactPhotoUri());
                     intent.putExtra("Id",contact.getId());
                     intent.putExtra("contact_Id",contact.getContId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     con.startActivity(intent);
                 }
             });

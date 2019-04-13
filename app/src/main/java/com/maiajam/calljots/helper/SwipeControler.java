@@ -109,7 +109,7 @@ public class SwipeControler extends ItemTouchHelper.Callback implements ViewTree
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
             RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(),
                     itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
-            p.setColor(context.getResources().getColor(R.color.new_y));
+            p.setColor(context.getResources().getColor(R.color.colorSecondAccent));
             c.drawRoundRect(leftButton, corners, corners, p);
             if(hint == 1)
             {

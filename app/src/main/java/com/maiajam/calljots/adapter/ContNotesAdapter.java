@@ -102,61 +102,61 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
                         i.putExtra("phoneNo", PhoneNo);
                         i.putExtra("image_uri", img_uri);
                         con.startActivity(i);
-
                     }
                 });
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if (msg.arg1 == 1) {
+                        // the note is updated by the thread
+                        contactNote.setContact_NoteStuts(1);
+                        ListNotes.set(holder.getAdapterPosition(), contactNote);
+                        notifyItemChanged(holder.getAdapterPosition());
+                    } else {
+                        // the note is deleted
+                        ListNotes.remove(contactNote);
+                        notifyItemRemoved(holder.getAdapterPosition());
+                     notifyItemRangeChanged(holder.getAdapterPosition(),ListNotes.size());
+                    }
+                    super.handleMessage(msg);
+                }
+            };
+            final PopupMenu pop = new PopupMenu(con, holder.menu_img);
+            pop.getMenuInflater().inflate(R.menu.menu_pop_note, pop.getMenu());
+
+            pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    int id = menuItem.getItemId();
+                    switch (id) {
+                        case R.id.action_delete:
+                            myThread = new ReadDataThread(handler, con, Constant.DELETE_NOTE_BY_time, null);
+                            myThread.setNoteDate(contactNote.getContact_LastCallTime());
+                            myThread.start();
+                            break;
+                        case R.id.action_edit:
+                            Intent i = new Intent(con, NewNoteActivity.class);
+                            i.putExtra("Id", parentNote_Id);
+                            i.putExtra("NoteFragment", 1);
+                            i.putExtra("name", Name);
+                            i.putExtra("contact_Id",contactId);
+                            i.putExtra(con.getString(R.string.phoneNoExtra), PhoneNo);
+                            i.putExtra("Note_Id",NoteId);
+                            i.putExtra("image_uri", img_uri);
+                            con.startActivity(i);
+                            break;
+                        case R.id.action_markComplete:
+                            myThread = new ReadDataThread(handler, con, Constant.UPDATE_NOTE_IS_DONE, null);
+                            myThread.setNoteId(NoteId);
+                            myThread.start();
+                            break;
+                    }
+                    return false;
+                }
+            });
                 holder.menu_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        handler = new Handler() {
-                            @Override
-                            public void handleMessage(Message msg) {
-                                if (msg.arg1 == 1) {
-                                    // the note is updated by the thread
-                                    contactNote.setContact_NoteStuts(1);
-                                    ListNotes.set(holder.getAdapterPosition(), contactNote);
-                                    notifyItemChanged(holder.getAdapterPosition());
-                                } else {
-                                    // the note is deleted
-                                    ListNotes.remove(holder.getAdapterPosition());
-                                    notifyItemRemoved(holder.getAdapterPosition());
-                                }
-                                super.handleMessage(msg);
-                            }
-                        };
-                        PopupMenu pop = new PopupMenu(con, holder.menu_img);
-                        pop.getMenuInflater().inflate(R.menu.menu_pop_note, pop.getMenu());
-
-                        pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem menuItem) {
-                                int id = menuItem.getItemId();
-                                switch (id) {
-                                    case R.id.action_delete:
-                                        myThread = new ReadDataThread(handler, con, Constant.DELETE_NOTE_BY_time, null);
-                                        myThread.setNoteDate(contactNote.getContact_LastCallTime());
-                                        myThread.start();
-                                        break;
-                                    case R.id.action_edit:
-                                        Intent i = new Intent(con, NewNoteActivity.class);
-                                        i.putExtra("Id", parentNote_Id);
-                                        i.putExtra("NoteFragment", 1);
-                                        i.putExtra("name", Name);
-                                        i.putExtra("contact_Id",contactId);
-                                        i.putExtra(con.getString(R.string.phoneNoExtra), PhoneNo);
-                                        i.putExtra("Note_Id",NoteId);
-                                        i.putExtra("image_uri", img_uri);
-                                        con.startActivity(i);
-                                        break;
-                                    case R.id.action_markComplete:
-                                        myThread = new ReadDataThread(handler, con, Constant.UPDATE_NOTE_IS_DONE, null);
-                                        myThread.setNoteId(NoteId);
-                                        myThread.start();
-                                        break;
-                                }
-                                return false;
-                            }
-                        });
                         pop.show();
                     }
                 });

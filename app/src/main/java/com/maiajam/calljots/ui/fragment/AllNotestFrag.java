@@ -152,5 +152,7 @@ public class AllNotestFrag extends Fragment {
         }
         readThread.start();
     }
+
+
 }
 

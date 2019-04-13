@@ -60,26 +60,23 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
         editor = sp.edit();
 
         if(sp.getBoolean("firstWelcome",true))
-        {
-            // this is the first time visit the app
+        { // this is the first time visit the app
             editor.putBoolean("firstWelcome", false);
             editor.commit();
             editor.apply();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ){
+            if (ContextCompat.checkSelfPermission(this, String.valueOf(READ_CONTACT_PERMISSIONS)) != PackageManager.PERMISSION_GRANTED ){
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
+                ActivityCompat.requestPermissions(this,READ_CONTACT_PERMISSIONS ,
                         Constant.REQUEST_CODE_READ_WRITE);
             } else {
                 // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
                RoomManger.getInstance(getBaseContext());
-
             }
         }else
         {
             startActivity(new Intent(welcome.this,MainActivity.class));
         }
-
     }
 
 

@@ -191,6 +191,7 @@ public class NewContact extends Fragment{
                         if (msg.arg1 == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.AddDone), Toast.LENGTH_LONG).show();
                             // return back to the All contact tab
+                            AddTheContact();
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.putExtra("tab2", 1);
                             startActivity(intent);

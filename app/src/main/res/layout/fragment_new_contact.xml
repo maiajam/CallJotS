@@ -26,7 +26,7 @@
         android:hint="@string/typename"
         android:fontFamily="@font/regulaer"
         android:id="@+id/ContactName_newContact_ed"
-        android:textCursorDrawable="@drawable/conphoto"/>
+        android:drawableStart="@drawable/typename_ed"/>
 
 
     <EditText
@@ -38,7 +38,7 @@
         android:hint="@string/typeFirstPhone"
         android:id="@+id/ContactFirstPhone_newContact_ed"
         android:fontFamily="@font/regulaer"
-        android:textCursorDrawable="@drawable/conphoto"/>
+        android:drawableStart="@drawable/typephone_ed"/>
 
     <EditText
         android:layout_marginRight="25dp"
@@ -49,7 +49,7 @@
         android:hint="@string/typeSecPhone"
         android:fontFamily="@font/regulaer"
         android:id="@+id/ContactSecPhone_newContact_ed"
-        android:textCursorDrawable="@drawable/conphoto"/>
+        android:drawableStart="@drawable/typephone_ed"/>
 
     <EditText
         android:layout_marginRight="25dp"
@@ -60,13 +60,14 @@
         android:hint="@string/typeEmail"
         android:fontFamily="@font/regulaer"
         android:id="@+id/ContactEmail_newContact_ed"
-        android:textCursorDrawable="@drawable/conphoto"/>
+        android:drawableStart="@drawable/typeemail_ed"/>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/AddASspec"
         android:checked="false"
+        android:fontFamily="@font/regulaer"
         android:id="@+id/AddasSpec_NewContact_ch"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_horizontal"
