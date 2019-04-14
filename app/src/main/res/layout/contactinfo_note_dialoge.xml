@@ -75,6 +75,7 @@
                         android:paddingRight="10dp"
                         android:paddingBottom="3dp"
                         android:text="Family"
+                        android:fontFamily="@font/regulaer"
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -86,6 +87,7 @@
                         android:layout_marginTop="5dp"
                         android:text="Mai Waleed "
                         android:textColor="#ffffff"
+                        android:fontFamily="@font/regulaer"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -97,6 +99,7 @@
                         android:text="079 99 57876 "
                         android:textColor="#ffffff"
                         android:textSize="20sp"
+                        android:fontFamily="@font/regulaer"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -111,6 +114,7 @@
                             android:layout_height="wrap_content"
                             android:text="Designer , "
                             android:textColor="#ffffff"
+                            android:fontFamily="@font/regulaer"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -122,6 +126,7 @@
                             android:text="Director Board"
                             android:textColor="#ffffff"
                             android:textSize="15sp"
+                            android:fontFamily="@font/regulaer"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -143,6 +148,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.95"
                 android:text="birth day paty "
+                android:fontFamily="@font/semibold"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
 
@@ -154,6 +160,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="2dp"
                 android:width="2dp"
+
                 android:background="@android:color/black"
                 android:orientation="vertical" />
 
@@ -178,6 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/semibold"
                     android:layout_weight="0.75"
                     android:text="done" />
             </LinearLayout>

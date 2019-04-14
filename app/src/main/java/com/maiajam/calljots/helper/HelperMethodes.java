@@ -458,15 +458,15 @@ public class HelperMethodes {
             FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
         }
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 FLAG,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSPARENT);
 
-        params.gravity = Gravity.BOTTOM;
+        params.gravity = Gravity.CENTER_VERTICAL;
         return params ;
     }
 
@@ -484,10 +484,8 @@ public class HelperMethodes {
         int id = sp.getInt("idParent",0);
         return id ;
     }
-
     private static void removeView(final WindowManager wm, final View v)
     {
-
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {

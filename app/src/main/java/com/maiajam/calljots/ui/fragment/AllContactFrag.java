@@ -99,7 +99,6 @@ public class AllContactFrag extends Fragment {
                     RoomDao roomDao = roomManger.roomDao();
                     allPhoneContact = roomDao.getAllPhoneContact();
                     allConAdapter = new AllConAdapter(getActivity(), allPhoneContact, 0);
-
                     handler.sendEmptyMessage(0);
                         }
             });
@@ -178,8 +177,6 @@ public class AllContactFrag extends Fragment {
         CallAction.setData(Uri.parse("tel:" + PhoneNo));
         startActivity(CallAction);
     }
-
-
     public void revertSwipe(int index) {
         allConAdapter.notifyItemChanged(index);
     }

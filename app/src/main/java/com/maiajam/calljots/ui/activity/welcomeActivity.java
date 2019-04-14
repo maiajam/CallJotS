@@ -19,9 +19,6 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
-import com.maiajam.calljots.helper.ReadDataThread;
-import com.maiajam.calljots.ui.fragment.AllContactFrag;
 import com.maiajam.calljots.util.CallServiceForGround;
 import com.maiajam.calljots.util.workmanger.MyWorker;
 
@@ -29,7 +26,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 
-public class welcome extends AppCompatActivity implements View.OnClickListener {
+public class welcomeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private static OneTimeWorkRequest CallRevicerRequest ;
@@ -75,7 +72,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
             }
         }else
         {
-            startActivity(new Intent(welcome.this,MainActivity.class));
+            startActivity(new Intent(welcomeActivity.this,MainActivity.class));
         }
     }
 
@@ -92,7 +89,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE);
                     } else {
                         WorkManager.getInstance().enqueue(CallRevicerRequest);
-                        startActivity(new Intent(welcome.this,MainActivity.class));
+                        startActivity(new Intent(welcomeActivity.this,MainActivity.class));
                     }
                 } else {
                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -102,7 +99,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                 }
             }else {
                 WorkManager.getInstance().enqueue(CallRevicerRequest);
-                startActivity(new Intent(welcome.this,MainActivity.class));
+                startActivity(new Intent(welcomeActivity.this,MainActivity.class));
             }
         }
 
@@ -120,7 +117,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE);
                     } else {
                         WorkManager.getInstance().enqueue(CallRevicerRequest);
-                        startActivity(new Intent(welcome.this,MainActivity.class));
+                        startActivity(new Intent(welcomeActivity.this,MainActivity.class));
                     }
                 }
             }
@@ -136,7 +133,7 @@ public class welcome extends AppCompatActivity implements View.OnClickListener {
               if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
               {
                   WorkManager.getInstance().enqueue(CallRevicerRequest);
-                  startActivity(new Intent(welcome.this,MainActivity.class));
+                  startActivity(new Intent(welcomeActivity.this,MainActivity.class));
               } else {
                     // the request is canceled then should show RequestPermissionRationale
                  ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_PHONE_STATE);
