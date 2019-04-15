@@ -78,6 +78,7 @@
                         android:fontFamily="@font/regulaer"
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp"
+                        android:background="@color/colorSecondAccent"
                         android:textStyle="bold" />
 
                     <TextView

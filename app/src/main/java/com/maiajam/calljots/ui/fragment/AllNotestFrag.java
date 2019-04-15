@@ -21,6 +21,7 @@ import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.ui.activity.ContactNotes;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import java.util.ArrayList;
@@ -38,12 +39,14 @@ import butterknife.Unbinder;
 public class AllNotestFrag extends Fragment {
 
 
+    public ArrayList<ContactNoteEnitiy> search_list;
+    public List<ContactNoteEnitiy> noteList;
     private String Name ;
     ArrayList<ContactNoteEnitiy> Allnote;
-    AllNotesAdapter allNoteadapter;
+    public AllNotesAdapter allNoteadapter;
     ContNotesAdapter contNotesAdapter;
     @BindView(R.id.ContNote_Rec)
-    RecyclerView ContNoteRec;
+     public RecyclerView ContNoteRec;
     @BindView(R.id.NoPermission_txt)
     TextView NoPermissionTxt;
     @BindView(R.id.addNewNote_fab)

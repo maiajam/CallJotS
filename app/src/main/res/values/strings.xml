@@ -80,4 +80,5 @@
     <string name="Indecator">ContactInd</string>
     <string name="Contact_Info">conactInfo</string>
     <string name="exit">are you sure you want to exit ?</string>
+    <string name="FamilyCat">Family</string>
 </resources>

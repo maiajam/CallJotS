@@ -381,6 +381,7 @@ public class HelperMethodes {
         TextView SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
         TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
         TextView Status_txt = (TextView) v.findViewById(R.id.status_txt);
+        TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
         //
         String ContName = contact.getContName();
         String first = contact.getContFirstClassf();
@@ -394,6 +395,16 @@ public class HelperMethodes {
         FirsClass_txt.setText(first);
         SecClass_txt.setText(Sec);
         ConNo_txt.setText(ContPhoneNo);
+        int cat = contact.getContPrimaryClassf();
+        if(cat == 1)
+        {
+            CatagoryType.setText(context.getString(R.string.family_cat));
+        }else if(cat == 2)
+        {
+            CatagoryType.setText(context.getString(R.string.Bussiness_cat));
+        }else {
+            CatagoryType.setText(context.getString(R.string.Friend_cat));
+        }
         if(hint == 1)
         {
             // this special contact dosnt has any note

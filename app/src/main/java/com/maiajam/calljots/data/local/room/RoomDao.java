@@ -36,6 +36,9 @@ public abstract class RoomDao {
     @Query("SELECT * FROM ContactNoteEnitiy WHERE id = :Id")
     public abstract ContactNoteEnitiy getnoteById(int Id);
 
+    @Query("SELECT Id FROM AllPhoneContact WHERE  contName = :name")
+    public abstract int getIdFOrContact(String name);
+
     @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id ASC LIMIT 1  ")
     public abstract ContactNoteEnitiy getLastNote(String name);
 

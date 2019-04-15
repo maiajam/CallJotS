@@ -26,6 +26,7 @@ import android.view.MenuItem;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
+import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
@@ -38,6 +39,7 @@ import com.maiajam.calljots.ui.fragment.SpecialContactFrag;
 import com.maiajam.calljots.util.workmanger.MyWorker;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.work.OneTimeWorkRequest;
 
@@ -56,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private AlertDialog dialog;
+    private ReadDataThread readDataThread;
+    private Handler h;
+    private ContactNoteEnitiy NoteItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,21 +168,41 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         switch (id) {
             case R.id.action_MyNotes:
+                final AllNotestFrag AllNotefrag = new AllNotestFrag();
+                AllNotefrag.search_list = new ArrayList<>();
+                AllNotefrag.search_list.clear();
+                final String[] noteTitle = new String[1];
+                h = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        AllNotefrag.noteList = (List<ContactNoteEnitiy>) msg.obj;
+                        for (int i = 0; i < AllNotefrag.noteList.size(); i++) {
+                            NoteItem =  AllNotefrag.noteList.get(i);
+                            noteTitle[0] = NoteItem.getContact_NoteTitle();
+                            if(noteTitle != null)
+                            {
+                                if (noteTitle[0].contains(query)) {
+                                    AllNotefrag.search_list.add(NoteItem);
+                                }
+                            }
+                        }
+                        AllNotefrag.ContNoteRec.setAdapter(AllNotefrag.allNoteadapter);
+                        AllNotefrag.allNoteadapter.notifyDataSetChanged();
 
-              //  Fragment NoteFrgment = new NotesFrag();
-                //((NotesFrag) NoteFrgment).onQueryTextSubmit(query);
-
+                    }
+                };
+                readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_NOTES,null);
+                readDataThread.start();
+                return true;
             case R.id.action_AllContact:
                 final AllContactFrag AllCont = AlxlContact;
                 AllCont.search_list = new ArrayList<>();
                 AllCont.search_list.clear();
                 final String[] name = new String[1];
-                runOnUiThread(new Runnable() {
+                h = new Handler(){
                     @Override
-                    public void run() {
-                        roomManger = RoomManger.getInstance(getBaseContext());
-                        RoomDao roomDao = roomManger.roomDao();
-                        AllCont.phoneList =  roomDao.getAllPhoneContact();
+                    public void handleMessage(Message msg) {
+                        AllCont.phoneList = (List<AllPhoneContact>) msg.obj;
                         for (int i = 0; i < AllCont.phoneList.size(); i++) {
                             contact = AllCont.phoneList.get(i);
                             name[0] = AllCont.phoneList.get(i).getContName();
@@ -189,12 +214,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         AllCont.allConAdapter.notifyDataSetChanged();
 
                     }
-                });
+                };
+                readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_PHONE_CONTACT,null);
+                readDataThread.start();
                 return true;
             case R.id.action_Spec:
-                Fragment Spec = new SpecialContactFrag();
-                ((SpecialContactFrag) Spec).onQueryTextSubmit(query);
+                final SpecialContactFrag specialContactFrag = new SpecialContactFrag();
+                specialContactFrag.search_list = new  ArrayList<>();
+                specialContactFrag.search_list.clear();
+                final String[] Specname = new String[1];
+                h = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                       specialContactFrag.phoneList = (List<AllPhoneContact>) msg.obj;
+                        for (int i = 0; i < specialContactFrag.phoneList.size(); i++) {
+                            contact = specialContactFrag.phoneList.get(i);
+                            Specname[0] = specialContactFrag.phoneList.get(i).getContName();
+                            if (Specname[0].contains(query)) {
+                                specialContactFrag.search_list.add(contact);
+                            }
+                        }
+                        specialContactFrag.recyclerView.setAdapter( specialContactFrag.adapter);
+                        specialContactFrag.adapter.notifyDataSetChanged();
 
+                    }
+                };
+                readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_SPECIAL_CONTACT,null);
+                readDataThread.start();
+                return true;
         }
 
         return true;
@@ -222,7 +269,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 return true;
             case R.id.action_Spec:
                 Fragment Spec = new SpecialContactFrag();
-
                 ((SpecialContactFrag) Spec).onQueryTextChange(newText);
 
         }

@@ -66,11 +66,12 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
     Button AddToSpecB;
     Unbinder unbinder;
     private int contact_id;
-    private ReadDataThread addThread;
+    private ReadDataThread addThread,getIdThread;
     private Handler handler;
     private String CompanyName;
     private String CompanyAdress;
     private int parentId;
+    private Handler h;
 
     public AddSpecialContactFrag() {
 
@@ -79,7 +80,7 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        }
+    }
 
     @Nullable
     @Override
@@ -88,10 +89,24 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
         unbinder = ButterKnife.bind(this, view);
 
         SpecContNameTxt.setText(name);
-        SpecContPhotoImgView.setImageDrawable(HelperMethodes.getBitmapImage(img_uri,getActivity()));
-       SpecContPhoneNoTxt.setText(phoneNo);
+        SpecContPhotoImgView.setImageDrawable(HelperMethodes.getBitmapImage(img_uri, getActivity()));
+        SpecContPhoneNoTxt.setText(phoneNo);
         FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
 
+        if(parentId == 0)
+        {
+            h = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+                    if(msg.obj != null)
+                    {
+                        parentId = (int) msg.obj;
+                    }
+                }
+            };
+            getIdThread = new ReadDataThread(h,getContext(),Constant.GET_ID_FOR_CONTACT,name);
+            getIdThread.start();
+        }
         AddToSpecB.setOnClickListener(this);
         BusIconBtn.setOnClickListener(this);
         FriendIconImg.setOnClickListener(this);
@@ -195,10 +210,10 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
     public void setcontactInfo(String Name, String FirstPhone, String imagePath, int contact_id, int id) {
 
         name = Name;
-        this.contact_id = contact_id ;
+        this.contact_id = contact_id;
         phoneNo = FirstPhone;
-        img_uri = imagePath ;
-        parentId = id ;
+        img_uri = imagePath;
+        parentId = id;
 
     }
 }

@@ -54,11 +54,11 @@ public class CallReciver extends BroadcastReceiver {
 
                         if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                             // rining state
-                            // this contact is a special contact
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
                                 HelperMethodes.drawInfo(context);
                             } else {
+                                // this contact is a special contact
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                                 if (contactNoteAndInfo.getContact_Note() != null) {
                                     HelperMethodes.drawContactInfo(context, contactNoteAndInfo, 0);
@@ -69,12 +69,12 @@ public class CallReciver extends BroadcastReceiver {
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
-                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo);
+                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0);
                                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                         true, (ContentObserver) history);
                             } else {
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
-                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo);
+                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,1);
                                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                         true, (ContentObserver) history);
                             }
@@ -99,7 +99,7 @@ public class CallReciver extends BroadcastReceiver {
         } else {// new number .. not one of the contact phone number... no toast msg.
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 // add to phone contact
-                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo);
+                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0);
                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                         true, (ContentObserver) history);
             } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {

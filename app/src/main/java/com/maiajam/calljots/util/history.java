@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 public class history extends ContentObserver {
     private final DialerInfoAndNote mContactInfo;
+    private final int isSpec;
     Context context;
 
     int Type, Dir;
@@ -39,10 +40,11 @@ public class history extends ContentObserver {
 
     // type value to indicate that we will show the dialoge or print the call log
     // type = 1 means show call log
-    public history(Handler handler, Context c, DialerInfoAndNote contactNoteAndInfo) {
+    public history(Handler handler, Context c, DialerInfoAndNote contactNoteAndInfo,int hintIsSpec) {
         super(handler);
         context = c;
         mContactInfo = contactNoteAndInfo;
+        isSpec = hintIsSpec ;
     }
 
     @Override
@@ -127,14 +129,14 @@ public class history extends ContentObserver {
                             , context.getString(R.string.newCon), context.getString(R.string.addCont),
                             Number, imgUri, 0, HelperMethodes.getContactId(Number, context), 0);
                 } else {// check is this contact a special contact
-                    if (mContactInfo.getContIsSpec() == 1) { // its a speacail contact ... so add a note for this calllog
+                    if (isSpec == 1) { // its a speacail contact ... so add a note for this calllog
                         HelperMethodes.CallNotifcation(context, 1, name,
                                 context.getString(R.string.savNote), context.getString(R.string.addNote), Number, imgUri,
                                 0, HelperMethodes.getContactId(Number, context), mContactInfo.getId());
                     } else { // its is not a speacail contact ... add it to specal then add a note for hime
                         HelperMethodes.CallNotifcation(context, 0, name,
                                 context.getString(R.string.addToSpec), context.getString(R.string.AddTospec), Number, imgUri,
-                                0, HelperMethodes.getContactId(Number, context), mContactInfo.getId());
+                                0, HelperMethodes.getContactId(Number, context), 0);
                     }
                 }
         }

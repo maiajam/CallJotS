@@ -21,6 +21,7 @@ import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -34,8 +35,10 @@ import butterknife.Unbinder;
 public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTextListener {
 
 
-    RecyclerView recyclerView;
-    SpecailConAdapter adapter;
+    public ArrayList<AllPhoneContact> search_list;
+    public List<AllPhoneContact> phoneList;
+    public RecyclerView recyclerView;
+    public SpecailConAdapter adapter;
     TextView txtNoItem, txtWelcome;
     List<AllPhoneContact> Spec_contactList;
     ReadDataThread readDataThread;

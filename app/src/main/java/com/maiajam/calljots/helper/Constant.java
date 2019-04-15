@@ -19,6 +19,8 @@ public interface Constant {
     int UPDATE_NOTE_IS_DONE = 140;
     int GET_LAST_CONTACT_NOTES = 150 ;
     int GET_PERSONAL_NOTE_PARENT_ID = 160;
+    int GET_ID_FOR_CONTACT = 170;
+
 
 
     // permsion request
@@ -30,7 +32,6 @@ public interface Constant {
 
     // else
     int ONE_CONTACT_NOTE = 200;
-
 
 
     ;

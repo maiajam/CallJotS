@@ -71,12 +71,17 @@ public class AllContactFrag extends Fragment {
     private ReadDataThread myThread;
     private SwipeControler swipeControler;
     private String PhonNo;
+    private String[] CALL_LOG_PERMISSIONS = new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG};
 
     public void AllContactFrag() {
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.READ_CALL_LOG )!= PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(CALL_LOG_PERMISSIONS,Constant.RequestCodeCallLog);
+        }
     }
     @Nullable
     @Override
@@ -168,6 +173,15 @@ public class AllContactFrag extends Fragment {
                 // permission was granted 🙂
               callAction(PhonNo);
             }
+        }else if(requestCode == Constant.RequestCodeCallLog)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+               //
+            }else {
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), String.valueOf(CALL_LOG_PERMISSIONS));
+            }
+
         }
 
     }
@@ -180,5 +194,7 @@ public class AllContactFrag extends Fragment {
     public void revertSwipe(int index) {
         allConAdapter.notifyItemChanged(index);
     }
+
+
 }
 

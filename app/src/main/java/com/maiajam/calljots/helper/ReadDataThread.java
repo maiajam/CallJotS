@@ -30,6 +30,7 @@ public class ReadDataThread extends Thread {
     private int id;
     private Date noteDate;
     private DialerInfoAndNote contactNoteAndInfo;
+    private int Id;
 
     public ReadDataThread(Handler h, Context context,int Type,String name) {
         mhandler = h;
@@ -60,6 +61,10 @@ public class ReadDataThread extends Thread {
             case Constant.GET_CONTACT_NOTES:
                 allContactNote = roomDao.getAllContactsNotes(mName);
                 message.obj =  allContactNote ;
+                break;
+            case Constant.GET_ID_FOR_CONTACT:
+                Id  = roomDao.getIdPersonalNote(mName);
+                message.obj =  Id ;
                 break;
             case Constant.GET_ALL_NOTES:
                 allContactNote = roomDao.getAllNote();
