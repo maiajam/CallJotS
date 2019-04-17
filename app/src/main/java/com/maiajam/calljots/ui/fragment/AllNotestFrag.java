@@ -61,6 +61,8 @@ public class AllNotestFrag extends Fragment {
     private String ImageUrl;
     private int Id;
     private int ContId;
+    public View view;
+
 
     public void AllNotesFrag() {
 
@@ -73,7 +75,7 @@ public class AllNotestFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_notes, container, false);
+       view = inflater.inflate(R.layout.fragment_notes, container, false);
         unbinder = ButterKnife.bind(this, view);
         Allnote = new ArrayList<>();
         setRecyContent();

@@ -4,7 +4,7 @@
     tools:context=".ui.activty.NewNoteActivity">
     <item
         android:id="@+id/action_save"
-        android:icon="@drawable/addnewnote"
+        android:icon="@drawable/add_new_note"
         android:orderInCategory="100"
         android:title="save note"
         android:visible="true"

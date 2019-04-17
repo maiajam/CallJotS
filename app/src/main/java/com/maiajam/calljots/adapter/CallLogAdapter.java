@@ -53,27 +53,60 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.Holder> 
         String date = new SimpleDateFormat("dd/MM/YY").format(new Date(Long.parseLong(calLog.getDate())));
         String Time = new SimpleDateFormat("hh:mm a").format(new Date(Long.parseLong(calLog.getDate())));
         String Duration = calLog.getCallDuration();
-
-        holder.Date_txt.setText(date + " , " +Time );
-        holder.CallDuration_txt.setText(Duration);
-
         String dir = calLog.getDir();
+        int duration = Integer.valueOf(Duration);
+        int callduration;
+        int noOfMin,noOgHour,noOfSec;
+        if(duration >= 60 && duration<3600)
+        {
+           noOgHour = 0;
+            noOfMin = duration/60 ;
+            noOfSec = duration % 60 ;
+            holder.CallDuration_txt.setText(String.format("%02d",noOgHour) +":" +String.format("%02d", noOfMin) +":" + String.format("%02d", noOfSec));
+        }else if (duration < 60 && duration != 0)
+        {
+            noOgHour = 0;
+            noOfMin = 0 ;
+            noOfSec = duration ;
+            holder.CallDuration_txt.setText(String.format("%02d", noOgHour) +":" +String.format("%02d", noOfMin) +":" +String.format("%02d", noOfSec));
+        }else if(duration >= 3600)
+        {
+            noOgHour = duration /3600;
+            int reminder = duration % 3600;
+            noOfMin = reminder /60;
+            noOfSec = reminder % 60 ;
+            holder.CallDuration_txt.setText(String.format("%02d", noOgHour) +":" +String.format("%02d", noOfMin) +":" +String.format("%02d",  noOfSec));
+        }else if (duration == 0)
+        {
+            noOgHour = 0;
+            noOfMin = 0 ;
+            noOfSec = 0 ;
+            if (dir.equals("MISSED"))
+            {
+                holder.Call_txt.setText(con.getString(R.string.missidCall));
+                holder.CallDuration_txt.setVisibility(View.INVISIBLE);
+            }
+
+        }
+        holder.Date_txt.setText(date + " , " +Time );
+
+
 
         if(dir.equals("OUTGOING"))
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.income_call));
-            }else
-            {
-                holder.callType_img.setImageDrawable(con.getResources().getDrawable(R.drawable.income_call));
-            }
-        }else if (   dir.equals("INCOMING") )
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.out));
             }else
             {
                 holder.callType_img.setImageDrawable(con.getResources().getDrawable(R.drawable.out));
+            }
+        }else if (   dir.equals("INCOMING") )
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.callType_img.setImageDrawable(con.getDrawable(R.drawable.income_call));
+            }else
+            {
+                holder.callType_img.setImageDrawable(con.getResources().getDrawable(R.drawable.income_call));
             }
 
         }else if (dir.equals("MISSED"))

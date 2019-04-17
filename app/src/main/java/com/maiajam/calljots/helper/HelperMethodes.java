@@ -2,6 +2,7 @@ package com.maiajam.calljots.helper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -280,10 +281,14 @@ public class HelperMethodes {
                     .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
                     .setChannelId(chanellId)
                     .setAutoCancel(true)
+
                     ;
         }
+
+        Notification notification = builder.build();
+        notification.flags = Notification.DEFAULT_ALL;
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+        notificationManager.notify((int) System.currentTimeMillis(), notification);
     }
 
     public static void enableAddNoteDuringCall(Context context,String contact_name, String phoneNo) {
@@ -478,6 +483,8 @@ public class HelperMethodes {
                 PixelFormat.TRANSPARENT);
 
         params.gravity = Gravity.CENTER_VERTICAL;
+        params.x = 0 ;
+        params.y = 50 ;
         return params ;
     }
 
@@ -511,4 +518,9 @@ public class HelperMethodes {
         thread.start();
     }
 
+    public static void callAction(Context context,String PhoneNo) {
+        Intent CallAction = new Intent(Intent.ACTION_CALL);
+        CallAction.setData(Uri.parse("tel:" + PhoneNo));
+        context.startActivity(CallAction);
+    }
 }

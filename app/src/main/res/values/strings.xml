@@ -41,7 +41,7 @@
     <string name="action_markcomplete">Mark Completed</string>
     <string name="action_edit">Edit</string>
     <string name="action_delteNote">Delete</string>
-    <string name="CallDuration">Call Duration</string>
+    <string name="CallDuration">Call Duration : </string>
     <string name="AccoumlpishB">ACComplish</string>
     <string name="NoPermission">you dont have a permission</string>
     <string name="search">search</string>
@@ -81,4 +81,5 @@
     <string name="Contact_Info">conactInfo</string>
     <string name="exit">are you sure you want to exit ?</string>
     <string name="FamilyCat">Family</string>
+    <string name="missidCall">Missed call</string>
 </resources>

@@ -55,7 +55,7 @@
             android:layout_height="30dp"
             android:id="@+id/CallNow_imgView"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/income_call"/>
+            android:src="@drawable/callnow_b"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -67,7 +67,9 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabTextColor="@android:color/black">
 
         <android.support.design.widget.TabItem
             android:id="@+id/tabItem"

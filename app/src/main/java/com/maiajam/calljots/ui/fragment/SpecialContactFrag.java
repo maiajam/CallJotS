@@ -45,6 +45,7 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
     Handler handler;
     Unbinder unbinder;
     private FloatingActionButton addNewSpec;
+    public View view;
 
     public void SpecialContactFrag() {
 
@@ -61,7 +62,7 @@ public class SpecialContactFrag extends Fragment implements SearchView.OnQueryTe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.frag_speccont, container, false);
+         view = inflater.inflate(R.layout.frag_speccont, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.SpecCon_Rec);
         txtNoItem = (TextView) view.findViewById(R.id.NoContact_txt);
         txtWelcome = (TextView) view.findViewById(R.id.welcomSpecial_txt);

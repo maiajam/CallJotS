@@ -1,12 +1,16 @@
 package com.maiajam.calljots.adapter;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +24,9 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
+import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.ui.activity.MainActivity;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.ui.fragment.AddSpecialContactFrag;
 
@@ -36,14 +42,18 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
     Context con;
     List<AllPhoneContact> ListCont = new ArrayList<>();
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
-
+    Holder holder ;
     int Type  ;
 
    public AllConAdapter(Context context, List<AllPhoneContact> List, int type)
     {
         con = context ;
         ListCont = List ;
+        viewBinderHelper.setOpenOnlyOne(true);
+
     }
+
+
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -136,6 +146,7 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
             ContPhone_txt = (TextView)itemView.findViewById(R.id.ContPhoneNo_txt);
             ContPhoto_img =(ImageView)itemView.findViewById(R.id.ContPhoto_imgView);
             AddToIcon_image =(ImageView)itemView.findViewById(R.id.AddToSpec_img);
+
         }
 
         public void binde(final AllPhoneContact contact) {
@@ -143,7 +154,7 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
             CallLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  callAction(contact.getContPhoneNo());
+                    requestCallPhonePerm(contact);
                 }
             });
 
@@ -156,10 +167,25 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
         }
     }
 
-    private void callAction(String PhoneNo) {
-        Intent CallAction = new Intent(Intent.ACTION_CALL);
-        CallAction.setData(Uri.parse("tel:" + PhoneNo));
-        con.startActivity(CallAction);
+    private void requestCallPhonePerm(AllPhoneContact contact) {
+        if (ContextCompat.checkSelfPermission(con,
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions((Activity) con,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
+        } else {
+            HelperMethodes.callAction(con, contact.getContPhoneNo());
+        }
+
     }
 
+    public void resultMakeCall(boolean b)
+    {
+        if(b)
+        {
+
+        }
+    }
 }

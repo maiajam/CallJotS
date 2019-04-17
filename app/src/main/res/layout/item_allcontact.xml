@@ -8,7 +8,7 @@
     app:mode="same_level"
     tools:context=".ui.fragment.AllContactFrag">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/delete_layout"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
@@ -20,10 +20,11 @@
             android:gravity="center"
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white"
+            android:id="@+id/Call_text"
             android:text="Call"/>
-    </FrameLayout>
+    </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/front_layout"
         android:layout_height="70dp">
@@ -94,7 +95,7 @@
                 android:textAlignment="viewEnd" />
         </LinearLayout>
 
-    </FrameLayout>
+    </RelativeLayout>
 
 
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

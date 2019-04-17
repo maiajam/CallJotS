@@ -72,6 +72,7 @@ public class AllContactFrag extends Fragment {
     private SwipeControler swipeControler;
     private String PhonNo;
     private String[] CALL_LOG_PERMISSIONS = new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG};
+    public View view;
 
     public void AllContactFrag() {
     }
@@ -87,7 +88,7 @@ public class AllContactFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.frag_allcont, container, false);
+        view = inflater.inflate(R.layout.frag_allcont, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.AllCon_Rec);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("All Contact");
         Add_b = (FloatingActionButton) view.findViewById(R.id.addNewContact_fab);
@@ -124,7 +125,6 @@ public class AllContactFrag extends Fragment {
         Add_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
              startActivity(new Intent(getActivity(), MainNewContactActivity.class));
             }
         });
@@ -171,7 +171,7 @@ public class AllContactFrag extends Fragment {
             }
             if (allgranted) {
                 // permission was granted 🙂
-              callAction(PhonNo);
+
             }
         }else if(requestCode == Constant.RequestCodeCallLog)
         {
