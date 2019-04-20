@@ -125,6 +125,7 @@ public class history extends ContentObserver {
             case 2:
                 // incoming call and missed call
                 if (TextUtils.isEmpty(name)) {// new contact
+                    HelperMethodes.dialogeAfterCallLog(context, context.getString(R.string.newCon), context.getString(R.string.addCont));
                     HelperMethodes.CallNotifcation(context, 2, Number
                             , context.getString(R.string.newCon), context.getString(R.string.addCont),
                             Number, imgUri, 0, HelperMethodes.getContactId(Number, context), 0);

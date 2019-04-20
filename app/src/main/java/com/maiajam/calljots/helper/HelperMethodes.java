@@ -523,4 +523,27 @@ public class HelperMethodes {
         CallAction.setData(Uri.parse("tel:" + PhoneNo));
         context.startActivity(CallAction);
     }
+
+    public static void dialogeAfterCallLog(Context context, String string, String string1) {
+
+        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+        // fill data in the field
+        TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
+        TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
+        TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
+        View pView =(View)v.findViewById(R.id.partView);
+        LinearLayout linStuts = (LinearLayout)v.findViewById(R.id.linStuts);
+        LinearLayout linClass = (LinearLayout)v.findViewById(R.id.linClassifcation);
+
+        ConName_txt.setText(getDailerInfo(context).getContName());
+        ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
+        NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
+        linClass.setVisibility(View.GONE);
+        linStuts.setVisibility(View.GONE);
+        pView.setVisibility(View.GONE);
+        wm.addView(v, getWindoesMangerParam(context));
+        removeView(wm,v);
+    }
 }

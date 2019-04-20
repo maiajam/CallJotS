@@ -82,4 +82,7 @@
     <string name="exit">are you sure you want to exit ?</string>
     <string name="FamilyCat">Family</string>
     <string name="missidCall">Missed call</string>
+    <string name="label_TakeANote">Do you want to take a note ?</string>
+    <string name="label_OkTakeAnote">Take a note</string>
+    <string name="label_CancelTakeAnote">Cancel</string>
 </resources>
