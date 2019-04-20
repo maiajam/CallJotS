@@ -30,10 +30,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/layout_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:background="@drawable/layout_border"
         android:orientation="vertical">
 
         <LinearLayout
@@ -90,9 +90,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:fontFamily="@font/regulaer"
                         android:text="Mai Waleed "
                         android:textColor="#ffffff"
-                        android:fontFamily="@font/regulaer"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -101,10 +101,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:fontFamily="@font/regulaer"
                         android:text="079 99 57876 "
                         android:textColor="#ffffff"
                         android:textSize="20sp"
-                        android:fontFamily="@font/regulaer"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -117,9 +117,9 @@
                             android:id="@+id/ContFirstClassi_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/regulaer"
                             android:text="Designer , "
                             android:textColor="#ffffff"
-                            android:fontFamily="@font/regulaer"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -128,10 +128,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
+                            android:fontFamily="@font/regulaer"
                             android:text="Director Board"
                             android:textColor="#ffffff"
                             android:textSize="15sp"
-                            android:fontFamily="@font/regulaer"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -199,50 +199,54 @@
             </LinearLayout>
 
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="10dp"
 
-            android:visibility="gone"
+        <LinearLayout
+            android:id="@+id/noteDialoge_Lin_afterCallLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
             <TextView
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
+                android:id="@+id/noteDialoge_Txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:fontFamily="@font/bold"
                 android:layout_gravity="center"
-                android:id="@+id/noteDialoge_Txt"
-                android:text="@string/label_TakeANote"/>
+                android:fontFamily="@font/bold"
+                android:gravity="center"
+                android:text="@string/label_TakeANote"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingEnd="40dp"
-                android:paddingStart="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp">
+
                 <Button
-                    android:background="@drawable/layout_border"
+                    android:id="@+id/noteDialoge_ok_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_weight="0.5"
-                    android:layout_width="wrap_content"
-                    android:text="@string/label_OkTakeAnote"
-                    android:id="@+id/noteDialoge_ok_b"
-                    android:fontFamily="@font/regulaer"
-                    android:layout_height="wrap_content"
-                    />
-                <Button
                     android:background="@drawable/layout_border"
-                    android:layout_weight="0.5"
                     android:fontFamily="@font/regulaer"
-                    android:layout_width="wrap_content"
-                    android:text="@string/label_CancelTakeAnote"
+                    android:text="@string/label_OkTakeAnote" />
+
+                <Button
                     android:id="@+id/noteDialoge_cancel_b"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/layout_border"
+                    android:fontFamily="@font/regulaer"
+                    android:text="@string/label_CancelTakeAnote" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
