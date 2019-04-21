@@ -70,12 +70,12 @@ public class CallReciver extends BroadcastReceiver {
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
-                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0);
+                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0,true);
                                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                         true, (ContentObserver) history);
                             } else {
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
-                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,1);
+                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,1,true);
                                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                                         true, (ContentObserver) history);
                             }
@@ -100,7 +100,7 @@ public class CallReciver extends BroadcastReceiver {
         } else {// new number .. not one of the contact phone number... no toast msg.
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 // add to phone contact
-                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0);
+                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0,true);
                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                         true, (ContentObserver) history);
             } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {

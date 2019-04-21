@@ -29,21 +29,18 @@ import java.util.ArrayList;
 public class history extends ContentObserver {
     private final DialerInfoAndNote mContactInfo;
     private final int isSpec;
+    private boolean hintFromReciver = false;
     Context context;
 
-    int Type, Dir;
+    int  Dir;
     ArrayList<ContactLogs> listCall;
-    String name, callDuration, date, ContactName;
-    private Handler handler;
-    private ReadDataThread readDataThrea;
 
-    // type value to indicate that we will show the dialoge or print the call log
-    // type = 1 means show call log
-    public history(Handler handler, Context c, DialerInfoAndNote contactNoteAndInfo,int hintIsSpec) {
+    public history(Handler handler, Context c, DialerInfoAndNote contactNoteAndInfo,int hintIsSpec,Boolean hintFromReciver) {
         super(handler);
         context = c;
         mContactInfo = contactNoteAndInfo;
         isSpec = hintIsSpec ;
+        this.hintFromReciver = hintFromReciver ;
     }
 
     @Override
@@ -52,7 +49,10 @@ public class history extends ContentObserver {
         SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
         String phoneNo = sp.getString("phoneNumber", null);
         if (phoneNo != null) {
-            getCallDetials();
+            if(hintFromReciver)
+            {
+                getCallDetials();
+            }
         }
     }
 
@@ -110,7 +110,9 @@ public class history extends ContentObserver {
             String imgUri = HelperMethodes.getContactImage(context, phNumber);
             String name = HelperMethodes.getContactName(phNumber, context);
             int contactId = HelperMethodes.getContactId(phNumber, context);
-            showDialge(phNumber, name, callDuration, date, Dir, imgUri, contactId, mContactInfo);
+
+               showDialge(phNumber, name, callDuration, date, Dir, imgUri, contactId, mContactInfo);
+
         }
 
 
