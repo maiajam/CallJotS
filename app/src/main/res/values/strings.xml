@@ -85,4 +85,8 @@
     <string name="label_TakeANote">Do you want to take a note ?</string>
     <string name="label_OkTakeAnote">Take a note</string>
     <string name="label_CancelTakeAnote">Cancel</string>
+    <string name="Label_ADDNewContact">Add To Phone Contact</string>
+    <string name="Qusetion_label">Do you want to add this number to your phone contact ?</string>
+    <string name="Label_ADDAddAsSpecialContact">Do you want to save this conact as special contact ?</string>
+    <string name="label_OKAddAsSpecial">Add as specail contact</string>
 </resources>

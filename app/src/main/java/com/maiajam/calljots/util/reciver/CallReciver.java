@@ -17,6 +17,7 @@ import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 import com.maiajam.calljots.util.history;
 
 /**
@@ -56,14 +57,14 @@ public class CallReciver extends BroadcastReceiver {
                             // rining state
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
-                                HelperMethodes.drawInfo(context);
+                                DialogeHelperMethods.drawInfo(context);
                             } else {
                                 // this contact is a special contact
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                                 if (contactNoteAndInfo.getContact_Note() != null) {
-                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo, 0);
+                                    DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 0);
                                 } else {// dont have any note for this special contact yet
-                                    HelperMethodes.drawContactInfo(context, contactNoteAndInfo, 1);
+                                    DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 1);
                                 }
                             }
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {

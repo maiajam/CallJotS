@@ -32,6 +32,9 @@ public interface Constant {
 
     // else
     int ONE_CONTACT_NOTE = 200;
+    int NEW_CONTACT_HINT = 1;
+    int SPECIAL_CONTACT_HINT = 2;
+    int NOT_SPECAIL_CONTACT_HINT = 3;
 
 
     ;

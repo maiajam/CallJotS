@@ -209,7 +209,7 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/noteDialoge_Txt"
+                android:id="@+id/noteDialoge_afterDialoge_Txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

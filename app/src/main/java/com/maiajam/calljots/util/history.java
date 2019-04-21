@@ -8,11 +8,9 @@ import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.model.ContactLogs;
@@ -20,6 +18,7 @@ import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 
 import java.util.ArrayList;
 
@@ -125,19 +124,15 @@ public class history extends ContentObserver {
             case 2:
                 // incoming call and missed call
                 if (TextUtils.isEmpty(name)) {// new contact
-                    HelperMethodes.dialogeAfterCallLog(context, context.getString(R.string.newCon), context.getString(R.string.addCont));
-                    HelperMethodes.CallNotifcation(context, 2, Number
-                            , context.getString(R.string.newCon), context.getString(R.string.addCont),
-                            Number, imgUri, 0, HelperMethodes.getContactId(Number, context), 0);
+                    DialogeHelperMethods.dialogeAfterCallLog(context,Constant.NEW_CONTACT_HINT,Number,imgUri,
+                            HelperMethodes.getContactId(Number,context),0);
+
                 } else {// check is this contact a special contact
                     if (isSpec == 1) { // its a speacail contact ... so add a note for this calllog
-                        HelperMethodes.CallNotifcation(context, 1, name,
-                                context.getString(R.string.savNote), context.getString(R.string.addNote), Number, imgUri,
-                                0, HelperMethodes.getContactId(Number, context), mContactInfo.getId());
+                        DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT, Number, imgUri, HelperMethodes.getContactId(Number, context), Constant.SPECIAL_CONTACT_HINT);
+
                     } else { // its is not a speacail contact ... add it to specal then add a note for hime
-                        HelperMethodes.CallNotifcation(context, 0, name,
-                                context.getString(R.string.addToSpec), context.getString(R.string.AddTospec), Number, imgUri,
-                                0, HelperMethodes.getContactId(Number, context), 0);
+                        DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT, Number, imgUri, HelperMethodes.getContactId(Number, context), 0);
                     }
                 }
         }
