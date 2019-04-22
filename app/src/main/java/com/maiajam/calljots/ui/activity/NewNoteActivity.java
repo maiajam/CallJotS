@@ -72,6 +72,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
             Mycalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             Mycalendar.set(Calendar.MINUTE, min);
+            remindeMe();
         }
     };
     private Handler handler;
@@ -186,7 +187,7 @@ public class NewNoteActivity extends AppCompatActivity {
             case R.id.action_Reminder:
                 RemindeMe = true;
                 ShowDatePicker();
-                remindeMe(3);
+
                 break;
         }
         return true;
@@ -197,7 +198,8 @@ public class NewNoteActivity extends AppCompatActivity {
         int Year, month, DayofMounth;
         Calendar calendar = Calendar.getInstance();
 
-        DatePickerDialog picker = new DatePickerDialog(NewNoteActivity.this, setDate, calendar.get(Calendar.YEAR), GregorianCalendar.MONTH, GregorianCalendar.DAY_OF_MONTH);
+        DatePickerDialog picker = new DatePickerDialog(NewNoteActivity.this, setDate, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
 
         picker.setButton(DialogInterface.BUTTON_POSITIVE, "Set Time", new DialogInterface.OnClickListener() {
             @Override
@@ -210,9 +212,9 @@ public class NewNoteActivity extends AppCompatActivity {
 
     }
 
-    private void remindeMe(int time) {
+    private void remindeMe( ) {
         OneTimeReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
-                .setInitialDelay(time, TimeUnit.MILLISECONDS)
+                .setInitialDelay(Mycalendar.getTimeInMillis(), TimeUnit.MILLISECONDS)
                 .build();
         WorkManager.getInstance().enqueue(OneTimeReq);
     }
@@ -259,7 +261,7 @@ public class NewNoteActivity extends AppCompatActivity {
             };
             if (NoteFrag == 1) {// update the note
                 if (RemindeMe) {
-                    remindeMe(((int) Calendar.getInstance().getTimeInMillis()));
+                    remindeMe();
                 }
                 if (Contact_Id == 0) { // means this is a personal note not contact note and this page open from All notes page
                     contact_obj.setContact_Name("Personal");

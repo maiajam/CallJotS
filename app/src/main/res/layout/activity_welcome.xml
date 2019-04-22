@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,28 +7,28 @@
     android:orientation="vertical"
     tools:context=".ui.activity.welcomeActivity">
 
+
     <ImageView
+
         android:id="@+id/img_splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/marginTop"
-        android:src="@drawable/l"
-        />
+        android:layout_centerInParent="true"
+
+        android:src="@drawable/l" />
 
     <TextView
         android:id="@+id/textWlcom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/img_splash"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="5dp"
+        android:fontFamily="@font/blackoblique"
         android:gravity="center_horizontal"
         android:text="@string/welcome"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
-        android:fontFamily="@font/blackoblique"
         tools:fontFamily="@font/font" />
 
 
@@ -36,10 +36,12 @@
         android:id="@+id/txtStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/img_start"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="170dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/semibold"
-        android:gravity="bottom|center_horizontal"
         android:text="@string/start"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp" />
@@ -48,8 +50,11 @@
         android:id="@+id/img_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/welcomMargen"
         android:src="@drawable/getstarted" />
 
-</LinearLayout>
+
+</RelativeLayout>
