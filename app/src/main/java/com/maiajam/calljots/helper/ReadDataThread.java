@@ -63,7 +63,7 @@ public class ReadDataThread extends Thread {
                 message.obj =  allContactNote ;
                 break;
             case Constant.GET_ID_FOR_CONTACT:
-                Id  = roomDao.getIdPersonalNote(mName);
+                Id  = roomDao.getIdFOrContact(mName);
                 message.obj =  Id ;
                 break;
             case Constant.GET_ALL_NOTES:
@@ -111,7 +111,7 @@ public class ReadDataThread extends Thread {
                   roomDao.getLastNote(mName);
                   break;
               case Constant.GET_PERSONAL_NOTE_PARENT_ID:
-                  message.obj = roomDao.getIdPersonalNote("Personal");
+                  message.obj = roomDao.getIdFOrContact("Personal");
                   break;
 
         }

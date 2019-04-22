@@ -53,8 +53,6 @@ public abstract class RoomDao {
             "ORDER BY ContactNoteEnitiy.Contact_LastCallTime DESC LIMIT 1")
     public abstract DialerInfoAndNote getContactInfoByName(String Name);
 
-    @Query("SELECT Id FROM AllPhoneContact WHERE contName = :name")
-    public abstract int getIdPersonalNote(String name);
     @Query("SELECT * FROM ContactNoteEnitiy")
     public abstract List<ContactNoteEnitiy> getAllNote();
 

@@ -185,8 +185,7 @@ public class DialogeHelperMethods {
     }
     private static void removeViewImmidiatly(final WindowManager wm, final View v)
     {
-                    wm.removeView(v);
-    }
+                    wm.removeView(v);    }
     private static void removeView(final WindowManager wm, final View v)
     {
         Thread thread = new Thread(new Runnable() {

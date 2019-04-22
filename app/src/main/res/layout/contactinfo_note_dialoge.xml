@@ -237,6 +237,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/layout_border"
                     android:fontFamily="@font/regulaer"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/label_OkTakeAnote" />
 
                 <Button
@@ -246,6 +247,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/layout_border"
                     android:fontFamily="@font/regulaer"
+                    android:textColor="@color/colorPrimary"
                     android:text="@string/label_CancelTakeAnote" />
             </LinearLayout>
         </LinearLayout>

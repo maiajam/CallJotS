@@ -77,10 +77,11 @@ public class NewNoteActivity extends AppCompatActivity {
     private Handler handler;
     private ReadDataThread myReadThread;
     private Handler getNotehandler;
-    private ReadDataThread getNoteThread;
+    private ReadDataThread getNoteThread,getIdThread;
     private OneTimeWorkRequest OneTimeReq;
     private int Contact_Id;
     private int NoteId;
+    private Handler getIdHanler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,6 @@ public class NewNoteActivity extends AppCompatActivity {
         if (extra != null) {
             Name = extra.getString("name");
             PhoneNo = extra.getString(getString(R.string.phoneNoExtra));
-            Id = extra.getInt("Id");
             Contact_Id = extra.getInt("contact_Id");
             NoteFrag = extra.getInt("NoteFragment");
             NoteId = extra.getInt("Note_Id");
@@ -125,16 +125,34 @@ public class NewNoteActivity extends AppCompatActivity {
             getNoteThread.setNoteId(NoteId);
             getNoteThread.start();
         }
+
         if (Contact_Id == 0) {
             // personal note
             ContactName_txt.setVisibility(View.GONE);
             ContactPhone_txt.setVisibility(View.GONE);
             ContactPhoto.setVisibility(View.GONE);
         } else {
+            getIdForTheContact(Name);
             ContactName_txt.setText(Name);
             ContactPhone_txt.setText(PhoneNo);
             ContactPhoto.setImageDrawable(HelperMethodes.getBitmapImage(Image_Uri, getBaseContext()));
         }
+    }
+
+    private void getIdForTheContact(String name) {
+
+        getIdHanler = new Handler(){
+
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.obj != null)
+                {
+                    Id = (int) msg.obj;
+                }
+            }
+        };
+        getIdThread = new ReadDataThread(getIdHanler,getBaseContext(),Constant.GET_ID_FOR_CONTACT,name);
+        getIdThread.start();
     }
 
     @Override
@@ -201,6 +219,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private void AddNote() throws ParseException {
         {
+
             noteTitle = NoteTitle_ed.getText().toString();
             Note = Note_ed.getText().toString();
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
@@ -208,6 +227,7 @@ public class NewNoteActivity extends AppCompatActivity {
             contact_obj.setContact_Note(Note);
             contact_obj.setContact_NoteTitle(noteTitle);
             contact_obj.setContact_Id(Contact_Id);
+
             contact_obj.setNote_Parent_Id(Id);
             current_date = current_Calender.getTime();
             contact_obj.setContact_LastCallTime(current_date);
