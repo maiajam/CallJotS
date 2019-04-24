@@ -26,7 +26,7 @@ import com.maiajam.calljots.util.history;
 
 public class CallReciver extends BroadcastReceiver {
 
-    private static String lastState;
+    private static String lastState,prevState;
     Handler h;
     private DialerInfoAndNote contactNoteAndInfo;
     private Object history;
@@ -37,15 +37,17 @@ public class CallReciver extends BroadcastReceiver {
         final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         if (!state.equals(lastState)) {
             lastState = state;
+            prevState = lastState ;
             checkCaller(intent, context, state);
         }
     }
 
     private void checkCaller(Intent intent, final Context context, final String state) {
-        String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        final String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         final String Contact_name = HelperMethodes.getContactName(NOCont, context);
+        final String ContactImg_url = HelperMethodes.getContactImage(context,NOCont);
         // save dialer info at shared prefrence
-        HelperMethodes.saveDialerInfo(context, Contact_name, NOCont);
+        HelperMethodes.saveDialerInfo(context, Contact_name, NOCont,ContactImg_url);
         if (!TextUtils.isEmpty(Contact_name)) {
             h = new Handler() {
                 @Override
@@ -70,14 +72,14 @@ public class CallReciver extends BroadcastReceiver {
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
-                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0,true);
-                                context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
-                                        true, (ContentObserver) history);
+                                DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT,
+                                        NOCont, HelperMethodes.getContactImage(context,NOCont), HelperMethodes.getContactId(NOCont, context),
+                                        Constant.SPECIAL_CONTACT_HINT,null);
                             } else {
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
-                                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,1,true);
-                                context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
-                                        true, (ContentObserver) history);
+                                DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT,
+                                        NOCont, HelperMethodes.getContactImage(context,NOCont), HelperMethodes.getContactId(NOCont, context),
+                                        Constant.SPECIAL_CONTACT_HINT,contactNoteAndInfo);
                             }
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
@@ -100,7 +102,7 @@ public class CallReciver extends BroadcastReceiver {
         } else {// new number .. not one of the contact phone number... no toast msg.
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 // add to phone contact
-                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0,true);
+                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0,1);
                 context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
                         true, (ContentObserver) history);
             } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {

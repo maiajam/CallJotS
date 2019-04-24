@@ -12,12 +12,10 @@ import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 
-import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.HelperMethodes;
-import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 
 import java.util.ArrayList;
@@ -29,13 +27,13 @@ import java.util.ArrayList;
 public class history extends ContentObserver {
     private final DialerInfoAndNote mContactInfo;
     private final int isSpec;
-    private boolean hintFromReciver = false;
+    private int hintFromReciver ;
     Context context;
 
     int  Dir;
     ArrayList<ContactLogs> listCall;
 
-    public history(Handler handler, Context c, DialerInfoAndNote contactNoteAndInfo,int hintIsSpec,Boolean hintFromReciver) {
+    public history(Handler handler, Context c, DialerInfoAndNote contactNoteAndInfo,int hintIsSpec,int hintFromReciver) {
         super(handler);
         context = c;
         mContactInfo = contactNoteAndInfo;
@@ -49,7 +47,7 @@ public class history extends ContentObserver {
         SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
         String phoneNo = sp.getString("phoneNumber", null);
         if (phoneNo != null) {
-            if(hintFromReciver)
+            if(hintFromReciver == 1)
             {
                 getCallDetials();
             }
@@ -77,7 +75,6 @@ public class history extends ContentObserver {
         int duration1 = managedCursor.getColumnIndex(CallLog.Calls.DURATION);
         int type1 = managedCursor.getColumnIndex(CallLog.Calls.TYPE);
         int date1 = managedCursor.getColumnIndex(CallLog.Calls.DATE);
-        //  int name1 =  managedCursor.getColumnIndex(CallLog.Calls.);
 
         if (managedCursor.moveToFirst() == true) {
 
@@ -126,15 +123,15 @@ public class history extends ContentObserver {
             case 2:
                 // incoming call and missed call
                 if (TextUtils.isEmpty(name)) {// new contact
-                    DialogeHelperMethods.dialogeAfterCallLog(context,Constant.NEW_CONTACT_HINT,Number,imgUri,
-                            HelperMethodes.getContactId(Number,context),0);
+                  //  DialogeHelperMethods.dialogeAfterCallLog(context,Constant.NEW_CONTACT_HINT,Number,imgUri,
+                    //        HelperMethodes.getContactId(Number,context),0, contactNoteAndInfo);
 
                 } else {// check is this contact a special contact
                     if (isSpec == 1) { // its a speacail contact ... so add a note for this calllog
-                        DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT, Number, imgUri, HelperMethodes.getContactId(Number, context), Constant.SPECIAL_CONTACT_HINT);
+                     //   DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT, Number, imgUri, HelperMethodes.getContactId(Number, context), Constant.SPECIAL_CONTACT_HINT, contactNoteAndInfo);
 
                     } else { // its is not a speacail contact ... add it to specal then add a note for hime
-                        DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT, Number, imgUri, HelperMethodes.getContactId(Number, context), 0);
+                       // DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT, Number, imgUri, HelperMethodes.getContactId(Number, context), 0, contactNoteAndInfo);
                     }
                 }
         }

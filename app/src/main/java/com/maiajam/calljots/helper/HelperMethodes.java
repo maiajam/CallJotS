@@ -108,9 +108,24 @@ public class HelperMethodes {
         return contactName;
     }
 
+    public static String getContactphoto(String phoneNumber, Context context) {
+
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+        String[] projection = new String[]{ContactsContract.PhoneLookup.PHOTO_URI};
+        String imgUrl = "";
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                imgUrl = cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return imgUrl;
+    }
+
     public static int getContactId(String phoneNumber,Context context)
     {
-
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
         String[] projection = new String[]{ContactsContract.PhoneLookup.CONTACT_ID};
         int COntactId = 0;
@@ -121,15 +136,15 @@ public class HelperMethodes {
             }
             cursor.close();
         }
-
         return COntactId;
     }
 
-    public static void saveDialerInfo(Context context, String contact_name, String noCont) {
+    public static void saveDialerInfo(Context context, String contact_name, String noCont, String contactImg_url) {
         SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("Name", contact_name);
         editor.putString("phoneNumber", (noCont));
+        editor.putString("contactPhoto", (noCont));
         editor.commit();
     }
 
@@ -138,12 +153,18 @@ public class HelperMethodes {
         SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
       String Name = sp.getString("Name","");
       String no = sp.getString("phoneNumber" , "");
+       String photoUrl = sp.getString("contactPhoto","");
       AllPhoneContact c =new  AllPhoneContact();
       c.setContName(Name);
       c.setContPhoneNo(no);
+      c.setContactPhotoUri(photoUrl);
       return c ;
     }
 
+    public static void showDialogeAfterCallEnd()
+    {
+
+    }
     //
     public static List<ContactLogs> getCallLogsList(FragmentActivity activity, int contact_id, String contact_number) {
         ArrayList<ContactLogs> list_Log = new ArrayList<>();

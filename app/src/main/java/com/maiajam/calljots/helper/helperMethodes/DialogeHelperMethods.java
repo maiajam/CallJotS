@@ -1,6 +1,5 @@
 package com.maiajam.calljots.helper.helperMethodes;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -17,11 +16,13 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
+import static com.maiajam.calljots.helper.HelperMethodes.getContactImage;
 import static com.maiajam.calljots.helper.HelperMethodes.getDailerInfo;
 import static java.lang.Thread.sleep;
 
@@ -38,12 +39,14 @@ public class DialogeHelperMethods {
         TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
         TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
+        ImageView contactImg = (ImageView)v.findViewById(R.id.ContPhotToast_img);
         View pView =(View)v.findViewById(R.id.partView);
         LinearLayout linStuts = (LinearLayout)v.findViewById(R.id.linStuts);
         LinearLayout linClass = (LinearLayout)v.findViewById(R.id.linClassifcation);
 
         ConName_txt.setText(getDailerInfo(context).getContName());
         ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
+        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(),context));
         NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
         linClass.setVisibility(View.GONE);
         linStuts.setVisibility(View.GONE);
@@ -53,7 +56,7 @@ public class DialogeHelperMethods {
     }
     public static void dialogeAfterCallLog(final Context context, int hintContactType,
                                            final String number, final String imgUri, final int contactId,
-                                           int ContactType) {
+                                           int ContactType, DialerInfoAndNote contactInfo) {
 
         final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -61,9 +64,39 @@ public class DialogeHelperMethods {
         // fill data in the field
         TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
+        TextView FirsClass_txt = (TextView) v.findViewById(R.id.ContFirstClassi_txt);
+        TextView SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
+        TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
         TextView afterDialoge_Txt = (TextView) v.findViewById(R.id.noteDialoge_afterDialoge_Txt);
+        ImageView contactImg = (ImageView)v.findViewById(R.id.ContPhotToast_img);
         Button ok_b= (Button) v.findViewById(R.id.noteDialoge_ok_b);
         Button cancel_b = (Button) v.findViewById(R.id.noteDialoge_cancel_b);
+
+        //
+
+        ConName_txt.setText(HelperMethodes.getDailerInfo(context).getContName());
+        ConNo_txt.setText(number);
+        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(imgUri,context));
+        if(contactInfo != null)
+        {
+            FirsClass_txt.setText(contactInfo.getContFirstClassf());
+            SecClass_txt.setText(contactInfo.getContSecClassF());
+            int cat = contactInfo.getContPrimaryClassf();
+            if(cat == 1)
+            {
+                CatagoryType.setText(context.getString(R.string.family_cat));
+            }else if(cat == 2)
+            {
+                CatagoryType.setText(context.getString(R.string.Bussiness_cat));
+            }else if(cat == 3) {
+                CatagoryType.setText(context.getString(R.string.Friend_cat));
+            }else {
+                CatagoryType.setVisibility(View.INVISIBLE);
+            }
+        }else {
+            CatagoryType.setVisibility(View.INVISIBLE);
+        }
+
 
         LinearLayout noteAfterDialoge  = (LinearLayout)v.findViewById(R.id.noteDialoge_Lin_afterCallLog);
         noteAfterDialoge.setVisibility(View.VISIBLE);
@@ -71,8 +104,6 @@ public class DialogeHelperMethods {
         LinearLayout noteTitleLin = (LinearLayout)v.findViewById(R.id.ContactInfo_Lin_);
         noteTitleLin.setVisibility(View.GONE);
         //
-        ConName_txt.setText(getDailerInfo(context).getContName());
-        ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
 
         cancel_b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,8 +118,7 @@ public class DialogeHelperMethods {
             ok_b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addNewContact(context,number,contactId,0);
-                    removeViewImmidiatly(wm,v);
+                    addNewContact(context,number,contactId,0,wm,v);
                 }
             });
 
@@ -141,12 +171,13 @@ public class DialogeHelperMethods {
         context.startActivity(intent);
     }
 
-    private static void addNewContact(Context context, String phoneNo, int conId, int id) {
+    private static void addNewContact(Context context, String phoneNo, int conId, int id, WindowManager wm, View v) {
         Intent intent = new Intent(context, MainNewContactActivity.class);
         intent.putExtra("phoneNo",phoneNo);
         intent.putExtra("contact_Id",conId);
         intent.putExtra("Id",id);
         context.startActivity(intent);
+        removeViewImmidiatly(wm,v);
     }
 
     private static WindowManager.LayoutParams getWindoesMangerParam(Context context)
@@ -214,6 +245,7 @@ public class DialogeHelperMethods {
         TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
         TextView Status_txt = (TextView) v.findViewById(R.id.status_txt);
         TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
+        ImageView contactImg = (ImageView)v.findViewById(R.id.ContPhotToast_img);
         //
         String ContName = contact.getContName();
         String first = contact.getContFirstClassf();
@@ -227,6 +259,7 @@ public class DialogeHelperMethods {
         FirsClass_txt.setText(first);
         SecClass_txt.setText(Sec);
         ConNo_txt.setText(ContPhoneNo);
+        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(contact.getContactPhotoUri().toString(),context));
         int cat = contact.getContPrimaryClassf();
         if(cat == 1)
         {

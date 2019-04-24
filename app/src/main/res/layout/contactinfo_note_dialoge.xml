@@ -78,7 +78,7 @@
                         android:paddingTop="3dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="3dp"
-                        android:text="Family"
+                        android:text=""
                         android:textColor="@color/colorPrimary"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/regulaer"
-                        android:text="Mai Waleed "
+                        android:text=" "
                         android:textColor="#ffffff"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -118,7 +118,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/regulaer"
-                            android:text="Designer , "
+                            android:text=" "
                             android:textColor="#ffffff"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -129,7 +129,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:fontFamily="@font/regulaer"
-                            android:text="Director Board"
+                            android:text=""
                             android:textColor="#ffffff"
                             android:textSize="15sp"
                             android:textStyle="bold" />
