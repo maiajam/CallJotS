@@ -35,7 +35,6 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
 
     Context con;
     List<ContactNoteEnitiy> ListNotes;
-    Holder holder;
     String NoteDate ;
     android.support.v7.widget.CardView CardView ;
     String Name,PhoneNo ;
@@ -53,8 +52,7 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contactsnote,parent,false);
-        holder = new Holder(v);
-        return holder;
+        return new Holder(v);
     }
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
@@ -111,12 +109,11 @@ public class ContNotesAdapter extends RecyclerView.Adapter<ContNotesAdapter.Hold
                         // the note is updated by the thread
                         contactNote.setContact_NoteStuts(1);
                         ListNotes.set(holder.getAdapterPosition(), contactNote);
-                        notifyItemChanged(holder.getAdapterPosition());
+                        notifyDataSetChanged();
                     } else {
                         // the note is deleted
                         ListNotes.remove(contactNote);
                         notifyItemRemoved(holder.getAdapterPosition());
-                     notifyItemRangeChanged(holder.getAdapterPosition(),ListNotes.size());
                     }
                     super.handleMessage(msg);
                 }

@@ -33,7 +33,7 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
     Context context;
     ArrayList<ContactNoteEnitiy> AllNotes;
 
-    holder h;
+
     private RoomManger roomManger;
     private Handler handler;
     private ReadDataThread readDataThreaD;
@@ -47,13 +47,12 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
     public holder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_allnote, parent, false);
-        h = new holder(v);
-        return h;
+        return new holder(v);
 
     }
 
     @Override
-    public void onBindViewHolder(holder holder, int position) {
+    public void onBindViewHolder(final holder holder, int position) {
         final ContactNoteEnitiy contactNote;
         final String contactName, NoteTitle;
         Date NoteDate;
@@ -81,22 +80,20 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
             } else {
                 holder.check_done_img.setVisibility(View.GONE);
             }
-            final PopupMenu pop = new PopupMenu(context, h.menuAll_img);
+            final PopupMenu pop = new PopupMenu(context,holder.menuAll_img);
             pop.getMenuInflater().inflate(R.menu.menu_pop_note, pop.getMenu());
 
             pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
-                    int Itemid = menuItem.getItemId();
-                    roomManger = RoomManger.getInstance(context);
-                    RoomDao roomDao = roomManger.roomDao();
-                    switch (Itemid) {
+                    switch (menuItem.getItemId()) {
                         case R.id.action_delete:
                             handler = new Handler() {
                                 @Override
                                 public void handleMessage(Message msg) {
-                                    AllNotes.remove(h.getAdapterPosition());
-                                    notifyItemChanged(h.getAdapterPosition());
+                                    AllNotes.remove(holder.getAdapterPosition());
+                                    notifyItemRemoved(holder.getAdapterPosition());
+                                    notifyItemRangeChanged(holder.getAdapterPosition(),AllNotes.size());
                                 }
                             };
                             readDataThreaD = new ReadDataThread(handler, context, Constant.DELETE_NOTE_BY_time, null);
@@ -118,8 +115,9 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                             handler = new Handler() {
                                 @Override
                                 public void handleMessage(Message msg) {
-                                    AllNotes.set(h.getAdapterPosition(), contactNote);
-                                    notifyItemChanged(h.getAdapterPosition());
+                                    contactNote.setContact_NoteStuts(1);
+                                    AllNotes.set(holder.getAdapterPosition(), contactNote);
+                                    notifyItemChanged(holder.getAdapterPosition());
                                 }
                             };
                             readDataThreaD = new ReadDataThread(handler, context, Constant.UPDATE_NOTE_BY_ID, contactName);

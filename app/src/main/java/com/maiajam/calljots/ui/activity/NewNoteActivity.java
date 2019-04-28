@@ -229,7 +229,7 @@ public class NewNoteActivity extends AppCompatActivity {
             contact_obj.setContact_Note(Note);
             contact_obj.setContact_NoteTitle(noteTitle);
             contact_obj.setContact_Id(Contact_Id);
-
+            contact_obj.setId(NoteId);
             contact_obj.setNote_Parent_Id(Id);
             current_date = current_Calender.getTime();
             contact_obj.setContact_LastCallTime(current_date);

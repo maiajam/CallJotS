@@ -64,7 +64,7 @@ public abstract class RoomDao {
     @Update
     public abstract int updateContactAsSpec(AllPhoneContact contact);
 
-    @Query("UPDATE ContactNoteEnitiy SET Contact_NoteTitle = :title AND Contact_Note = :Note WHERE id = :id")
+    @Query("UPDATE ContactNoteEnitiy SET Contact_NoteTitle = :title , Contact_Note = :Note WHERE id = :id")
     public abstract void updateNoteByID(int id, String title, String Note);
 
     @Query("UPDATE ContactNoteEnitiy SET Contact_NoteStuts = 1 WHERE id = :id")

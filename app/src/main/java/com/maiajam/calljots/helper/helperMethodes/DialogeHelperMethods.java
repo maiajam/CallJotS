@@ -1,5 +1,6 @@
 package com.maiajam.calljots.helper.helperMethodes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -182,24 +183,35 @@ public class DialogeHelperMethods {
 
     private static WindowManager.LayoutParams getWindoesMangerParam(Context context)
     {
-        int FLAG;
+        int  TypesFLAG,Flags;
         if (Build.VERSION.SDK_INT >= 26) {
-            FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            TypesFLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
+            TypesFLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            ((Activity)context).setShowWhenLocked(true);
+            Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH ;
+        }else {
+            Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                    |WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED ;
         }
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                TypesFLAG,
+                Flags,
                 PixelFormat.TRANSPARENT);
 
         params.gravity = Gravity.CENTER_VERTICAL;
         params.x = 0 ;
         params.y = 20 ;
+
         return params ;
     }
     //
@@ -259,7 +271,10 @@ public class DialogeHelperMethods {
         FirsClass_txt.setText(first);
         SecClass_txt.setText(Sec);
         ConNo_txt.setText(ContPhoneNo);
-        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(contact.getContactPhotoUri().toString(),context));
+        if(contact.getContactPhotoUri() != null)
+        {
+            contactImg.setImageDrawable(HelperMethodes.getBitmapImage(contact.getContactPhotoUri().toString(),context));
+        }
         int cat = contact.getContPrimaryClassf();
         if(cat == 1)
         {

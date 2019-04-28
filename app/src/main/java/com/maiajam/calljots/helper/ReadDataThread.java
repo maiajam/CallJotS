@@ -74,6 +74,12 @@ public class ReadDataThread extends Thread {
                 oneNote =roomDao.getnoteById(NoteId);
                 message.obj = oneNote ;
                 break;
+            case Constant.GET_LAST_CONTACT_NOTES:
+                roomDao.getLastNote(mName);
+                break;
+            case Constant.GET_PERSONAL_NOTE_PARENT_ID:
+                message.obj = roomDao.getIdFOrContact("Personal");
+                break;
             case Constant.ADD_NEW_CONTACT:
                 // get id
                 message.arg2 = (int) roomDao.AddPhoneContacts(contact);
@@ -94,7 +100,7 @@ public class ReadDataThread extends Thread {
                   message.arg1 = roomDao.CheckIsSpec(mName);
                   break;
                case Constant.UPDATE_NOTE_BY_ID:
-                   roomDao.updateNoteByID(NoteId,oneNote.getContact_NoteTitle(),oneNote.getContact_Note());
+                   roomDao.updateNoteByID(NoteId,oneNote.getContact_NoteTitle().toString(),oneNote.getContact_Note());
                    // arg value to indicate that this thread update the note
                    message.arg1 = 1;
                    break;
@@ -107,12 +113,7 @@ public class ReadDataThread extends Thread {
                     // arg value to indicate that this thread delete the note will help us at the handler
                     message.arg1 = 3;
                     break;
-              case Constant.GET_LAST_CONTACT_NOTES:
-                  roomDao.getLastNote(mName);
-                  break;
-              case Constant.GET_PERSONAL_NOTE_PARENT_ID:
-                  message.obj = roomDao.getIdFOrContact("Personal");
-                  break;
+
 
         }
         mhandler.sendMessage(message);
