@@ -1,4 +1,4 @@
-package com.maiajam.calljots.helper;
+package com.maiajam.calljots.helper.helperMethodes;
 
 import android.app.Activity;
 import android.content.Context;

@@ -7,19 +7,12 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
-import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.GetAllPhoneContactThread;
-import com.maiajam.calljots.helper.HelperMethodes;
-import com.maiajam.calljots.helper.ReadDataThread;
-import com.maiajam.calljots.ui.fragment.AllContactFrag;
 
 
 @Database(entities = {AllPhoneContact.class,ContactNoteEnitiy.class}, version = 1, exportSchema = false)

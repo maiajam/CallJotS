@@ -1,12 +1,10 @@
 package com.maiajam.calljots.helper;
 
 import android.content.Context;
-import android.database.AbstractCursor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
@@ -14,7 +12,7 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
-import com.maiajam.calljots.ui.fragment.AllContactFrag;
+import com.maiajam.calljots.helper.helperMethodes.SharedPrefHelperMethodes;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

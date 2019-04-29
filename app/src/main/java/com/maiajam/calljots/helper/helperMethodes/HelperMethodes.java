@@ -1,4 +1,4 @@
-package com.maiajam.calljots.helper;
+package com.maiajam.calljots.helper.helperMethodes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

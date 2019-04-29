@@ -1,31 +1,23 @@
 package com.maiajam.calljots.ui.fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,22 +25,15 @@ import android.widget.ProgressBar;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.AllConAdapter;
-import com.maiajam.calljots.adapter.CallLogAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
-import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
-import com.maiajam.calljots.helper.SwipeContrlloerActions;
 import com.maiajam.calljots.helper.SwipeControler;
-import com.maiajam.calljots.ui.activity.ContactNotes;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.util.NewContactObserver;
 import com.maiajam.calljots.helper.ReadDataThread;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

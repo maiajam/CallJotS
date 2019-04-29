@@ -17,7 +17,7 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.CallLogAdapter;
 import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import java.util.ArrayList;
 import java.util.List;
 

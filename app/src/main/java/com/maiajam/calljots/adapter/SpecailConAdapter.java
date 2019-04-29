@@ -2,7 +2,6 @@ package com.maiajam.calljots.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +16,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.ui.activity.ContactNotes;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 

@@ -18,7 +18,7 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.SpecailConAdapter;
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
 
 import java.util.ArrayList;

@@ -17,14 +17,12 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
-import static com.maiajam.calljots.helper.HelperMethodes.getContactImage;
-import static com.maiajam.calljots.helper.HelperMethodes.getDailerInfo;
+import static com.maiajam.calljots.helper.helperMethodes.HelperMethodes.getDailerInfo;
 import static java.lang.Thread.sleep;
 
 public class DialogeHelperMethods {

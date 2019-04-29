@@ -15,15 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.maiajam.calljots.R;
-import com.maiajam.calljots.adapter.CallLogAdapter;
 import com.maiajam.calljots.adapter.pageAdapter;
-import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.ui.fragment.AllNotestFrag;
 import com.maiajam.calljots.ui.fragment.CallLogFrag;
-
-import java.util.ArrayList;
 
 public class ContactNotes extends AppCompatActivity {
 

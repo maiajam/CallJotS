@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.maiajam.calljots.R;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.ui.fragment.AddSpecialContactFrag;
 import com.maiajam.calljots.ui.fragment.NewContact;
 

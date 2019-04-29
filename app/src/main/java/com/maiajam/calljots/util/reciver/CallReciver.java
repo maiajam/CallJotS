@@ -11,11 +11,9 @@ import android.provider.CallLog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.maiajam.calljots.data.local.room.RoomDao;
-import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 import com.maiajam.calljots.util.history;

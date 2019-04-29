@@ -1,8 +1,6 @@
 package com.maiajam.calljots.ui.activity;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,20 +22,18 @@ import android.widget.Toast;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
-import com.maiajam.calljots.helper.SharedPrefHelperMethodes;
+import com.maiajam.calljots.helper.helperMethodes.SharedPrefHelperMethodes;
 import com.maiajam.calljots.util.workmanger.ReminerSchudleWorker;
 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 public class NewNoteActivity extends AppCompatActivity {
@@ -276,6 +272,9 @@ public class NewNoteActivity extends AppCompatActivity {
                 myReadThread.start();
 
             } else {
+                if (RemindeMe) {
+                    remindeMe();
+                }
                 // new note
                 if (Contact_Id == 0) { // means this is a personal note not contact note and this page open from All notes page
                     contact_obj.setContact_Name("Personal");

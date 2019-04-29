@@ -14,9 +14,7 @@ import android.text.TextUtils;
 
 import com.maiajam.calljots.data.model.ContactLogs;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
-import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.HelperMethodes;
-import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
+import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 
 import java.util.ArrayList;
 
