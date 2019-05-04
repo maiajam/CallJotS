@@ -50,7 +50,7 @@ public class DialogeHelperMethods {
         linClass.setVisibility(View.GONE);
         linStuts.setVisibility(View.GONE);
         pView.setVisibility(View.GONE);
-        wm.addView(v, getWindoesMangerParam(context));
+        wm.addView(v, getWindoesMangerParam(context,Constant.RECIVED_CALL_HINT));
         removeView(wm,v);
     }
     public static void dialogeAfterCallLog(final Context context, int hintContactType,
@@ -147,7 +147,7 @@ public class DialogeHelperMethods {
             });
         }
         //
-        wm.addView(v, getWindoesMangerParam(context));
+        wm.addView(v, getWindoesMangerParam(context,Constant.AFTER_Call_HINT));
     }
 
     private static void addAsSpecialContact(Context context, String contName, String number, String imgUri, int contactId) {
@@ -179,7 +179,7 @@ public class DialogeHelperMethods {
         removeViewImmidiatly(wm,v);
     }
 
-    private static WindowManager.LayoutParams getWindoesMangerParam(Context context)
+    private static WindowManager.LayoutParams getWindoesMangerParam(Context context,int hint)
     {
         int  TypesFLAG,Flags;
         if (Build.VERSION.SDK_INT >= 26) {
@@ -189,10 +189,11 @@ public class DialogeHelperMethods {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            ((Activity)context).setShowWhenLocked(true);
+           // ((Activity)context).setShowWhenLocked(true);
             Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH ;
+                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                    |WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
         }else {
             Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -206,9 +207,18 @@ public class DialogeHelperMethods {
                 Flags,
                 PixelFormat.TRANSPARENT);
 
-        params.gravity = Gravity.CENTER_VERTICAL;
-        params.x = 0 ;
-        params.y = 20 ;
+        if(hint == Constant.AFTER_Call_HINT)
+        {
+            params.gravity = Gravity.TOP;
+            params.x = 0 ;
+            params.y = 5 ;
+        }else {
+
+            params.gravity = Gravity.CENTER_VERTICAL;
+            params.x = 0 ;
+            params.y = 20 ;
+        }
+
 
         return params ;
     }
@@ -220,7 +230,8 @@ public class DialogeHelperMethods {
         final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
         addContentToTheView(context,v,contact,hint);
-        wm.addView(v, getWindoesMangerParam(context));
+        wm.addView(v, getWindoesMangerParam(context,Constant.RECIVED_CALL_HINT));
+
         removeView(wm,v);
 
     }

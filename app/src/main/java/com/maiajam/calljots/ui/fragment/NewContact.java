@@ -33,6 +33,7 @@ import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.ui.activity.MainActivity;
+import com.maiajam.calljots.util.NewContactObserver;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -72,6 +73,7 @@ public class NewContact extends Fragment{
     private Handler handler;
     private ReadDataThread readThread;
     private String PhoneNO;
+    private NewContactObserver observer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -194,6 +196,8 @@ public class NewContact extends Fragment{
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             intent.putExtra("tab2", 1);
                             startActivity(intent);
+                             observer = new NewContactObserver(new Handler(), getContext());
+                            getContext().getContentResolver().unregisterContentObserver(observer);
                         }
                     }
                     super.handleMessage(msg);

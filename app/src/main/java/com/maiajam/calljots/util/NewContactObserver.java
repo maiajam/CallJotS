@@ -6,16 +6,22 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
+import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.ReadDataThread;
 
 public class NewContactObserver extends ContentObserver {
 
     Context contexT;
     private RoomManger roomManger;
+    private ReadDataThread addNewContactThread;
+    private Handler h;
+
     public NewContactObserver(Handler handler) {
         super(handler);
     }
@@ -36,7 +42,7 @@ public class NewContactObserver extends ContentObserver {
     public void onChange(boolean selfChange, Uri uri) {
         super.onChange(selfChange, uri);
 
-            addToContact();
+          //  addToContact();
 
     }
 
@@ -61,8 +67,6 @@ public class NewContactObserver extends ContentObserver {
                         }
                         contactName = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         photo_uri = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-                        String msg = "Name : " + contactName + " Contact No. : " + contactNumber;
-                        //Add to phone contact table
 
                         AllPhoneContact newContact = new AllPhoneContact();
                         newContact.setContName(contactName);
@@ -72,7 +76,15 @@ public class NewContactObserver extends ContentObserver {
 
                         roomManger = RoomManger.getInstance(contexT);
                         RoomDao roomDao = roomManger.roomDao();
-                        roomDao.AddPhoneContacts(newContact);
+                        h = new Handler()
+                        {
+                            @Override
+                            public void handleMessage(Message msg) {
+                        //
+                            }
+                        };
+                        addNewContactThread = new ReadDataThread(h,contexT,Constant.ADD_NEW_CONTACT,null);
+                        addNewContactThread.start();
                     }
                     pCur.close();
                 }

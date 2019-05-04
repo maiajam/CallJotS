@@ -99,13 +99,10 @@ public class CallReciver extends BroadcastReceiver {
 
         } else {// new number .. not one of the contact phone number... no toast msg.
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-                // add to phone contact
-                history = new history(new Handler(Looper.getMainLooper()), context, contactNoteAndInfo,0,1);
-                context.getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,
-                        true, (ContentObserver) history);
+
             } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                 // during the call draw the logo and enable the user to add a tp phone contact then add a new note for this contact
-                HelperMethodes.enableAddNoteDuringCall(context, null, null);
+               // HelperMethodes.enableAddNoteDuringCall(context, null, null);
             }
         }
     }
