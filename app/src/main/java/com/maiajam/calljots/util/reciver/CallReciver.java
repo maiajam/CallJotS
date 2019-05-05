@@ -16,7 +16,6 @@ import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.helper.ReadDataThread;
 import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
-import com.maiajam.calljots.util.history;
 
 /**
  * Created by maiAjam on 7/10/2018.
@@ -24,28 +23,27 @@ import com.maiajam.calljots.util.history;
 
 public class CallReciver extends BroadcastReceiver {
 
-    private static String lastState,prevState;
     Handler h;
     private DialerInfoAndNote contactNoteAndInfo;
-    private Object history;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         // recived call info
         final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-        if (!state.equals(lastState)) {
-            lastState = state;
-            prevState = lastState ;
-            checkCaller(intent, context, state);
+        final String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        if(TextUtils.isEmpty(NOCont))
+        {
+            return;
+        }else {
+            checkCaller(intent, context, state,NOCont);
         }
     }
 
-    private void checkCaller(Intent intent, final Context context, final String state) {
-        final String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-        final String Contact_name = HelperMethodes.getContactName(NOCont, context);
-        final String ContactImg_url = HelperMethodes.getContactImage(context,NOCont);
+    private void checkCaller(Intent intent, final Context context, final String state, final String NO) {
+        final String Contact_name = HelperMethodes.getContactName(NO, context);
+        final String ContactImg_url = HelperMethodes.getContactImage(context,NO);
         // save dialer info at shared prefrence
-        HelperMethodes.saveDialerInfo(context, Contact_name, NOCont,ContactImg_url);
+        HelperMethodes.saveDialerInfo(context, Contact_name, NO,ContactImg_url);
         if (!TextUtils.isEmpty(Contact_name)) {
             h = new Handler() {
                 @Override
@@ -71,12 +69,12 @@ public class CallReciver extends BroadcastReceiver {
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
                                 DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT,
-                                        NOCont, HelperMethodes.getContactImage(context,NOCont), HelperMethodes.getContactId(NOCont, context),
+                                        NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
                                         Constant.SPECIAL_CONTACT_HINT,null);
                             } else {
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                                 DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT,
-                                        NOCont, HelperMethodes.getContactImage(context,NOCont), HelperMethodes.getContactId(NOCont, context),
+                                        NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
                                         Constant.SPECIAL_CONTACT_HINT,contactNoteAndInfo);
                             }
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
@@ -87,7 +85,7 @@ public class CallReciver extends BroadcastReceiver {
                             //}else {
 
                             //  HelperMethodes.enableAddNoteDuringCall(context,null,null);
-                            //  }
+                            //
                         }
                         super.handleMessage(msg);
                     }

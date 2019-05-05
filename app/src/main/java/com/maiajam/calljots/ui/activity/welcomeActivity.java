@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.util.CallServiceForGround;
 import com.maiajam.calljots.util.workmanger.MyWorker;
 
 import androidx.work.OneTimeWorkRequest;
@@ -33,7 +32,6 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
     TextView welcom_text,start_txt;
     ImageView start_img;
     private int OVERLAY_PERMISSION_CODE = 100;
-    Intent i ;
     private int READ_PHONE_STATE = 5;
     SharedPreferences sp ;
     SharedPreferences.Editor editor;
@@ -51,7 +49,6 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
         start_img = (ImageView) findViewById(R.id.img_start);
 
         start_img.setOnClickListener(this);
-        i = new Intent(getBaseContext(), CallServiceForGround.class);
 
        sp = getBaseContext().getSharedPreferences("MyFirstVisit", Context.MODE_PRIVATE);
         editor = sp.edit();

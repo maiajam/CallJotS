@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class RoomDao {
 
     // insert
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long AddPhoneContacts(AllPhoneContact allPhoneContact);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -51,8 +51,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".util.CallServiceForGround" />
-
         <activity android:name=".ui.activity.MainNewContactActivity"></activity>
     </application>
 

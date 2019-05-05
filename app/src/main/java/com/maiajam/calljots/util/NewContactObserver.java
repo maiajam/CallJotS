@@ -35,7 +35,7 @@ public class NewContactObserver extends ContentObserver {
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
 
-            addToContact();
+          //  addToContact();
     }
 
     @Override
@@ -74,8 +74,6 @@ public class NewContactObserver extends ContentObserver {
                         newContact.setContactPhotoUri(photo_uri);
                         newContact.setContIsSpec(0);
 
-                        roomManger = RoomManger.getInstance(contexT);
-                        RoomDao roomDao = roomManger.roomDao();
                         h = new Handler()
                         {
                             @Override
