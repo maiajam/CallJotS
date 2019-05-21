@@ -37,6 +37,7 @@ public interface Constant {
     int NOT_SPECAIL_CONTACT_HINT = 3;
     int AFTER_Call_HINT = 1 ;
     int RECIVED_CALL_HINT = 2 ;
+    int Personal_Note = 0;
 
 
     ;

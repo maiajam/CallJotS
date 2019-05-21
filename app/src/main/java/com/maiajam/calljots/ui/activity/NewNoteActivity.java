@@ -192,7 +192,7 @@ public class NewNoteActivity extends AppCompatActivity {
     private void ShowDatePicker() {
 
         int Year, month, DayofMounth;
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
 
         DatePickerDialog picker = new DatePickerDialog(NewNoteActivity.this, setDate, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
@@ -200,7 +200,7 @@ public class NewNoteActivity extends AppCompatActivity {
         picker.setButton(DialogInterface.BUTTON_POSITIVE, "Set Time", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                new TimePickerDialog(NewNoteActivity.this, setTime, Calendar.HOUR_OF_DAY, Calendar.MINUTE, true).show();
+                new TimePickerDialog(NewNoteActivity.this, setTime, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
             }
         });
 
@@ -276,7 +276,7 @@ public class NewNoteActivity extends AppCompatActivity {
                     remindeMe();
                 }
                 // new note
-                if (Contact_Id == 0) { // means this is a personal note not contact note and this page open from All notes page
+                if (Contact_Id == Constant.Personal_Note) { // means this is a personal note not contact note and this page open from All notes page
                     contact_obj.setContact_Name("Personal");
                     contact_obj.setNote_Parent_Id(SharedPrefHelperMethodes.getParntIdNoteForPernol(getBaseContext()));
                 } else {
