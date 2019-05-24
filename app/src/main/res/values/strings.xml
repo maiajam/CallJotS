@@ -89,4 +89,8 @@
     <string name="Qusetion_label">Do you want to add this number to your phone contact ?</string>
     <string name="Label_ADDAddAsSpecialContact">Do you want to save this conact as special contact ?</string>
     <string name="label_OKAddAsSpecial">Add as specail contact</string>
+    <string name="ContactName_Extra">ContactName_extra</string>
+    <string name="Note_Extra">Note_extra</string>
+    <string name="NoteTitle_Extra">NoteTitle_extra</string>
+    <string name="ImgUrl_extra">imgUrl_extra</string>
 </resources>

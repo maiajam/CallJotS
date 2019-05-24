@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -68,14 +69,14 @@ public class NewNoteActivity extends AppCompatActivity {
 
             Mycalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             Mycalendar.set(Calendar.MINUTE, min);
-            remindeMe();
+            remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
         }
     };
     private Handler handler;
     private ReadDataThread myReadThread;
     private Handler getNotehandler;
     private ReadDataThread getNoteThread,getIdThread;
-    private OneTimeWorkRequest OneTimeReq;
+    private OneTimeWorkRequest scheduleReq;
     private int Contact_Id;
     private int NoteId;
     private Handler getIdHanler;
@@ -208,11 +209,22 @@ public class NewNoteActivity extends AppCompatActivity {
 
     }
 
-    private void remindeMe( ) {
-        OneTimeReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
-                .setInitialDelay(Mycalendar.getTimeInMillis(), TimeUnit.MILLISECONDS)
+    private void remindeMe(String ContactName,String Note,String NoteTitle ) {
+
+        Data noteData = new Data.Builder()
+                .putString(getString(R.string.ContactName_Extra),ContactName)
+                .putString(getString(R.string.Note_Extra),Note)
+                .putString(getString(R.string.NoteTitle_Extra),NoteTitle)
                 .build();
-        WorkManager.getInstance().enqueue(OneTimeReq);
+
+
+        scheduleReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
+                .setInitialDelay(Mycalendar.getTimeInMillis(), TimeUnit.MILLISECONDS)
+                .setInputData(noteData)
+                .build();
+
+
+        WorkManager.getInstance().enqueue(scheduleReq);
     }
 
     private void AddNote() throws ParseException {
@@ -257,7 +269,7 @@ public class NewNoteActivity extends AppCompatActivity {
             };
             if (NoteFrag == 1) {// update the note
                 if (RemindeMe) {
-                    remindeMe();
+                    remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
                 }
                 if (Contact_Id == 0) { // means this is a personal note not contact note and this page open from All notes page
                     contact_obj.setContact_Name("Personal");
@@ -273,7 +285,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
             } else {
                 if (RemindeMe) {
-                    remindeMe();
+                    remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
                 }
                 // new note
                 if (Contact_Id == Constant.Personal_Note) { // means this is a personal note not contact note and this page open from All notes page
