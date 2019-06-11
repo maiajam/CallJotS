@@ -127,7 +127,7 @@ public class HelperMethodes {
     public static int getContactId(String phoneNumber,Context context)
     {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-        String[] projection = new String[]{ContactsContract.PhoneLookup.CONTACT_ID};
+        String[] projection = new String[]{ContactsContract.PhoneLookup._ID};
         int COntactId = 0;
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor != null) {
