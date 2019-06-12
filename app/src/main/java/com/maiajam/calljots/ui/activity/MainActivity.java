@@ -18,6 +18,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.adapter.AllConAdapter;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private ReadDataThread readDataThread;
     private Handler h;
     private ContactNoteEnitiy NoteItem;
+    private boolean isStartup = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +70,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
+                if(isStartup) {
+                    ((FrameLayout) findViewById(R.id.frame)).removeAllViews();
+                    isStartup = false;
+                }
                 switch (id) {
                     case R.id.action_MyNotes:
-
                         Bundle bundle = new Bundle();
                         bundle.putString("text", SearchText);
                         Fragment AllNotes = new AllNotestFrag();
@@ -80,12 +85,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         transaction.replace(R.id.frame, AllNotes);
                         transaction.addToBackStack(null);
                         transaction.commit();
-
                         toolbar.setTitle("My Note");
                         return true;
-
                     case R.id.action_AllContact:
-
                         Bundle bundle2 = new Bundle();
                         bundle2.putString("text", SearchText);
                         AlxlContact = new AllContactFrag();
@@ -155,85 +157,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         switch (id) {
             case R.id.action_MyNotes:
-                final AllNotestFrag AllNotefrag = new AllNotestFrag();
-                AllNotefrag.search_list = new ArrayList<>();
-                AllNotefrag.search_list.clear();
-                AllNotefrag.ContNoteRec = AllNotefrag.view.findViewById(R.id.ContNote_Rec);
-                final String[] noteTitle = new String[1];
-                h = new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        AllNotefrag.noteList = (List<ContactNoteEnitiy>) msg.obj;
-                        for (int i = 0; i < AllNotefrag.noteList.size(); i++) {
-                            NoteItem =  AllNotefrag.noteList.get(i);
-                            noteTitle[0] = NoteItem.getContact_NoteTitle();
-                            if(noteTitle[0] != null)
-                            {
-                                if (noteTitle[0].contains(query)) {
-                                    AllNotefrag.search_list.add(NoteItem);
-                                }
-                            }
-                        }
-                        AllNotefrag.allNoteadapter = new AllNotesAdapter(getBaseContext(),AllNotefrag.search_list);
-                        AllNotefrag.ContNoteRec.setAdapter(AllNotefrag.allNoteadapter);
-                        AllNotefrag.allNoteadapter.notifyDataSetChanged();
-
-                    }
-                };
-                readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_NOTES,null);
-                readDataThread.start();
+              getSelectedNote(query);
                 return true;
             case R.id.action_AllContact:
-                final AllContactFrag AllCont = AlxlContact;
-                AllCont.search_list = new ArrayList<>();
-                AllCont.search_list.clear();
-                AllCont.recyclerView = AllCont.view.findViewById(R.id.AllCon_Rec);
-                final String[] name = new String[1];
-                h = new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                        AllCont.phoneList = (List<AllPhoneContact>) msg.obj;
-                        for (int i = 0; i < AllCont.phoneList.size(); i++) {
-                            contact = AllCont.phoneList.get(i);
-                            name[0] = AllCont.phoneList.get(i).getContName();
-                            if (name[0].contains(query)) {
-                                AllCont.search_list.add(contact);
-                            }
-                        }
-                        AllCont.allConAdapter = new AllConAdapter(getBaseContext(),  AllCont.search_list,0);
-                        AllCont.recyclerView.setAdapter(AllCont.allConAdapter);
-                        AllCont.allConAdapter.notifyDataSetChanged();
-
-                    }
-                };
-                readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_PHONE_CONTACT,null);
-                readDataThread.start();
+               getContact(query);
                 return true;
             case R.id.action_Spec:
-                final SpecialContactFrag specialContactFrag = new SpecialContactFrag();
-                specialContactFrag.search_list = new  ArrayList<>();
-                specialContactFrag.search_list.clear();
-                specialContactFrag.recyclerView = specialContactFrag.view.findViewById(R.id.SpecCon_Rec);
-                final String[] Specname = new String[1];
-                h = new Handler(){
-                    @Override
-                    public void handleMessage(Message msg) {
-                       specialContactFrag.phoneList = (List<AllPhoneContact>) msg.obj;
-                        for (int i = 0; i < specialContactFrag.phoneList.size(); i++) {
-                            contact = specialContactFrag.phoneList.get(i);
-                            Specname[0] = specialContactFrag.phoneList.get(i).getContName();
-                            if (Specname[0].contains(query)) {
-                                specialContactFrag.search_list.add(contact);
-                            }
-                        }
-                        specialContactFrag.adapter = new SpecailConAdapter(getBaseContext(),specialContactFrag.search_list,0);
-                        specialContactFrag.recyclerView.setAdapter( specialContactFrag.adapter);
-                        specialContactFrag.adapter.notifyDataSetChanged();
-
-                    }
-                };
-                readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_SPECIAL_CONTACT,null);
-                readDataThread.start();
+               getSpecialContact(query);
                 return true;
         }
 
@@ -241,29 +171,103 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
+    public boolean onQueryTextChange(final String newText) {
 
-        // Toast.makeText(getBaseContext(),newText,Toast.LENGTH_LONG).show();
-        SearchText = newText;
-
-        int id = navigationView.getSelectedItemId();
-
-        switch (id) {
+        switch (navigationView.getSelectedItemId()) {
             case R.id.action_MyNotes:
-
+                getSelectedNote(newText);
+                return true ;
             case R.id.action_AllContact:
-                AllContactFrag AllCont = (AllContactFrag) getSupportFragmentManager().findFragmentById(R.id.frame);
-                //((AllContactFrag) AllCont).onQueryTextChange(newText);
-
-
+                getContact(newText);
                 return true;
             case R.id.action_Spec:
-                Fragment Spec = new SpecialContactFrag();
-                ((SpecialContactFrag) Spec).onQueryTextChange(newText);
-
+                getSpecialContact(newText);
+                return true ;
         }
-
         return true;
+    }
+    private void getSelectedNote(final String query) {
+        final AllNotestFrag AllNotefrag = new AllNotestFrag();
+        AllNotefrag.search_list = new ArrayList<>();
+        AllNotefrag.search_list.clear();
+        AllNotefrag.ContNoteRec = AllNotefrag.view.findViewById(R.id.ContNote_Rec);
+        final String[] noteTitle = new String[1];
+        h = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                AllNotefrag.noteList = (List<ContactNoteEnitiy>) msg.obj;
+                for (int i = 0; i < AllNotefrag.noteList.size(); i++) {
+                    NoteItem =  AllNotefrag.noteList.get(i);
+                    noteTitle[0] = NoteItem.getContact_NoteTitle();
+                    if(noteTitle[0] != null)
+                    {
+                        if (noteTitle[0].contains(query)) {
+                            AllNotefrag.search_list.add(NoteItem);
+                        }
+                    }
+                }
+                AllNotefrag.allNoteadapter = new AllNotesAdapter(getBaseContext(),AllNotefrag.search_list);
+                AllNotefrag.ContNoteRec.setAdapter(AllNotefrag.allNoteadapter);
+                AllNotefrag.allNoteadapter.notifyDataSetChanged();
+
+            }
+        };
+        readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_NOTES,null);
+        readDataThread.start();
+    }
+
+    private void getContact(final String newText) {
+        final AllContactFrag AllCont = AlxlContact;
+        AllCont.search_list = new ArrayList<>();
+        AllCont.search_list.clear();
+        AllCont.recyclerView = AllCont.view.findViewById(R.id.AllCon_Rec);
+        final String[] name = new String[1];
+        h = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                AllCont.phoneList = (List<AllPhoneContact>) msg.obj;
+                for (int i = 0; i < AllCont.phoneList.size(); i++) {
+                    contact = AllCont.phoneList.get(i);
+                    name[0] = AllCont.phoneList.get(i).getContName();
+                    if (name[0].contains(newText)) {
+                        AllCont.search_list.add(contact);
+                    }
+                }
+                AllCont.allConAdapter = new AllConAdapter(getBaseContext(),  AllCont.search_list,0);
+                AllCont.recyclerView.setAdapter(AllCont.allConAdapter);
+                AllCont.allConAdapter.notifyDataSetChanged();
+
+            }
+        };
+        readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_PHONE_CONTACT,null);
+        readDataThread.start();
+    }
+
+    private void getSpecialContact(final String newText) {
+        final SpecialContactFrag specialContactFrag = new SpecialContactFrag();
+        specialContactFrag.search_list = new  ArrayList<>();
+        specialContactFrag.search_list.clear();
+        specialContactFrag.recyclerView = specialContactFrag.view.findViewById(R.id.SpecCon_Rec);
+        final String[] Specname = new String[1];
+        h = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                specialContactFrag.phoneList = (List<AllPhoneContact>) msg.obj;
+                for (int i = 0; i < specialContactFrag.phoneList.size(); i++) {
+                    contact = specialContactFrag.phoneList.get(i);
+                    Specname[0] = specialContactFrag.phoneList.get(i).getContName();
+                    if (Specname[0].contains(newText)) {
+                        specialContactFrag.search_list.add(contact);
+                    }
+                }
+                specialContactFrag.adapter = new SpecailConAdapter(getBaseContext(),specialContactFrag.search_list,0);
+                specialContactFrag.recyclerView.setAdapter( specialContactFrag.adapter);
+                specialContactFrag.adapter.notifyDataSetChanged();
+
+            }
+        };
+        readDataThread = new ReadDataThread(h,getBaseContext(),Constant.GET_ALL_SPECIAL_CONTACT,null);
+        readDataThread.start();
     }
 
     @Override

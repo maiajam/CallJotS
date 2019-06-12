@@ -50,7 +50,7 @@ public class CallLogAdapter extends RecyclerView.Adapter<CallLogAdapter.Holder> 
 
         ContactLogs calLog = ListCallLog.get(position);
 
-        String date = new SimpleDateFormat("dd/MM/YY").format(new Date(Long.parseLong(calLog.getDate())));
+        String date = new SimpleDateFormat("dd/MM/yy").format(new Date(Long.parseLong(calLog.getDate())));
         String Time = new SimpleDateFormat("hh:mm a").format(new Date(Long.parseLong(calLog.getDate())));
         String Duration = calLog.getCallDuration();
         String dir = calLog.getDir();

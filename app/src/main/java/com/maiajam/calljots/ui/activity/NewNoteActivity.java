@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import androidx.work.BackoffPolicy;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -69,7 +70,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
             Mycalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             Mycalendar.set(Calendar.MINUTE, min);
-            remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
+          //  remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
         }
     };
     private Handler handler;
@@ -182,7 +183,6 @@ public class NewNoteActivity extends AppCompatActivity {
 
                 break;
             case R.id.action_Reminder:
-                RemindeMe = true;
                 ShowDatePicker();
 
                 break;
@@ -202,28 +202,27 @@ public class NewNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 new TimePickerDialog(NewNoteActivity.this, setTime, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+                RemindeMe = true;
             }
         });
-
         picker.show();
-
     }
 
     private void remindeMe(String ContactName,String Note,String NoteTitle ) {
 
+        int IntilaDelayInMin = Mycalendar.get(Calendar.MILLISECOND)- Calendar.getInstance().get(Calendar.MILLISECOND);
         Data noteData = new Data.Builder()
                 .putString(getString(R.string.ContactName_Extra),ContactName)
                 .putString(getString(R.string.Note_Extra),Note)
                 .putString(getString(R.string.NoteTitle_Extra),NoteTitle)
                 .build();
 
-
         scheduleReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
-                .setInitialDelay(Mycalendar.getTimeInMillis(), TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL,
+                                      IntilaDelayInMin,
+                                       TimeUnit.MILLISECONDS)
                 .setInputData(noteData)
                 .build();
-
-
         WorkManager.getInstance().enqueue(scheduleReq);
     }
 
@@ -284,9 +283,6 @@ public class NewNoteActivity extends AppCompatActivity {
                 myReadThread.start();
 
             } else {
-                if (RemindeMe) {
-                    remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
-                }
                 // new note
                 if (Contact_Id == Constant.Personal_Note) { // means this is a personal note not contact note and this page open from All notes page
                     contact_obj.setContact_Name("Personal");
@@ -304,6 +300,9 @@ public class NewNoteActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
+                }
+                if (RemindeMe) {
+                    remindeMe(contact_obj.getContact_Name(),contact_obj.getContact_Note(),contact_obj.getContact_NoteTitle());
                 }
                 myReadThread = new ReadDataThread(handler, getBaseContext(), Constant.ADD_NEW_NOTE, Name);
                 myReadThread.setNote(contact_obj);

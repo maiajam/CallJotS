@@ -34,15 +34,14 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     //
     implementation 'com.google.code.gson:gson:2.8.5'
-
     //ButterKnife Dependency
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    //work manger dependency
-    implementation "android.arch.work:work-runtime:1.0.0-alpha02"
-
     //swipe item recycleview
-    implementation  "com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1"
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
+    //work manger dependency
+    implementation 'android.arch.work:work-runtime:1.0.1'
 
 }

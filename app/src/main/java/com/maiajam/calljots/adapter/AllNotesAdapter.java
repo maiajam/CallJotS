@@ -72,7 +72,7 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
             }
             holder.contactName.setText(contactName);
             holder.noteTitle_txt.setText(NoteTitle);
-            String date = new SimpleDateFormat("ddd dd/MM/YYYY hh:mm a").format(NoteDate).toString();
+            String date = new SimpleDateFormat("EEE dd/MM/yyyy hh:mm a").format(NoteDate).toString();
             holder.NoteDate_text.setText(date);
 
             if (stuts == 1) {

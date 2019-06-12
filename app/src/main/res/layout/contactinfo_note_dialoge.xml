@@ -230,17 +230,19 @@
                 android:paddingEnd="40dp">
 
                 <Button
+                    android:textAllCaps="false"
                     android:id="@+id/noteDialoge_ok_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_weight="0.5"
-                    android:background="@drawable/layout_border"
+                    android:background="@drawable/layout_border_selected"
                     android:fontFamily="@font/regulaer"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorAccent"
                     android:text="@string/label_OkTakeAnote" />
 
                 <Button
+                    android:textAllCaps="false"
                     android:id="@+id/noteDialoge_cancel_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

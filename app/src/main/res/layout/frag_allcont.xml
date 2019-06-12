@@ -16,6 +16,7 @@
       android:id ="@+id/AllCon_Rec"></android.support.v7.widget.RecyclerView>
 
   <LinearLayout
+      android:visibility="visible"
       android:layout_width="378dp"
       android:layout_height="wrap_content"
       android:layout_alignParentStart="true"
