@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:layoutDirection="rtl"
-    tools:context=".ui.fragment.NotesFrag">
+    tools:context=".ui.activity.ContactNotes">
 
   <include
 

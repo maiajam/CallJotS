@@ -210,17 +210,18 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private void remindeMe(String ContactName,String Note,String NoteTitle ) {
 
-        int IntilaDelayInMin = Mycalendar.get(Calendar.MILLISECOND)- Calendar.getInstance().get(Calendar.MILLISECOND);
+        int IntilaDelay = (int) (Mycalendar.getTimeInMillis()- Calendar.getInstance().getTimeInMillis());
         Data noteData = new Data.Builder()
                 .putString(getString(R.string.ContactName_Extra),ContactName)
                 .putString(getString(R.string.Note_Extra),Note)
                 .putString(getString(R.string.NoteTitle_Extra),NoteTitle)
+                .putString(getString(R.string.ContactImgUrl_Extra),Image_Uri)
+                .putString(getString(R.string.ContactPhoneNumber_Extra),PhoneNo)
+                .putInt(getString(R.string.ContactId_Extra),Contact_Id)
                 .build();
 
         scheduleReq = new OneTimeWorkRequest.Builder(ReminerSchudleWorker.class)
-                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL,
-                                      IntilaDelayInMin,
-                                       TimeUnit.MILLISECONDS)
+                .setInitialDelay(IntilaDelay,TimeUnit.MILLISECONDS)
                 .setInputData(noteData)
                 .build();
         WorkManager.getInstance().enqueue(scheduleReq);
@@ -228,7 +229,6 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private void AddNote() throws ParseException {
         {
-
             noteTitle = NoteTitle_ed.getText().toString();
             Note = Note_ed.getText().toString();
             Calendar calendar = Calendar.getInstance(Locale.getDefault());

@@ -229,7 +229,7 @@ public class HelperMethodes {
 
         return contactPhoto;
     }
-    public  static void CallNotifcation(Context context, int type,
+    public  static void CallNotifcation(Context context,
                                         String name,String Note,
                                         String Actiontitel,String Numer,
                                         String imgUrl,int reminerIndecater,
@@ -238,35 +238,19 @@ public class HelperMethodes {
         Intent intent ;
         PendingIntent pendingIntent ;
         String chanellId = "10" ;
-        if(type == 1)
-        {// this notifacation to notify the user to add a note for his specail contact
+
             intent = new Intent(context, NewNoteActivity.class);
-            intent.putExtra("name",name);
-            intent.putExtra("phoneNo",Numer);
-            intent.putExtra("image_uri",imgUrl);
-            intent.putExtra("contact_Id",conId);
-            intent.putExtra("Id",id);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        }else if (type == 2)
-        {// this notifacation to notify the user to add a new contact for his phone contact
-            intent = new Intent(context, MainNewContactActivity.class);
-            intent.putExtra("phoneNo",Numer);
-            intent.putExtra("contact_Id",conId);
-            intent.putExtra("Id",id);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        }else
-        {// this notifacation to notify the user to add this contact to a specail contact list
-            intent = new Intent(context, MainNewContactActivity.class);
             intent.putExtra("name",name);
             intent.putExtra("phoneNo",Numer);
             intent.putExtra(context.getString(R.string.imageUrl),imgUrl);
             intent.putExtra(context.getString(R.string.Contact_Id),conId);
             intent.putExtra("id",id);
+            intent.putExtra(context.getString(R.string.NoteTitle_Extra),Actiontitel);
+            intent.putExtra(context.getString(R.string.Note_Extra),Note);
+
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence namE = context.getString(R.string.channel_name);
             String description = context.getString(R.string.channel_description);
@@ -279,37 +263,23 @@ public class HelperMethodes {
             notificationManager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder builder ;
-        if(reminerIndecater == 1)
-        {
-             builder = new NotificationCompat.Builder(context,"v")
-                    .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle( name)
-                    .setContentText(Note)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setCategory(NotificationCompat.CATEGORY_EVENT)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
-                     .setChannelId(chanellId)
-                    .setAutoCancel(true)
-                    ;
-        }else
-        {
+
             builder = new NotificationCompat.Builder(context,"v")
                     .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle(name)
+                    .setContentTitle(Actiontitel)
                     .setContentText(Note)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .addAction(R.drawable.addnewnote,Actiontitel,pendingIntent)
                     .setChannelId(chanellId)
+                    .setOnlyAlertOnce(true)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(Note))
                     .setAutoCancel(true)
-
                     ;
-        }
+
 
         Notification notification = builder.build();
-        notification.flags = Notification.DEFAULT_ALL;
+        notification.defaults= Notification.DEFAULT_ALL;
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify((int) System.currentTimeMillis(), notification);
     }

@@ -49,7 +49,7 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
         start_img = (ImageView) findViewById(R.id.img_start);
 
         start_img.setOnClickListener(this);
-
+        start_txt.setOnClickListener(this);
        sp = getBaseContext().getSharedPreferences("MyFirstVisit", Context.MODE_PRIVATE);
         editor = sp.edit();
 
@@ -73,11 +73,10 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     @Override
     public void onClick(View view) {
 
-        if(view == start_img)
+        if(view == start_img || view == start_txt)
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (Settings.canDrawOverlays(getBaseContext())) {

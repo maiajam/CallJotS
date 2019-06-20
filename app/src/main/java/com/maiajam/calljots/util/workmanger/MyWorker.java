@@ -21,7 +21,7 @@ public class MyWorker extends Worker {
 
     @NonNull
     @Override
-    public WorkerResult doWork() {
+    public Result doWork() {
 
         getApplicationContext().registerReceiver(reciver,iNtent);
         return null;
