@@ -156,6 +156,7 @@ public class DialogeHelperMethods {
         intent.putExtra("phoneNo",number);
         intent.putExtra(context.getString(R.string.imageUrl),imgUri);
         intent.putExtra(context.getString(R.string.Contact_Id),contactId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

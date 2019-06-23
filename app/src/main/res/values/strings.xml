@@ -96,4 +96,7 @@
     <string name="ContactImgUrl_Extra">ContactImgUrl_extra</string>
     <string name="ContactPhoneNumber_Extra">ContactPhoneNo_extra</string>
     <string name="ContactId_Extra">ContactId_extra</string>
+    <string name="NotifcationTitee_Note">Note :</string>
+    <string name="action_Share">share the app</string>
+    <string name="action_RateApp">Rate the app</string>
 </resources>

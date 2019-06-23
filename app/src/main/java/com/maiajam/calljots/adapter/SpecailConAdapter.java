@@ -1,8 +1,13 @@
 package com.maiajam.calljots.adapter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,8 +117,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
             }
         }
 
-        holder.Editet_txt.setText("Edit");
-        viewBinderHelper.bind(holder.swipeRevealLayout, contact.getContPhoneNo());
+        viewBinderHelper.bind(holder.swipeRevealLayout,contact.getContPhoneNo());
         holder.binde(contact);
     }
 
@@ -152,6 +156,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                 @Override
                 public void onClick(View v) {
                     //
+                    requestCallPhonePerm(contact);
                 }
             });
 
@@ -162,6 +167,22 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                 }
             });
         }
+
+
+        private void requestCallPhonePerm(AllPhoneContact contact) {
+            if (ContextCompat.checkSelfPermission(con,
+                    Manifest.permission.CALL_PHONE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions((Activity) con,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE);
+            } else {
+                HelperMethodes.callAction(con, contact.getContPhoneNo());
+            }
+
+        }
+
     }
 
 }

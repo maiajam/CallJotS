@@ -120,7 +120,7 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                                     notifyItemChanged(holder.getAdapterPosition());
                                 }
                             };
-                            readDataThreaD = new ReadDataThread(handler, context, Constant.UPDATE_NOTE_BY_ID, contactName);
+                            readDataThreaD = new ReadDataThread(handler, context, Constant.UPDATE_NOTE_IS_DONE, null);
                             readDataThreaD.setNote(contactNote);
                             readDataThreaD.start();
                             break;

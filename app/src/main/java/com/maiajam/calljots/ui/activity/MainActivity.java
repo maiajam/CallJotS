@@ -3,7 +3,9 @@ package com.maiajam.calljots.ui.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private BottomNavigationView navigationView;
     private String SearchText;
     AllContactFrag allContactFrag = new AllContactFrag();
-    private AllContactFrag AlxlContact;
+    private AllContactFrag allContactFragment;
     private AllPhoneContact contact;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private Handler h;
     private ContactNoteEnitiy NoteItem;
     private boolean isStartup = true;
+    private AllNotestFrag allNotesFrag;
+    private SpecialContactFrag specailContactFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +82,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     case R.id.action_MyNotes:
                         Bundle bundle = new Bundle();
                         bundle.putString("text", SearchText);
-                        Fragment AllNotes = new AllNotestFrag();
-                        AllNotes.setArguments(bundle);
+                        allNotesFrag = new AllNotestFrag();
+                        allNotesFrag.setArguments(bundle);
                         FragmentManager manager = getSupportFragmentManager();
                         FragmentTransaction transaction = manager.beginTransaction();
-                        transaction.replace(R.id.frame, AllNotes);
+                        transaction.replace(R.id.frame, allNotesFrag);
                         transaction.addToBackStack(null);
                         transaction.commit();
                         toolbar.setTitle("My Note");
@@ -90,21 +94,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     case R.id.action_AllContact:
                         Bundle bundle2 = new Bundle();
                         bundle2.putString("text", SearchText);
-                        AlxlContact = new AllContactFrag();
-                        AlxlContact.setArguments(bundle2);
+                        allContactFragment = new AllContactFrag();
+                        allContactFragment.setArguments(bundle2);
                         FragmentManager xmanager = getSupportFragmentManager();
                         FragmentTransaction xtransaction = xmanager.beginTransaction();
-                        xtransaction.replace(R.id.frame, AlxlContact);
+                        xtransaction.replace(R.id.frame, allContactFragment);
                         xtransaction.addToBackStack(null);
                         xtransaction.commit();
                         toolbar.setTitle("Phone Contact");
                         return true;
 
                     case R.id.action_Spec:
-                        Fragment AlxxlContact = new SpecialContactFrag();
+                        specailContactFrag = new SpecialContactFrag();
                         FragmentManager xxmanager = getSupportFragmentManager();
                         FragmentTransaction xxtransaction = xxmanager.beginTransaction();
-                        xxtransaction.replace(R.id.frame, AlxxlContact);
+                        xxtransaction.replace(R.id.frame, specailContactFrag);
                         xxtransaction.addToBackStack(null);
                         xxtransaction.commit();
                         toolbar.setTitle("Special Contact");
@@ -139,15 +143,42 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_RateApp) {
+            rateTheApp();
+            return true;
+        }else if(item.getItemId() == R.id.action_Share)
+        {
+            shareTheApp();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    private void rateTheApp() {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + this.getPackageName())));
+        } catch (android.content.ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + this.getPackageName())));
+        }
+    }
+
+    private void shareTheApp() {
+        try {
+        Intent i = new Intent(Intent.ACTION_SEND).setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+        String sAux = "\n DownLoad CallJots Now ...so you will never miss any call note again \n\n";
+        sAux = sAux + "https://play.google.com/store/apps/details?id="+this.getPackageName()+"\n\n";
+        i.putExtra(Intent.EXTRA_TEXT, sAux);
+        startActivity(Intent.createChooser(i, "choose one"));
+    } catch(Exception e) {
+        //e.toString();
+
+        }
+    }
+
+
 
     @Override
     public boolean onQueryTextSubmit(final String query) {
@@ -187,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return true;
     }
     private void getSelectedNote(final String query) {
-        final AllNotestFrag AllNotefrag = new AllNotestFrag();
+        final AllNotestFrag AllNotefrag = allNotesFrag;
         AllNotefrag.search_list = new ArrayList<>();
         AllNotefrag.search_list.clear();
         AllNotefrag.ContNoteRec = AllNotefrag.view.findViewById(R.id.ContNote_Rec);
@@ -217,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void getContact(final String newText) {
-        final AllContactFrag AllCont = AlxlContact;
+        final AllContactFrag AllCont = allContactFragment;
         AllCont.search_list = new ArrayList<>();
         AllCont.search_list.clear();
         AllCont.recyclerView = AllCont.view.findViewById(R.id.AllCon_Rec);
@@ -244,25 +275,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void getSpecialContact(final String newText) {
-        final SpecialContactFrag specialContactFrag = new SpecialContactFrag();
-        specialContactFrag.search_list = new  ArrayList<>();
-        specialContactFrag.search_list.clear();
-        specialContactFrag.recyclerView = specialContactFrag.view.findViewById(R.id.SpecCon_Rec);
+        final SpecialContactFrag _specialContactFrag =specailContactFrag ;
+        _specialContactFrag.search_list = new  ArrayList<>();
+        _specialContactFrag.search_list.clear();
+        _specialContactFrag.recyclerView = _specialContactFrag.view.findViewById(R.id.SpecCon_Rec);
         final String[] Specname = new String[1];
         h = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                specialContactFrag.phoneList = (List<AllPhoneContact>) msg.obj;
-                for (int i = 0; i < specialContactFrag.phoneList.size(); i++) {
-                    contact = specialContactFrag.phoneList.get(i);
-                    Specname[0] = specialContactFrag.phoneList.get(i).getContName();
+                _specialContactFrag.phoneList = (List<AllPhoneContact>) msg.obj;
+                for (int i = 0; i < _specialContactFrag.phoneList.size(); i++) {
+                    contact = _specialContactFrag.phoneList.get(i);
+                    Specname[0] = _specialContactFrag.phoneList.get(i).getContName();
                     if (Specname[0].contains(newText)) {
-                        specialContactFrag.search_list.add(contact);
+                        _specialContactFrag.search_list.add(contact);
                     }
                 }
-                specialContactFrag.adapter = new SpecailConAdapter(getBaseContext(),specialContactFrag.search_list,0);
-                specialContactFrag.recyclerView.setAdapter( specialContactFrag.adapter);
-                specialContactFrag.adapter.notifyDataSetChanged();
+                _specialContactFrag.adapter = new SpecailConAdapter(getBaseContext(),_specialContactFrag.search_list,0);
+                _specialContactFrag.recyclerView.setAdapter( _specialContactFrag.adapter);
+                _specialContactFrag.adapter.notifyDataSetChanged();
 
             }
         };

@@ -23,12 +23,14 @@ import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 
 public class CallReciver extends BroadcastReceiver {
 
-    Handler h;
+    private Handler h;
     private DialerInfoAndNote contactNoteAndInfo;
+    private static String PrevState;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         // recived call info
+        PrevState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         final String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         if(TextUtils.isEmpty(NOCont))

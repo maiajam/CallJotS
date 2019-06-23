@@ -39,10 +39,10 @@ public abstract class RoomDao {
     @Query("SELECT Id FROM AllPhoneContact WHERE  contName = :name")
     public abstract int getIdFOrContact(String name);
 
-    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY id ASC LIMIT 1  ")
+    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE  Contact_Name = :name  OR Contact_NoteStuts = 0 ORDER BY Contact_LastCallTime DESC LIMIT 1  ")
     public abstract ContactNoteEnitiy getLastNote(String name);
 
-    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE Contact_Name = :name")
+    @Query("SELECT *  FROM  ContactNoteEnitiy WHERE Contact_Name = :name ORDER BY Contact_LastCallTime DESC")
     public abstract List<ContactNoteEnitiy> getAllContactsNotes(String name);
 
     @Query("SELECT * FROM AllPhoneContact WHERE contIsSpec = 1")
@@ -53,7 +53,7 @@ public abstract class RoomDao {
             "ORDER BY ContactNoteEnitiy.Contact_LastCallTime DESC LIMIT 1")
     public abstract DialerInfoAndNote getContactInfoByName(String Name);
 
-    @Query("SELECT * FROM ContactNoteEnitiy")
+    @Query("SELECT * FROM ContactNoteEnitiy  ORDER BY Contact_LastCallTime DESC ")
     public abstract List<ContactNoteEnitiy> getAllNote();
 
     // delete

@@ -266,7 +266,7 @@ public class HelperMethodes {
 
             builder = new NotificationCompat.Builder(context,"v")
                     .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle(Actiontitel)
+                    .setContentTitle(name + context.getString(R.string.NotifcationTitee_Note)+ Actiontitel)
                     .setContentText(Note)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setCategory(NotificationCompat.CATEGORY_EVENT)
