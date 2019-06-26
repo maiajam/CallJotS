@@ -55,7 +55,7 @@ public class DialogeHelperMethods {
     }
     public static void dialogeAfterCallLog(final Context context, int hintContactType,
                                            final String number, final String imgUri, final int contactId,
-                                           int ContactType, DialerInfoAndNote contactInfo) {
+                                            DialerInfoAndNote contactInfo) {
 
         final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -176,6 +176,7 @@ public class DialogeHelperMethods {
         intent.putExtra("phoneNo",phoneNo);
         intent.putExtra("contact_Id",conId);
         intent.putExtra("Id",id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
         removeViewImmidiatly(wm,v);
     }
@@ -239,6 +240,7 @@ public class DialogeHelperMethods {
     private static void removeViewImmidiatly(final WindowManager wm, final View v)
     {
                     wm.removeView(v);    }
+
     private static void removeView(final WindowManager wm, final View v)
     {
         Thread thread = new Thread(new Runnable() {
@@ -286,10 +288,10 @@ public class DialogeHelperMethods {
             contactImg.setImageDrawable(HelperMethodes.getBitmapImage(contact.getContactPhotoUri().toString(),context));
         }
         int cat = contact.getContPrimaryClassf();
-        if(cat == 1)
+        if(cat == Constant.FAMILY_PRIMER_CAT)
         {
             CatagoryType.setText(context.getString(R.string.family_cat));
-        }else if(cat == 2)
+        }else if(cat == Constant.BUSSINESS_PRIMERY_CAT)
         {
             CatagoryType.setText(context.getString(R.string.Bussiness_cat));
         }else {
@@ -337,4 +339,53 @@ public class DialogeHelperMethods {
             Status_txt.setText("pending");
         }
     }
+
+    public static void enableAddNoteDuringCall(final Context context, final String contact_name, final String phoneNo,final int contactId) {
+
+        int FLAG;
+        if (Build.VERSION.SDK_INT >= 26) {
+            FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
+        }
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                FLAG,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSPARENT);
+
+        params.x = 40;
+        params.gravity = Gravity.CENTER_VERTICAL;
+        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View v = inflater.inflate(R.layout.dialoge_addnote_duringcall, null);
+        // Add layout to window manager
+        ImageView logo = (ImageView)v.findViewById(R.id.AddNoteDuringCall_ImgView_Logo);
+        logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context,NewNoteActivity.class).
+                        setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).
+                        putExtra("contact_Id",contactId).
+                        putExtra(context.getString(R.string.phoneNoExtra),phoneNo).
+                        putExtra("name",contact_name));
+            }
+        });
+        wm.addView(v, params);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sleep(10*1000);
+                    wm.removeView(v);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
 }

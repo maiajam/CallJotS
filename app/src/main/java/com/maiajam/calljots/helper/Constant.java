@@ -39,6 +39,10 @@ public interface Constant {
     int RECIVED_CALL_HINT = 2 ;
     int Personal_Note = 0;
 
+    int FAMILY_PRIMER_CAT = 1;
+    int BUSSINESS_PRIMERY_CAT = 3;
+    int FRIEND_PRIMERY_CAT = 2;
+
 
     ;
 

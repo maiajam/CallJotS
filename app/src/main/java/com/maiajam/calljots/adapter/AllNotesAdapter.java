@@ -117,11 +117,11 @@ public class AllNotesAdapter extends RecyclerView.Adapter<AllNotesAdapter.holder
                                 public void handleMessage(Message msg) {
                                     contactNote.setContact_NoteStuts(1);
                                     AllNotes.set(holder.getAdapterPosition(), contactNote);
-                                    notifyItemChanged(holder.getAdapterPosition());
+                                    notifyDataSetChanged();
                                 }
                             };
                             readDataThreaD = new ReadDataThread(handler, context, Constant.UPDATE_NOTE_IS_DONE, null);
-                            readDataThreaD.setNote(contactNote);
+                            readDataThreaD.setNoteId(contactNote.getId());
                             readDataThreaD.start();
                             break;
                     }

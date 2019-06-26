@@ -284,42 +284,7 @@ public class HelperMethodes {
         notificationManager.notify((int) System.currentTimeMillis(), notification);
     }
 
-    public static void enableAddNoteDuringCall(Context context,String contact_name, String phoneNo) {
 
-        int FLAG;
-        if (Build.VERSION.SDK_INT >= 26) {
-            FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            FLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
-        }
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                PixelFormat.TRANSPARENT);
-
-        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL ;
-        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
-        // Add layout to window manager
-        wm.addView(v, params);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    sleep(10*1000);
-                    wm.removeView(v);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
 
     public static void setContactNameInfo(Context context,String Name,String Phone,String ImgUrl,int ContId)
     {

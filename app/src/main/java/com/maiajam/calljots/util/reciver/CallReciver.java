@@ -72,22 +72,23 @@ public class CallReciver extends BroadcastReceiver {
                                 // this contact is not one of your speacal contact
                                 DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT,
                                         NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
-                                        Constant.SPECIAL_CONTACT_HINT,null);
+                                        null);
                             } else {
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                                 DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT,
                                         NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
-                                        Constant.SPECIAL_CONTACT_HINT,contactNoteAndInfo);
+                                        contactNoteAndInfo);
                             }
                         } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                             // during the call draw the logo and enable the user to add a new note for this contact
-                            //   if(msg.obj == null){
-                            // this contact is not one of your speacal contact
-                            //     HelperMethodes.drawInfo(context);
-                            //}else {
+                               if(msg.obj == null) {
+                                   // this contact is not one of your speacal contact
+                                   //   HelperMethodes.drawInfo(context);
+                                   }else {
 
-                            //  HelperMethodes.enableAddNoteDuringCall(context,null,null);
-                            //
+                                   DialogeHelperMethods.enableAddNoteDuringCall(context,Contact_name,NO,HelperMethodes.getContactId(NO, context));
+                                   //
+                               }
                         }
                         super.handleMessage(msg);
                     }
@@ -99,10 +100,9 @@ public class CallReciver extends BroadcastReceiver {
 
         } else {// new number .. not one of the contact phone number... no toast msg.
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-
-            } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-                // during the call draw the logo and enable the user to add a tp phone contact then add a new note for this contact
-               // HelperMethodes.enableAddNoteDuringCall(context, null, null);
+                DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NEW_CONTACT_HINT,
+                        NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
+                        null);
             }
         }
     }
