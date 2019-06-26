@@ -52,8 +52,8 @@
         <View
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorAccent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"
             android:orientation="horizontal"/>
 
     </LinearLayout>
@@ -88,12 +88,11 @@
             android:orientation="horizontal">
 
             <Button
-
                 android:background="@drawable/border"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Bussiness_cat"
-                android:textColor="#ffffff"
+                android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="@font/semibold"
                 android:id="@+id/BusIcon_btn"/>
@@ -104,13 +103,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/family_cat"
-                android:textColor="#ffffff"
+                android:textColor="@color/colorPrimary"
                 android:fontFamily="@font/semibold"
                 android:id="@+id/FamilyIcon_btn"/>
 
             <Button
                 android:background="@drawable/border"
-                android:textColor="#ffffff"
+                android:textColor="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/Friend_cat"
                 android:layout_width="wrap_content"
@@ -135,21 +134,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:textSize="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/FirstClassifcation_ed"
-            android:textColorHint="@color/colorPrimary"
+            android:textSize="15sp"
             android:fontFamily="@font/regulaer"
             android:hint="@string/FirstClass"/>
 
         <EditText
             android:fontFamily="@font/regulaer"
-            android:textSize="12sp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_width="match_parent"
-            android:textColorHint="@color/colorPrimary"
+            android:textSize="15sp"
             android:layout_height="wrap_content"
             android:id="@+id/SecClassifcation_ed"
             android:hint="@string/SecClass"/>
@@ -161,10 +158,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:textSize="12sp"
             android:fontFamily="@font/regulaer"
-            android:textColorHint="@color/colorPrimary"
             android:id="@+id/CompanyName_ed"
+            android:textSize="15sp"
             android:hint="@string/CompanyName"/>
 
         <EditText
@@ -174,9 +170,8 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:fontFamily="@font/regulaer"
-            android:textSize="12sp"
-            android:textColorHint="@color/colorPrimary"
             android:id="@+id/Address_ed"
+            android:textSize="15sp"
             android:hint="@string/Address"/>
 
         <Button

@@ -58,7 +58,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="0.90"
                 android:orientation="vertical">
 
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/bold"
-                    android:text="mai waleed "
+                    android:text=""
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />

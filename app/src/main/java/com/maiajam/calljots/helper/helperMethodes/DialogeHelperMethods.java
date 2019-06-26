@@ -42,9 +42,11 @@ public class DialogeHelperMethods {
         View pView =(View)v.findViewById(R.id.partView);
         LinearLayout linStuts = (LinearLayout)v.findViewById(R.id.linStuts);
         LinearLayout linClass = (LinearLayout)v.findViewById(R.id.linClassifcation);
+        TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
 
         ConName_txt.setText(getDailerInfo(context).getContName());
         ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
+        CatagoryType.setVisibility(View.INVISIBLE);
         contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(),context));
         NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
         linClass.setVisibility(View.GONE);
@@ -81,13 +83,13 @@ public class DialogeHelperMethods {
             FirsClass_txt.setText(contactInfo.getContFirstClassf());
             SecClass_txt.setText(contactInfo.getContSecClassF());
             int cat = contactInfo.getContPrimaryClassf();
-            if(cat == 1)
+            if(cat == Constant.FAMILY_PRIMER_CAT)
             {
                 CatagoryType.setText(context.getString(R.string.family_cat));
-            }else if(cat == 2)
+            }else if(cat == Constant.BUSSINESS_PRIMERY_CAT)
             {
                 CatagoryType.setText(context.getString(R.string.Bussiness_cat));
-            }else if(cat == 3) {
+            }else if(cat == Constant.FRIEND_PRIMERY_CAT) {
                 CatagoryType.setText(context.getString(R.string.Friend_cat));
             }else {
                 CatagoryType.setVisibility(View.INVISIBLE);

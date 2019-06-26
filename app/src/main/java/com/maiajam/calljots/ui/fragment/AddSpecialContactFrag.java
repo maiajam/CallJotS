@@ -92,7 +92,7 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
         SpecContPhotoImgView.setImageDrawable(HelperMethodes.getBitmapImage(img_uri, getActivity()));
         SpecContPhoneNoTxt.setText(phoneNo);
         FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
-
+        FamilyIconBtn.setTextColor(getResources().getColor(R.color.colorAccent));
         if(parentId == 0)
         {
             h = new Handler(){
@@ -177,27 +177,40 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
 
         } else if (view == BusIconBtn) {
             B_clicked = 1;
-            CatType = 3;
+            CatType = Constant.BUSSINESS_PRIMERY_CAT;
             CompanyNameEd.setVisibility(View.VISIBLE);
             AddressEd.setVisibility(View.VISIBLE);
             FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            FamilyIconBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
+            BusIconBtn.setTextColor(getResources().getColor(R.color.colorAccent));
             BusIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
             FriendIconImg.setBackground(getResources().getDrawable(R.drawable.border));
+            FriendIconImg.setTextColor(getResources().getColor(R.color.colorPrimary));
 
         } else if (view == FamilyIconBtn) {
-            CatType = 1;
+            CatType = Constant.FAMILY_PRIMER_CAT;
             CompanyNameEd.setVisibility(View.GONE);
             AddressEd.setVisibility(View.GONE);
             FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
+            FamilyIconBtn.setTextColor(getResources().getColor(R.color.colorAccent));
             BusIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            BusIconBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
             FriendIconImg.setBackground(getResources().getDrawable(R.drawable.border));
+            FriendIconImg.setTextColor(getResources().getColor(R.color.colorPrimary));
+
         } else if (view == FriendIconImg) {
-            CatType = 2;
+            CatType = Constant.FRIEND_PRIMERY_CAT;
             CompanyNameEd.setVisibility(View.GONE);
             AddressEd.setVisibility(View.GONE);
+
             FamilyIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            FamilyIconBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
+
             BusIconBtn.setBackground(getResources().getDrawable(R.drawable.border));
+            FriendIconImg.setTextColor(getResources().getColor(R.color.colorPrimary));
+
             FriendIconImg.setBackground(getResources().getDrawable(R.drawable.clcikedborder));
+            FriendIconImg.setTextColor(getResources().getColor(R.color.colorAccent));
         }
     }
 

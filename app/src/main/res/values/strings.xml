@@ -21,9 +21,9 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="chosePrim">Choose the catagory for your Contact</string>
-    <string name="FirstClass">write  the first classification </string>
-    <string name="SecClass">Writ Classification </string>
-    <string name="AddToB">Add  Special Contact</string>
+    <string name="FirstClass">Type Your First Classification </string>
+    <string name="SecClass">Type Your Second Classification </string>
+    <string name="AddToB">Add as Special Contact</string>
     <string name="ADDTOtitle">Add Special Contact</string>
     <string name="CompanyName">Company Name</string>
     <string name="Address">Address</string>
@@ -32,7 +32,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="NoteToken">Note token on :  </string>
     <string name="Notetitle">Note Title</string>
-    <string name="starthere">write your notes about </string>
+    <string name="starthere"></string>
     <string name="EnterNoteTitle">please Enter Note title ...</string>
     <string name="EnterNote">please enter the note ..</string>
     <string name="family_cat">Family</string>
