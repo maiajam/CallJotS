@@ -332,4 +332,16 @@ public class HelperMethodes {
         context.startActivity(CallAction);
     }
 
+    public static void saveCallState(Context context,String state) {
+        SharedPreferences sp = context.getSharedPreferences("PreviuosCallState", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("state", state);
+        editor.commit();
+    }
+
+    public static String getLastCallState(Context context)
+    {
+        SharedPreferences sp = context.getSharedPreferences("PreviuosCallState", Activity.MODE_PRIVATE);
+        return sp.getString("state","");
+    }
 }

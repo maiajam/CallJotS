@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.ui.activity.ContactNotes;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
+import com.maiajam.calljots.ui.fragment.AddSpecialContactFrag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
     Context con;
     List<AllPhoneContact> ListCont = new ArrayList<>();
     int Type;
+    private FragmentTransaction ft;
 
     public SpecailConAdapter(Context context, List<AllPhoneContact> List, int type) {
         con = context;
@@ -132,15 +136,16 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
         SwipeRevealLayout swipeRevealLayout;
         View CallLayout, frontLayout;
         ImageView ContPhoto_img, PhoneIcon_img, AddToIcon_image;
-        TextView ContName_txt, ContPhone_txt, Editet_txt;
         LinearLayout lin;
+        TextView ContName_txt,ContPhone_txt,CallAction_txt,EditAction_txt;
 
         public Holder(View itemView) {
             super(itemView);
-            swipeRevealLayout = (SwipeRevealLayout) itemView.findViewById(R.id.main_content);
-            CallLayout = (View) itemView.findViewById(R.id.delete_layout);
-            frontLayout = (View) itemView.findViewById(R.id.front_layout);
-            Editet_txt = (TextView) CallLayout.findViewById(R.id.Call_text);
+
+            swipeRevealLayout = (SwipeRevealLayout)itemView.findViewById(R.id.main_content);
+            CallAction_txt =(TextView)itemView.findViewById(R.id.Call_text);
+            EditAction_txt =(TextView)itemView.findViewById(R.id.EDIT_text);
+            ContName_txt =(TextView)itemView.findViewById(R.id.ContName_txt);
             ContName_txt = (TextView) itemView.findViewById(R.id.ContName_txt);
             ContPhone_txt = (TextView) itemView.findViewById(R.id.ContPhoneNo_txt);
 
@@ -152,22 +157,29 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
 
         public void binde(final AllPhoneContact contact) {
 
-            CallLayout.setOnClickListener(new View.OnClickListener() {
+            CallAction_txt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //
                     requestCallPhonePerm(contact);
                 }
             });
 
-            frontLayout.setOnClickListener(new View.OnClickListener() {
+            EditAction_txt.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-
+                public void onClick(View v) {
+                    editContactInfo(contact);
                 }
             });
         }
 
+
+        private void editContactInfo(AllPhoneContact contact) {
+
+            ft = ((FragmentActivity)con).getSupportFragmentManager().beginTransaction();
+            HelperMethodes.beginTransAction(ft
+                    ,((FragmentActivity) con).getSupportFragmentManager()
+                    , new AddSpecialContactFrag(contact), R.id.frame);
+        }
 
         private void requestCallPhonePerm(AllPhoneContact contact) {
             if (ContextCompat.checkSelfPermission(con,

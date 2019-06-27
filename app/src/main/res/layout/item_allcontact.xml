@@ -8,30 +8,33 @@
     app:mode="same_level"
     tools:context=".ui.fragment.AllContactFrag">
 
-    <RelativeLayout
-        android:id="@+id/delete_layout"
+    <LinearLayout
+        android:id="@+id/CallEdit_layout"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
         android:background="#ffcc0000">
 
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:id="@+id/Call_text"
-            android:text="Call"/>
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:id="@+id/EDIT_text"
-            android:text="Call"/>
-    </RelativeLayout>
 
+        <TextView
+            android:id="@+id/EDIT_text"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorSecondAccent"
+            android:text="Edit"
+            android:gravity="center"
+            android:textColor="@android:color/white" />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/Call_text"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:text="Call"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/front_layout"
@@ -61,6 +64,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="0.90"
                 android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/ContName_txt"
@@ -104,6 +108,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

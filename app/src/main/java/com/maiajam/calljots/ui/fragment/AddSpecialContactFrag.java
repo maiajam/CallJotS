@@ -1,5 +1,6 @@
 package com.maiajam.calljots.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,12 +71,19 @@ public class AddSpecialContactFrag extends Fragment implements View.OnClickListe
     private Handler handler;
     private String CompanyName;
     private String CompanyAdress;
+    private AllPhoneContact phoneContact ;
     private int parentId;
     private Handler h;
 
     public AddSpecialContactFrag() {
 
     }
+
+    @SuppressLint("ValidFragment")
+    public AddSpecialContactFrag(AllPhoneContact contact) {
+        this.phoneContact = contact ;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
