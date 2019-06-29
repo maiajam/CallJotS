@@ -7,11 +7,14 @@ import android.widget.Toast;
 
 import com.maiajam.calljots.util.reciver.CallReciver;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 public class MyWorker extends Worker {
 
+    private static OneTimeWorkRequest CallRevicerRequest ;
     CallReciver reciver = new CallReciver();
     IntentFilter iNtent =  new IntentFilter("android.intent.action.PHONE_STATE");;
 
@@ -24,11 +27,12 @@ public class MyWorker extends Worker {
     public Result doWork() {
 
         getApplicationContext().registerReceiver(reciver,iNtent);
-        return null;
+        return Result.success();
     }
 
     @Override
     public void onStopped() {
         getApplicationContext().unregisterReceiver(reciver);
+
     }
 }
