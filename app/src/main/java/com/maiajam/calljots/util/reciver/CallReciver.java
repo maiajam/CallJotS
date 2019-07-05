@@ -100,6 +100,21 @@ public class CallReciver extends BroadcastReceiver {
                             if(msg.obj != null) {
                                 DialogeHelperMethods.enableAddNoteDuringCall(context,Contact_name,NO,HelperMethodes.getContactId(NO, context));
                             }
+                        }else
+                        {
+                            // out going call
+                            if (msg.obj == null) {
+                                // this contact is not one of your speacal contact
+                                DialogeHelperMethods.drawInfo(context);
+                            } else {
+                                // this contact is a special contact
+                                contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
+                                if (contactNoteAndInfo.getContact_Note() != null) {
+                                    DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 0);
+                                } else {// dont have any note for this special contact yet
+                                    DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 1);
+                                }
+                            }
                         }
 
                     }

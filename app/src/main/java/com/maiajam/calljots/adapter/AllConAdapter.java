@@ -156,22 +156,11 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
                 }
             });
 
-          EditAction_txt.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  editContactInfo(contact);
-              }
-          });
+            EditAction_txt.setVisibility(View.GONE);
+
         }
     }
 
-    private void editContactInfo(AllPhoneContact contact) {
-
-         ft = ((FragmentActivity)con).getSupportFragmentManager().beginTransaction();
-        HelperMethodes.beginTransAction(ft
-                ,((FragmentActivity) con).getSupportFragmentManager()
-                , new AddSpecialContactFrag(contact), R.id.frame);
-    }
 
     private void requestCallPhonePerm(AllPhoneContact contact) {
         if (ContextCompat.checkSelfPermission(con,
@@ -187,11 +176,5 @@ public class AllConAdapter extends RecyclerView.Adapter<AllConAdapter.Holder> {
 
     }
 
-    public void resultMakeCall(boolean b)
-    {
-        if(b)
-        {
 
-        }
-    }
 }

@@ -25,6 +25,7 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.ui.activity.ContactNotes;
+import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 import com.maiajam.calljots.ui.fragment.AddSpecialContactFrag;
 
@@ -164,21 +165,20 @@ public class SpecailConAdapter extends RecyclerView.Adapter<SpecailConAdapter.Ho
                 }
             });
 
-            EditAction_txt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    editContactInfo(contact);
-                }
-            });
+            EditAction_txt.setVisibility(View.GONE);
         }
 
 
         private void editContactInfo(AllPhoneContact contact) {
 
-            ft = ((FragmentActivity)con).getSupportFragmentManager().beginTransaction();
-            HelperMethodes.beginTransAction(ft
-                    ,((FragmentActivity) con).getSupportFragmentManager()
-                    , new AddSpecialContactFrag(contact), R.id.frame);
+            Intent intent = new Intent(con, MainNewContactActivity.class);
+            intent.putExtra("name",contact.getContName());
+            intent.putExtra("phoneNo",contact.getContPhoneNo());
+            intent.putExtra("id",contact.getId());
+            intent.putExtra(con.getResources().getString(R.string.imageUrl),contact.getContactPhotoUri());
+            intent.putExtra(con.getResources().getString(R.string.Contact_Id),contact.getContId());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            con.startActivity(intent);
         }
 
         private void requestCallPhonePerm(AllPhoneContact contact) {
