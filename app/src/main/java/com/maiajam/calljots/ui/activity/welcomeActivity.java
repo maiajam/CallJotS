@@ -78,7 +78,10 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
 
         if(view == start_img || view == start_txt)
         {
+            openPowerSettings(getApplicationContext());
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
                 if (Settings.canDrawOverlays(getBaseContext())) {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
                     {
@@ -145,6 +148,9 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
               break;
       }
 
+    }
+    private void openPowerSettings(Context context) {
+        startActivityForResult(new Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), 0);
     }
 
 }
