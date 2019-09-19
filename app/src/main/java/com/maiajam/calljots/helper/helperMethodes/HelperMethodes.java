@@ -58,8 +58,7 @@ import static java.lang.Thread.sleep;
 public class HelperMethodes {
 
 
-
-    public static void beginTransAction(FragmentTransaction fragmentTransaction,FragmentManager fragmentManager, Fragment fragment, int frame) {
+    public static void beginTransAction(FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, Fragment fragment, int frame) {
         FragmentTransaction ft = fragmentTransaction;
         FragmentManager manager = fragmentManager;
         ft.replace(frame, fragment);
@@ -91,6 +90,7 @@ public class HelperMethodes {
         }
         return roundDrawable;
     }
+
     @SuppressLint("MissingPermission")
     public static String getContactName(String phoneNumber, Context context) {
 
@@ -124,8 +124,7 @@ public class HelperMethodes {
         return imgUrl;
     }
 
-    public static int getContactId(String phoneNumber,Context context)
-    {
+    public static int getContactId(String phoneNumber, Context context) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
         String[] projection = new String[]{ContactsContract.PhoneLookup._ID};
         int COntactId = 0;
@@ -148,73 +147,71 @@ public class HelperMethodes {
         editor.commit();
     }
 
-    public static AllPhoneContact getDailerInfo(Context context)
-    {
+    public static AllPhoneContact getDailerInfo(Context context) {
         SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
-      String Name = sp.getString("Name","");
-      String no = sp.getString("phoneNumber" , "");
-       String photoUrl = sp.getString("contactPhoto","");
-      AllPhoneContact c =new  AllPhoneContact();
-      c.setContName(Name);
-      c.setContPhoneNo(no);
-      c.setContactPhotoUri(photoUrl);
-      return c ;
+        String Name = sp.getString("Name", "");
+        String no = sp.getString("phoneNumber", "");
+        String photoUrl = sp.getString("contactPhoto", "");
+        AllPhoneContact c = new AllPhoneContact();
+        c.setContName(Name);
+        c.setContPhoneNo(no);
+        c.setContactPhotoUri(photoUrl);
+        return c;
     }
 
-    public static void showDialogeAfterCallEnd()
-    {
+    public static void showDialogeAfterCallEnd() {
 
     }
+
     //
     public static List<ContactLogs> getCallLogsList(FragmentActivity activity, int contact_id, String contact_number) {
         ArrayList<ContactLogs> list_Log = new ArrayList<>();
-        String Numer = contact_number.replaceAll("\\D+","");
+        String Numer = contact_number.replaceAll("\\D+", "");
         Cursor calls = null;
-            calls = activity.getContentResolver().query(CallLog.Calls.CONTENT_URI
-                    , null
-                    , null
-                    , null
-                    , CallLog.Calls.DATE + " DESC");
-            int number = calls.getColumnIndex(CallLog.Calls.NUMBER);
-            int duration1 = calls.getColumnIndex(CallLog.Calls.DURATION);
-            int type1 = calls.getColumnIndex(CallLog.Calls.TYPE);
-            int date1 = calls.getColumnIndex(CallLog.Calls.DATE);
+        calls = activity.getContentResolver().query(CallLog.Calls.CONTENT_URI
+                , null
+                , null
+                , null
+                , CallLog.Calls.DATE + " DESC");
+        int number = calls.getColumnIndex(CallLog.Calls.NUMBER);
+        int duration1 = calls.getColumnIndex(CallLog.Calls.DURATION);
+        int type1 = calls.getColumnIndex(CallLog.Calls.TYPE);
+        int date1 = calls.getColumnIndex(CallLog.Calls.DATE);
 
-            if (calls.moveToFirst() == true) {
+        if (calls.moveToFirst() == true) {
 
-                do {
-                    String phNumber = calls.getString(number);
-                    String callDuration1 = calls.getString(duration1);
-                    String typeCallLog = calls.getString(type1);
-                    String dateCallLog = calls.getString(date1);
-                    String dir = null;
-                    int dircode = Integer.parseInt(typeCallLog);
-                    switch (dircode) {
-                        case CallLog.Calls.OUTGOING_TYPE:
-                            dir = "OUTGOING";
-                            break;
-                        case CallLog.Calls.INCOMING_TYPE:
-                            dir = "INCOMING";
-                            break;
-                        case CallLog.Calls.MISSED_TYPE:
-                            dir = "MISSED";
-                            break;
-                        default:
-                            dir = "MISSED";
-                            break;
-                    }
+            do {
+                String phNumber = calls.getString(number);
+                String callDuration1 = calls.getString(duration1);
+                String typeCallLog = calls.getString(type1);
+                String dateCallLog = calls.getString(date1);
+                String dir = null;
+                int dircode = Integer.parseInt(typeCallLog);
+                switch (dircode) {
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        dir = "OUTGOING";
+                        break;
+                    case CallLog.Calls.INCOMING_TYPE:
+                        dir = "INCOMING";
+                        break;
+                    case CallLog.Calls.MISSED_TYPE:
+                        dir = "MISSED";
+                        break;
+                    default:
+                        dir = "MISSED";
+                        break;
+                }
 
-                    if(Numer.equals(String.valueOf(phNumber)))
-                    {
-                        ContactLogs log = new ContactLogs(callDuration1, dateCallLog, dir);
-                        list_Log.add(log);
-                    }
-                } while (calls.moveToNext());
+                if (Numer.equals(String.valueOf(phNumber))) {
+                    ContactLogs log = new ContactLogs(callDuration1, dateCallLog, dir);
+                    list_Log.add(log);
+                }
+            } while (calls.moveToNext());
         }
-        return list_Log ;
+        return list_Log;
     }
-    public static String getContactImage(Context context,String PhoneNumber)
-    {
+
+    public static String getContactImage(Context context, String PhoneNumber) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(PhoneNumber));
 
         String[] projection = new String[]{ContactsContract.PhoneLookup.PHOTO_URI};
@@ -229,27 +226,27 @@ public class HelperMethodes {
 
         return contactPhoto;
     }
-    public  static void CallNotifcation(Context context,
-                                        String name,String Note,
-                                        String Actiontitel,String Numer,
-                                        String imgUrl,int reminerIndecater,
-                                        int conId,int id)
-    {
-        Intent intent ;
-        PendingIntent pendingIntent ;
-        String chanellId = "10" ;
 
-            intent = new Intent(context, NewNoteActivity.class);
-            intent.putExtra("name",name);
-            intent.putExtra("phoneNo",Numer);
-            intent.putExtra(context.getString(R.string.imageUrl),imgUrl);
-            intent.putExtra(context.getString(R.string.Contact_Id),conId);
-            intent.putExtra("id",id);
-            intent.putExtra(context.getString(R.string.NoteTitle_Extra),Actiontitel);
-            intent.putExtra(context.getString(R.string.Note_Extra),Note);
+    public static void CallNotifcation(Context context,
+                                       String name, String Note,
+                                       String Actiontitel, String Numer,
+                                       String imgUrl, int reminerIndecater,
+                                       int conId, int id) {
+        Intent intent;
+        PendingIntent pendingIntent;
+        String chanellId = "10";
 
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        intent = new Intent(context, NewNoteActivity.class);
+        intent.putExtra("name", name);
+        intent.putExtra("phoneNo", Numer);
+        intent.putExtra(context.getString(R.string.imageUrl), imgUrl);
+        intent.putExtra(context.getString(R.string.Contact_Id), conId);
+        intent.putExtra("id", id);
+        intent.putExtra(context.getString(R.string.NoteTitle_Extra), Actiontitel);
+        intent.putExtra(context.getString(R.string.Note_Extra), Note);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence namE = context.getString(R.string.channel_name);
@@ -262,56 +259,54 @@ public class HelperMethodes {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-        NotificationCompat.Builder builder ;
+        NotificationCompat.Builder builder;
 
-            builder = new NotificationCompat.Builder(context,"v")
-                    .setSmallIcon(R.mipmap.logo)
-                    .setContentTitle(name + context.getString(R.string.NotifcationTitee_Note)+ Actiontitel)
-                    .setContentText(Note)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setCategory(NotificationCompat.CATEGORY_EVENT)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setChannelId(chanellId)
-                    .setOnlyAlertOnce(true)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(Note))
-                    .setAutoCancel(true)
-                    ;
+        builder = new NotificationCompat.Builder(context, "v")
+                .setSmallIcon(R.mipmap.logo)
+                .setContentTitle(name + context.getString(R.string.NotifcationTitee_Note) + Actiontitel)
+                .setContentText(Note)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_EVENT)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setChannelId(chanellId)
+                .setOnlyAlertOnce(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(Note))
+                .setAutoCancel(true)
+        ;
 
 
         Notification notification = builder.build();
-        notification.defaults= Notification.DEFAULT_ALL;
+        notification.defaults = Notification.DEFAULT_ALL;
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify((int) System.currentTimeMillis(), notification);
     }
 
 
-
-    public static void setContactNameInfo(Context context,String Name,String Phone,String ImgUrl,int ContId)
-    {
+    public static void setContactNameInfo(Context context, String Name, String Phone, String ImgUrl, int ContId) {
         SharedPreferences sp = context.getSharedPreferences(context.getResources().getString(R.string.Contact_Info), Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("Name", Name);
         editor.putString("phoneNumber", Phone);
-        editor.putString("ImageUrl",ImgUrl);
-        editor.putInt("ContId",ContId);
+        editor.putString("ImageUrl", ImgUrl);
+        editor.putInt("ContId", ContId);
         editor.commit();
     }
 
-    public static AllPhoneContact getContactInfo(Context context)
-    {
+    public static AllPhoneContact getContactInfo(Context context) {
         SharedPreferences sp = context.getSharedPreferences(context.getResources().getString(R.string.Contact_Info), Activity.MODE_PRIVATE);
-        String Name = sp.getString("Name","");
+        String Name = sp.getString("Name", "");
         String PhNo = sp.getString("phoneNumber", "");
-        String ImgUrl = sp.getString("ImageUrl","");
-        int ContId = sp.getInt("ContId",0);
+        String ImgUrl = sp.getString("ImageUrl", "");
+        int ContId = sp.getInt("ContId", 0);
         AllPhoneContact contact = new AllPhoneContact();
         contact.setContPhoneNo(PhNo);
         contact.setContName(Name);
         contact.setContactPhotoUri(ImgUrl);
         contact.setContId(ContId);
-        return contact ;
+        return contact;
     }
-    public static void setParntIdNoteForPernol(Context context,int id) {
+
+    public static void setParntIdNoteForPernol(Context context, int id) {
 
         SharedPreferences sp = context.getSharedPreferences("PersonalNote", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -319,29 +314,28 @@ public class HelperMethodes {
         editor.commit();
     }
 
-    public static int getParntIdNoteForPernol(Context context)
-    {
+    public static int getParntIdNoteForPernol(Context context) {
         SharedPreferences sp = context.getSharedPreferences("PersonalNote", Activity.MODE_PRIVATE);
-        int id = sp.getInt("idParent",0);
-        return id ;
+        int id = sp.getInt("idParent", 0);
+        return id;
     }
 
-    public static void callAction(Context context,String PhoneNo) {
+    public static void callAction(Context context, String PhoneNo) {
         Intent CallAction = new Intent(Intent.ACTION_CALL);
         CallAction.setData(Uri.parse("tel:" + PhoneNo));
         context.startActivity(CallAction);
     }
 
-    public static void saveCallState(Context context,String state) {
+    public static void saveCallState(Context context, String state) {
         SharedPreferences sp = context.getSharedPreferences("PreviuosCallState", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("state", state);
         editor.commit();
     }
 
-    public static String getLastCallState(Context context)
-    {
+    public static String getLastCallState(Context context) {
         SharedPreferences sp = context.getSharedPreferences("PreviuosCallState", Activity.MODE_PRIVATE);
-        return sp.getString("state","");
+        return sp.getString("state", "");
     }
+
 }

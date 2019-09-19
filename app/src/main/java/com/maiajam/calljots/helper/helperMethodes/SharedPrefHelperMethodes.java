@@ -9,6 +9,8 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 
 public class SharedPrefHelperMethodes {
 
+    private static SharedPreferences sp;
+
     public static void saveDialerInfo(Context context, String contact_name, String noCont) {
         SharedPreferences sp = context.getSharedPreferences("LastCall", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -66,5 +68,18 @@ public class SharedPrefHelperMethodes {
         SharedPreferences sp = context.getSharedPreferences("PersonalNote", Activity.MODE_PRIVATE);
         int id = sp.getInt("idParent",0);
         return id ;
+    }
+
+    public static void setHaveAdialgoe(Context context)
+    {
+        sp = context.getSharedPreferences("Dialoge", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("hasAdailgoe", true);
+        editor.commit();
+    }
+    public static boolean isTheirAnyDialoge(Context context)
+    {
+        sp = context.getSharedPreferences("Dialoge", Activity.MODE_PRIVATE);
+        return  sp.getBoolean("hasAdailgoe",false);
     }
 }

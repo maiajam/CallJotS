@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
+import com.maiajam.calljots.helper.Global.WindowsMangerSingleTon;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
@@ -28,164 +29,175 @@ import static java.lang.Thread.sleep;
 public class DialogeHelperMethods {
 
 
+    private static WindowsMangerSingleTon windowsMangerInstance;
 
     public static void drawInfo(Context context) {
 
-        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+        windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
+        final View v = windowsMangerInstance.inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
         TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
         TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
-        ImageView contactImg = (ImageView)v.findViewById(R.id.ContPhotToast_img);
-        View pView =(View)v.findViewById(R.id.partView);
-        LinearLayout linStuts = (LinearLayout)v.findViewById(R.id.linStuts);
-        LinearLayout linClass = (LinearLayout)v.findViewById(R.id.linClassifcation);
-        TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
+        ImageView contactImg = (ImageView) v.findViewById(R.id.ContPhotToast_img);
+        View pView = (View) v.findViewById(R.id.partView);
+        LinearLayout linStuts = (LinearLayout) v.findViewById(R.id.linStuts);
+        LinearLayout linClass = (LinearLayout) v.findViewById(R.id.linClassifcation);
+        TextView CatagoryType = (TextView) v.findViewById(R.id.CatTypeToa_txt);
 
         ConName_txt.setText(getDailerInfo(context).getContName());
         ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
         CatagoryType.setVisibility(View.INVISIBLE);
-        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(),context));
+        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(), context));
         NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
         linClass.setVisibility(View.GONE);
         linStuts.setVisibility(View.GONE);
         pView.setVisibility(View.GONE);
-        wm.addView(v, getWindoesMangerParam(context,Constant.RECIVED_CALL_HINT));
-        removeView(wm,v);
+
+        windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.RECIVED_CALL_HINT));
+       // removeViewAfteraWhile(context, v);
+
     }
+
+    private static void removeViewAfteraWhile(final Context context, final View v) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sleep(5 * 1000);
+                    WindowsMangerSingleTon.getWindowmangerInstance(context).RemoveView(v);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
     public static void dialogeAfterCallLog(final Context context, int hintContactType,
                                            final String number, final String imgUri, final int contactId,
-                                            DialerInfoAndNote contactInfo) {
+                                           DialerInfoAndNote contactInfo) {
 
-        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+        windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
+        final View v = windowsMangerInstance.inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
         TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
         TextView FirsClass_txt = (TextView) v.findViewById(R.id.ContFirstClassi_txt);
         TextView SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
-        TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
+        TextView CatagoryType = (TextView) v.findViewById(R.id.CatTypeToa_txt);
         TextView afterDialoge_Txt = (TextView) v.findViewById(R.id.noteDialoge_afterDialoge_Txt);
-        ImageView contactImg = (ImageView)v.findViewById(R.id.ContPhotToast_img);
-        Button ok_b= (Button) v.findViewById(R.id.noteDialoge_ok_b);
+        ImageView contactImg = (ImageView) v.findViewById(R.id.ContPhotToast_img);
+        Button ok_b = (Button) v.findViewById(R.id.noteDialoge_ok_b);
         Button cancel_b = (Button) v.findViewById(R.id.noteDialoge_cancel_b);
 
         //
 
         ConName_txt.setText(HelperMethodes.getDailerInfo(context).getContName());
         ConNo_txt.setText(number);
-        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(imgUri,context));
-        if(contactInfo != null)
-        {
+        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(imgUri, context));
+        if (contactInfo != null) {
             FirsClass_txt.setText(contactInfo.getContFirstClassf());
             SecClass_txt.setText(contactInfo.getContSecClassF());
             int cat = contactInfo.getContPrimaryClassf();
-            if(cat == Constant.FAMILY_PRIMER_CAT)
-            {
+            if (cat == Constant.FAMILY_PRIMER_CAT) {
                 CatagoryType.setText(context.getString(R.string.family_cat));
-            }else if(cat == Constant.BUSSINESS_PRIMERY_CAT)
-            {
+            } else if (cat == Constant.BUSSINESS_PRIMERY_CAT) {
                 CatagoryType.setText(context.getString(R.string.Bussiness_cat));
-            }else if(cat == Constant.FRIEND_PRIMERY_CAT) {
+            } else if (cat == Constant.FRIEND_PRIMERY_CAT) {
                 CatagoryType.setText(context.getString(R.string.Friend_cat));
-            }else {
+            } else {
                 CatagoryType.setVisibility(View.INVISIBLE);
             }
-        }else {
+        } else {
             CatagoryType.setVisibility(View.INVISIBLE);
         }
 
 
-        LinearLayout noteAfterDialoge  = (LinearLayout)v.findViewById(R.id.noteDialoge_Lin_afterCallLog);
+        LinearLayout noteAfterDialoge = (LinearLayout) v.findViewById(R.id.noteDialoge_Lin_afterCallLog);
         noteAfterDialoge.setVisibility(View.VISIBLE);
         //
-        LinearLayout noteTitleLin = (LinearLayout)v.findViewById(R.id.ContactInfo_Lin_);
+        LinearLayout noteTitleLin = (LinearLayout) v.findViewById(R.id.ContactInfo_Lin_);
         noteTitleLin.setVisibility(View.GONE);
         //
 
         cancel_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeViewImmidiatly(wm,v);
+                windowsMangerInstance.RemoveView(v);
             }
         });
-        if(hintContactType == Constant.NEW_CONTACT_HINT)
-        {
+        if (hintContactType == Constant.NEW_CONTACT_HINT) {
             afterDialoge_Txt.setText(context.getString(R.string.Qusetion_label));
             ok_b.setText(context.getString(R.string.Label_ADDNewContact));
             ok_b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addNewContact(context,number,contactId,0,wm,v);
+                    addNewContact(context, number, contactId, 0, v);
                 }
             });
 
-        }else if(hintContactType == Constant.SPECIAL_CONTACT_HINT)
-        {
+        } else if (hintContactType == Constant.SPECIAL_CONTACT_HINT) {
             afterDialoge_Txt.setText(context.getString(R.string.label_TakeANote));
             ok_b.setText(context.getString(R.string.label_OkTakeAnote));
             ok_b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //
-                    addNoteForCallLog(context,getDailerInfo(context).getContName(),number,imgUri,contactId,0);
-                    removeViewImmidiatly(wm,v);
+                    addNoteForCallLog(context, getDailerInfo(context).getContName(), number, imgUri, contactId, 0);
+                    windowsMangerInstance.RemoveView(v);
                 }
             });
 
-        }else if(hintContactType == Constant.NOT_SPECAIL_CONTACT_HINT){
+        } else if (hintContactType == Constant.NOT_SPECAIL_CONTACT_HINT) {
 
             afterDialoge_Txt.setText(context.getString(R.string.Label_ADDAddAsSpecialContact));
             ok_b.setText(context.getString(R.string.label_OKAddAsSpecial));
             ok_b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addAsSpecialContact(context,getDailerInfo(context).getContName(),number,imgUri,contactId);
-                    removeViewImmidiatly(wm,v);
+                    addAsSpecialContact(context, getDailerInfo(context).getContName(), number, imgUri, contactId);
+                    windowsMangerInstance.RemoveView(v);
                 }
             });
         }
         //
-        wm.addView(v, getWindoesMangerParam(context,Constant.AFTER_Call_HINT));
+        windowsMangerInstance.AddView(v, getWindoesMangerParam(context, Constant.AFTER_Call_HINT));
     }
 
     private static void addAsSpecialContact(Context context, String contName, String number, String imgUri, int contactId) {
         Intent intent = new Intent(context, MainNewContactActivity.class);
-        intent.putExtra("name",contName);
-        intent.putExtra("phoneNo",number);
-        intent.putExtra(context.getString(R.string.imageUrl),imgUri);
-        intent.putExtra(context.getString(R.string.Contact_Id),contactId);
+        intent.putExtra("name", contName);
+        intent.putExtra("phoneNo", number);
+        intent.putExtra(context.getString(R.string.imageUrl), imgUri);
+        intent.putExtra(context.getString(R.string.Contact_Id), contactId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
-    private static void addNoteForCallLog(Context context,String name,String phoneNo,String imgUrl,int conId,int id) {
+    private static void addNoteForCallLog(Context context, String name, String phoneNo, String imgUrl, int conId, int id) {
         Intent intent = new Intent(context, NewNoteActivity.class);
-        intent.putExtra("name",name);
-        intent.putExtra("phoneNo",phoneNo);
-        intent.putExtra("image_uri",imgUrl);
-        intent.putExtra("contact_Id",conId);
-        intent.putExtra("Id",id);
+        intent.putExtra("name", name);
+        intent.putExtra("phoneNo", phoneNo);
+        intent.putExtra("image_uri", imgUrl);
+        intent.putExtra("contact_Id", conId);
+        intent.putExtra("Id", id);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
 
-    private static void addNewContact(Context context, String phoneNo, int conId, int id, WindowManager wm, View v) {
+    private static void addNewContact(Context context, String phoneNo, int conId, int id, View v) {
         Intent intent = new Intent(context, MainNewContactActivity.class);
-        intent.putExtra("phoneNo",phoneNo);
-        intent.putExtra("contact_Id",conId);
-        intent.putExtra("Id",id);
+        intent.putExtra("phoneNo", phoneNo);
+        intent.putExtra("contact_Id", conId);
+        intent.putExtra("Id", id);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
-        removeViewImmidiatly(wm,v);
+        windowsMangerInstance.RemoveView(v);
     }
 
-    private static WindowManager.LayoutParams getWindoesMangerParam(Context context,int hint)
-    {
-        int  TypesFLAG,Flags;
+    private static WindowManager.LayoutParams getWindoesMangerParam(Context context, int hint) {
+        int TypesFLAG, Flags;
         if (Build.VERSION.SDK_INT >= 26) {
             TypesFLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
@@ -193,16 +205,16 @@ public class DialogeHelperMethods {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-           // ((Activity)context).setShowWhenLocked(true);
+            // ((Activity)context).setShowWhenLocked(true);
             Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    |WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-        }else {
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+        } else {
             Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    |WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED ;
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
         }
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -211,53 +223,33 @@ public class DialogeHelperMethods {
                 Flags,
                 PixelFormat.TRANSPARENT);
 
-        if(hint == Constant.AFTER_Call_HINT)
-        {
+        if (hint == Constant.AFTER_Call_HINT) {
             params.gravity = Gravity.TOP;
-            params.x = 0 ;
-            params.y = 5 ;
-        }else {
+            params.x = 0;
+            params.y = 5;
+        } else {
 
             params.gravity = Gravity.CENTER_VERTICAL;
-            params.x = 0 ;
-            params.y = 20 ;
+            params.x = 0;
+            params.y = 20;
         }
 
 
-        return params ;
+        return params;
     }
+
     //
     public static void drawContactInfo(final Context context, final DialerInfoAndNote contact, int hint) {
 
-        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
-        addContentToTheView(context,v,contact,hint);
-        wm.addView(v, getWindoesMangerParam(context,Constant.RECIVED_CALL_HINT));
-
-        removeView(wm,v);
-
+        addContentToTheView(context, v, contact, hint);
+        windowsMangerInstance.AddView(v, getWindoesMangerParam(context, Constant.RECIVED_CALL_HINT));
+        windowsMangerInstance.RemoveView(v);
     }
-    private static void removeViewImmidiatly(final WindowManager wm, final View v)
-    {
-                    wm.removeView(v);    }
 
-    private static void removeView(final WindowManager wm, final View v)
-    {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    sleep(5*1000);
-                    wm.removeView(v);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-    }
 
 
     private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact, int hint) {
@@ -270,8 +262,8 @@ public class DialogeHelperMethods {
         TextView SecClass_txt = (TextView) v.findViewById(R.id.ContSecClass_txt);
         TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
         TextView Status_txt = (TextView) v.findViewById(R.id.status_txt);
-        TextView CatagoryType = (TextView)v.findViewById(R.id.CatTypeToa_txt);
-        ImageView contactImg = (ImageView)v.findViewById(R.id.ContPhotToast_img);
+        TextView CatagoryType = (TextView) v.findViewById(R.id.CatTypeToa_txt);
+        ImageView contactImg = (ImageView) v.findViewById(R.id.ContPhotToast_img);
         //
         String ContName = contact.getContName();
         String first = contact.getContFirstClassf();
@@ -285,29 +277,24 @@ public class DialogeHelperMethods {
         FirsClass_txt.setText(first);
         SecClass_txt.setText(Sec);
         ConNo_txt.setText(ContPhoneNo);
-        if(contact.getContactPhotoUri() != null)
-        {
-            contactImg.setImageDrawable(HelperMethodes.getBitmapImage(contact.getContactPhotoUri().toString(),context));
+        if (contact.getContactPhotoUri() != null) {
+            contactImg.setImageDrawable(HelperMethodes.getBitmapImage(contact.getContactPhotoUri().toString(), context));
         }
         int cat = contact.getContPrimaryClassf();
-        if(cat == Constant.FAMILY_PRIMER_CAT)
-        {
+        if (cat == Constant.FAMILY_PRIMER_CAT) {
             CatagoryType.setText(context.getString(R.string.family_cat));
-        }else if(cat == Constant.BUSSINESS_PRIMERY_CAT)
-        {
+        } else if (cat == Constant.BUSSINESS_PRIMERY_CAT) {
             CatagoryType.setText(context.getString(R.string.Bussiness_cat));
-        }else {
+        } else {
             CatagoryType.setText(context.getString(R.string.Friend_cat));
         }
-        if(hint == 1)
-        {
+        if (hint == 1) {
             // this special contact dosnt has any note
             NoteTitle_txt.setText("you dont have any note for this contact");
             StatusIcon_img.setVisibility(View.GONE);
             Status_txt.setVisibility(View.GONE);
 
-        }else
-        {
+        } else {
             NoteTitle_txt.setText("'" + NoteTitle + "'");
             if (status == 1) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -342,7 +329,7 @@ public class DialogeHelperMethods {
         }
     }
 
-    public static void enableAddNoteDuringCall(final Context context, final String contact_name, final String phoneNo,final int contactId) {
+    public static void enableAddNoteDuringCall(final Context context, final String contact_name, final String phoneNo, final int contactId) {
 
         int FLAG;
         if (Build.VERSION.SDK_INT >= 26) {
@@ -360,28 +347,27 @@ public class DialogeHelperMethods {
 
         params.x = 40;
         params.gravity = Gravity.CENTER_VERTICAL;
-        final WindowManager wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View v = inflater.inflate(R.layout.dialoge_addnote_duringcall, null);
+       windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
+        final View v = windowsMangerInstance.inflater.inflate(R.layout.dialoge_addnote_duringcall, null);
         // Add layout to window manager
-        ImageView logo = (ImageView)v.findViewById(R.id.AddNoteDuringCall_ImgView_Logo);
+        ImageView logo = (ImageView) v.findViewById(R.id.AddNoteDuringCall_ImgView_Logo);
         logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context,NewNoteActivity.class).
+                context.startActivity(new Intent(context, NewNoteActivity.class).
                         setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).
-                        putExtra("contact_Id",contactId).
-                        putExtra(context.getString(R.string.phoneNoExtra),phoneNo).
-                        putExtra("name",contact_name));
+                        putExtra("contact_Id", contactId).
+                        putExtra(context.getString(R.string.phoneNoExtra), phoneNo).
+                        putExtra("name", contact_name));
             }
         });
-        wm.addView(v, params);
+        windowsMangerInstance.AddView(v,params);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    sleep(10*1000);
-                    wm.removeView(v);
+                    sleep(10 * 1000);
+                 windowsMangerInstance.RemoveView(v);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
