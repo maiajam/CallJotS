@@ -29,6 +29,7 @@ public interface Constant {
     int MY_PERMISSIONS_REQUEST_CALL_PHONE = 25;
     int REQ_READ_PHONE_STATE = 35 ;
     int REQUEST_CODE_WRITE = 45;
+    int MY_IGNORE_OPTIMIZATION_REQUEST = 55;
 
     // else
     int ONE_CONTACT_NOTE = 200;
@@ -42,6 +43,7 @@ public interface Constant {
     int FAMILY_PRIMER_CAT = 1;
     int BUSSINESS_PRIMERY_CAT = 3;
     int FRIEND_PRIMERY_CAT = 2;
+
 
 
     ;

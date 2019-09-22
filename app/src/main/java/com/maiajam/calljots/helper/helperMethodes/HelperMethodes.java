@@ -338,4 +338,26 @@ public class HelperMethodes {
         return sp.getString("state", "");
     }
 
+
+    public static void addAsSpecialContact(Context context, String contName, String number, String imgUri, int contactId) {
+        Intent intent = new Intent(context, MainNewContactActivity.class);
+        intent.putExtra("name", contName);
+        intent.putExtra("phoneNo", number);
+        intent.putExtra(context.getString(R.string.imageUrl), imgUri);
+        intent.putExtra(context.getString(R.string.Contact_Id), contactId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void addNoteForCallLog(Context context, String name, String phoneNo, String imgUrl, int conId, int id) {
+        Intent intent = new Intent(context, NewNoteActivity.class);
+        intent.putExtra("name", name);
+        intent.putExtra("phoneNo", phoneNo);
+        intent.putExtra("image_uri", imgUrl);
+        intent.putExtra("contact_Id", conId);
+        intent.putExtra("Id", id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
 }

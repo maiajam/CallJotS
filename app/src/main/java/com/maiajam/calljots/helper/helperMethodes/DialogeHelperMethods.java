@@ -23,7 +23,11 @@ import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.content.Context.WINDOW_SERVICE;
+import static com.maiajam.calljots.helper.helperMethodes.HelperMethodes.addAsSpecialContact;
+import static com.maiajam.calljots.helper.helperMethodes.HelperMethodes.addNoteForCallLog;
 import static com.maiajam.calljots.helper.helperMethodes.HelperMethodes.getDailerInfo;
+import static com.maiajam.calljots.helper.helperMethodes.SharedPrefHelperMethodes.isTheirAnyDialoge;
+import static com.maiajam.calljots.helper.helperMethodes.SharedPrefHelperMethodes.setHaveAdialgoe;
 import static java.lang.Thread.sleep;
 
 public class DialogeHelperMethods {
@@ -54,8 +58,12 @@ public class DialogeHelperMethods {
         linStuts.setVisibility(View.GONE);
         pView.setVisibility(View.GONE);
 
+        if (isTheirAnyDialoge(context))
+            windowsMangerInstance.RemoveView(v);
+        setHaveAdialgoe(context);
+
         windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.RECIVED_CALL_HINT));
-       // removeViewAfteraWhile(context, v);
+        removeViewAfteraWhile(context, v);
 
     }
 
@@ -162,28 +170,11 @@ public class DialogeHelperMethods {
             });
         }
         //
-        windowsMangerInstance.AddView(v, getWindoesMangerParam(context, Constant.AFTER_Call_HINT));
-    }
+        if(isTheirAnyDialoge(context))
+            windowsMangerInstance.RemoveView(v);
 
-    private static void addAsSpecialContact(Context context, String contName, String number, String imgUri, int contactId) {
-        Intent intent = new Intent(context, MainNewContactActivity.class);
-        intent.putExtra("name", contName);
-        intent.putExtra("phoneNo", number);
-        intent.putExtra(context.getString(R.string.imageUrl), imgUri);
-        intent.putExtra(context.getString(R.string.Contact_Id), contactId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
-    private static void addNoteForCallLog(Context context, String name, String phoneNo, String imgUrl, int conId, int id) {
-        Intent intent = new Intent(context, NewNoteActivity.class);
-        intent.putExtra("name", name);
-        intent.putExtra("phoneNo", phoneNo);
-        intent.putExtra("image_uri", imgUrl);
-        intent.putExtra("contact_Id", conId);
-        intent.putExtra("Id", id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
+        windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.AFTER_Call_HINT));
+        setHaveAdialgoe(context);
     }
 
     private static void addNewContact(Context context, String phoneNo, int conId, int id, View v) {
@@ -196,48 +187,6 @@ public class DialogeHelperMethods {
         windowsMangerInstance.RemoveView(v);
     }
 
-    private static WindowManager.LayoutParams getWindoesMangerParam(Context context, int hint) {
-        int TypesFLAG, Flags;
-        if (Build.VERSION.SDK_INT >= 26) {
-            TypesFLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            TypesFLAG = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            // ((Activity)context).setShowWhenLocked(true);
-            Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-        } else {
-            Flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-        }
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                TypesFLAG,
-                Flags,
-                PixelFormat.TRANSPARENT);
-
-        if (hint == Constant.AFTER_Call_HINT) {
-            params.gravity = Gravity.TOP;
-            params.x = 0;
-            params.y = 5;
-        } else {
-
-            params.gravity = Gravity.CENTER_VERTICAL;
-            params.x = 0;
-            params.y = 20;
-        }
-
-
-        return params;
-    }
-
     //
     public static void drawContactInfo(final Context context, final DialerInfoAndNote contact, int hint) {
 
@@ -246,10 +195,11 @@ public class DialogeHelperMethods {
         final View v = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
         addContentToTheView(context, v, contact, hint);
-        windowsMangerInstance.AddView(v, getWindoesMangerParam(context, Constant.RECIVED_CALL_HINT));
-        windowsMangerInstance.RemoveView(v);
+        if(isTheirAnyDialoge(context))
+            windowsMangerInstance.RemoveView(v);
+        windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.RECIVED_CALL_HINT));
+        setHaveAdialgoe(context);
     }
-
 
 
     private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact, int hint) {
@@ -347,7 +297,7 @@ public class DialogeHelperMethods {
 
         params.x = 40;
         params.gravity = Gravity.CENTER_VERTICAL;
-       windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
+        windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
         final View v = windowsMangerInstance.inflater.inflate(R.layout.dialoge_addnote_duringcall, null);
         // Add layout to window manager
         ImageView logo = (ImageView) v.findViewById(R.id.AddNoteDuringCall_ImgView_Logo);
@@ -361,13 +311,13 @@ public class DialogeHelperMethods {
                         putExtra("name", contact_name));
             }
         });
-        windowsMangerInstance.AddView(v,params);
+        windowsMangerInstance.AddView(v, params);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     sleep(10 * 1000);
-                 windowsMangerInstance.RemoveView(v);
+                    windowsMangerInstance.RemoveView(v);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
