@@ -16,12 +16,10 @@ public class BootCompletedReciver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Toast.makeText(context,"boot",Toast.LENGTH_LONG).show();
-     /*   if(intent.getExtras().equals(Intent.ACTION_BOOT_COMPLETED))
-        {
+        //Toast.makeText(context,"boot",Toast.LENGTH_LONG).show();
             CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
             WorkManager.getInstance().enqueue(CallRevicerRequest);
-        }
-        */
+
+
     }
 }
