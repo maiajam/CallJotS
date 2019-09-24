@@ -1,4 +1,4 @@
-package com.maiajam.calljots.helper;
+package com.maiajam.calljots.helper.thread;
 
 import android.content.Context;
 import android.database.Cursor;

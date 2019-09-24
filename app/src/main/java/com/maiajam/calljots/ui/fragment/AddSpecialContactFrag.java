@@ -23,7 +23,7 @@ import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
 import com.maiajam.calljots.ui.activity.MainActivity;
-import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

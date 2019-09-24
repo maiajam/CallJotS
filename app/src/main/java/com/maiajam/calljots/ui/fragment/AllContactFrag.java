@@ -32,7 +32,7 @@ import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.SwipeControler;
 import com.maiajam.calljots.ui.activity.MainNewContactActivity;
 import com.maiajam.calljots.util.NewContactObserver;
-import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 
 import java.util.ArrayList;
 import java.util.List;

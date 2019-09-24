@@ -1,4 +1,4 @@
-package com.maiajam.calljots.helper;
+package com.maiajam.calljots.helper.thread;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,10 +9,10 @@ import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
+import com.maiajam.calljots.helper.Constant;
 
 ;import java.util.Date;
 import java.util.List;
-import java.util.jar.Attributes;
 
 public class ReadDataThread extends Thread {
 

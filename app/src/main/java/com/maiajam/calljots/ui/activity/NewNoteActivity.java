@@ -23,7 +23,7 @@ import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
-import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 import com.maiajam.calljots.helper.helperMethodes.SharedPrefHelperMethodes;
 import com.maiajam.calljots.util.workmanger.ReminerSchudleWorker;
 
@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import androidx.work.BackoffPolicy;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;

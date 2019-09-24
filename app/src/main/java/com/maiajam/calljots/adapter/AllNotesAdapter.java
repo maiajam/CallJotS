@@ -17,10 +17,9 @@ import android.widget.TextView;
 
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
-import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import java.text.SimpleDateFormat;

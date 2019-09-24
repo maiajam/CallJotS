@@ -20,8 +20,7 @@ import com.maiajam.calljots.adapter.ContNotesAdapter;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.ReadDataThread;
-import com.maiajam.calljots.ui.activity.ContactNotes;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 import com.maiajam.calljots.ui.activity.NewNoteActivity;
 
 import java.util.ArrayList;

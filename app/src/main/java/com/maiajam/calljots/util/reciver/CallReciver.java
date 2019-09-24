@@ -3,18 +3,15 @@ package com.maiajam.calljots.util.reciver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.provider.CallLog;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.maiajam.calljots.data.model.DialerInfoAndNote;
 import com.maiajam.calljots.helper.Constant;
 import com.maiajam.calljots.helper.helperMethodes.HelperMethodes;
-import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 
 /**
@@ -23,20 +20,24 @@ import com.maiajam.calljots.helper.helperMethodes.DialogeHelperMethods;
 
 public class CallReciver extends BroadcastReceiver {
 
+    private static String LastCallState;
     private Handler h;
     private DialerInfoAndNote contactNoteAndInfo;
-    private static String LastCallState ;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
 
         final String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-        if(TextUtils.isEmpty(NOCont))
-        {
+        checkReciverHasNo(NOCont, context, intent);
+    }
+
+    private void checkReciverHasNo(String NOCont, Context context, Intent intent) {
+        if (TextUtils.isEmpty(NOCont)) {
             return;
-        }else {
-            checkCaller(intent, context, intent.getStringExtra(TelephonyManager.EXTRA_STATE),NOCont);
-            HelperMethodes.saveCallState(context,intent.getStringExtra(TelephonyManager.EXTRA_STATE));
+        } else {
+            DialogeHelperMethods.getInstance(context).removeAnyView();
+            checkCaller(intent, context, intent.getStringExtra(TelephonyManager.EXTRA_STATE), NOCont);
+            HelperMethodes.saveCallState(context, intent.getStringExtra(TelephonyManager.EXTRA_STATE));
         }
     }
 
@@ -44,23 +45,22 @@ public class CallReciver extends BroadcastReceiver {
 
         LastCallState = HelperMethodes.getLastCallState(context);
         final String Contact_name = HelperMethodes.getContactName(NO, context);
-        final String ContactImg_url = HelperMethodes.getContactImage(context,NO);
-        // save dialer info at shared prefrence
-        HelperMethodes.saveDialerInfo(context, Contact_name, NO,ContactImg_url);
-        if (!TextUtils.isEmpty(Contact_name)) {
+        final String ContactImg_url = HelperMethodes.getContactImage(context, NO);
 
-          getContactInfoForThisContact(context,intent.getStringExtra(TelephonyManager.EXTRA_STATE),NO,Contact_name);
+        HelperMethodes.saveDialerInfo(context, Contact_name, NO, ContactImg_url);
+        if (!TextUtils.isEmpty(Contact_name)) {
+            getContactInfoForThisContact(context, intent.getStringExtra(TelephonyManager.EXTRA_STATE), NO, Contact_name);
 
         } else {// new number .. not one of the contact phone number... no toast msg.
             if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                 DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NEW_CONTACT_HINT,
-                        NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
+                        NO, HelperMethodes.getContactImage(context, NO), HelperMethodes.getContactId(NO, context),
                         null);
             }
         }
     }
 
-    private void getContactInfoForThisContact(final Context context,final String state,final String NO,final String Contact_name) {
+    private void getContactInfoForThisContact(final Context context, final String state, final String NO, final String Contact_name) {
         h = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -71,48 +71,46 @@ public class CallReciver extends BroadcastReceiver {
                         // rining state
                         if (msg.obj == null) {
                             // this contact is not one of your speacal contact
-                            DialogeHelperMethods.drawInfo(context);
+                            DialogeHelperMethods.getInstance(context).drawInfo(context);
                         } else {
                             // this contact is a special contact
                             contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                             if (contactNoteAndInfo.getContact_Note() != null) {
-                                DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 0);
+                                DialogeHelperMethods.getInstance(context).drawContactInfo(context, contactNoteAndInfo, 0);
                             } else {// dont have any note for this special contact yet
-                                DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 1);
+                                DialogeHelperMethods.getInstance(context).drawContactInfo(context, contactNoteAndInfo, 1);
                             }
                         }
                     } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                         if (msg.obj == null) {
                             // this contact is not one of your speacal contact
-                            DialogeHelperMethods.dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT,
-                                    NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
+                            DialogeHelperMethods.getInstance(context).dialogeAfterCallLog(context, Constant.NOT_SPECAIL_CONTACT_HINT,
+                                    NO, HelperMethodes.getContactImage(context, NO), HelperMethodes.getContactId(NO, context),
                                     null);
                         } else {
                             contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
-                            DialogeHelperMethods.dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT,
-                                    NO, HelperMethodes.getContactImage(context,NO), HelperMethodes.getContactId(NO, context),
+                            DialogeHelperMethods.getInstance(context).dialogeAfterCallLog(context, Constant.SPECIAL_CONTACT_HINT,
+                                    NO, HelperMethodes.getContactImage(context, NO), HelperMethodes.getContactId(NO, context),
                                     contactNoteAndInfo);
                         }
                     } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
 
-                        if(LastCallState.equals(TelephonyManager.EXTRA_STATE_RINGING))
-                        {
-                            if(msg.obj != null) {
-                                DialogeHelperMethods.enableAddNoteDuringCall(context,Contact_name,NO,HelperMethodes.getContactId(NO, context));
+                        if (LastCallState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                            if (msg.obj != null) {
+                                DialogeHelperMethods.getInstance(context).enableAddNoteDuringCall(context, Contact_name, NO, HelperMethodes.getContactId(NO, context));
                             }
-                        }else
-                        {
+                        } else {
                             // out going call
                             if (msg.obj == null) {
                                 // this contact is not one of your speacal contact
-                                DialogeHelperMethods.drawInfo(context);
+                                DialogeHelperMethods.getInstance(context).drawInfo(context);
                             } else {
                                 // this contact is a special contact
                                 contactNoteAndInfo = (DialerInfoAndNote) msg.obj;
                                 if (contactNoteAndInfo.getContact_Note() != null) {
-                                    DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 0);
+                                    DialogeHelperMethods.getInstance(context).drawContactInfo(context, contactNoteAndInfo, 0);
                                 } else {// dont have any note for this special contact yet
-                                    DialogeHelperMethods.drawContactInfo(context, contactNoteAndInfo, 1);
+                                    DialogeHelperMethods.getInstance(context).drawContactInfo(context, contactNoteAndInfo, 1);
                                 }
                             }
                         }

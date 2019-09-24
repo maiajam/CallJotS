@@ -10,10 +10,9 @@ import android.os.Message;
 import android.provider.ContactsContract;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
-import com.maiajam.calljots.data.local.room.RoomDao;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
-import com.maiajam.calljots.helper.ReadDataThread;
+import com.maiajam.calljots.helper.thread.ReadDataThread;
 
 public class NewContactObserver extends ContentObserver {
 

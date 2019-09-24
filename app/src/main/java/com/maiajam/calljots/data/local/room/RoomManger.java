@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 
 import com.maiajam.calljots.data.local.entity.AllPhoneContact;
 import com.maiajam.calljots.data.local.entity.ContactNoteEnitiy;
-import com.maiajam.calljots.helper.GetAllPhoneContactThread;
+import com.maiajam.calljots.helper.thread.GetAllPhoneContactThread;
 
 
 @Database(entities = {AllPhoneContact.class,ContactNoteEnitiy.class}, version = 1, exportSchema = false)

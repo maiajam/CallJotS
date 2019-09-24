@@ -90,9 +90,10 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
 
         if (view == start_img || view == start_txt) {
-            openPowerSettings();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                openPowerSettings();
 
                 if (Settings.canDrawOverlays(getBaseContext())) {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -115,6 +116,7 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -130,6 +132,15 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             }
+        } else if (requestCode == MY_IGNORE_OPTIMIZATION_REQUEST) {
+            pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            boolean isIgnoringBatteryOptimizations = pm.isIgnoringBatteryOptimizations(getPackageName());
+            if (isIgnoringBatteryOptimizations) {
+                // Ignoring battery optimization
+            } else {
+                // Not ignoring battery optimization
+            }
+
         }
     }
 
@@ -155,21 +166,14 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
                 break;
-            case MY_IGNORE_OPTIMIZATION_REQUEST:
-                pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                boolean isIgnoringBatteryOptimizations = pm.isIgnoringBatteryOptimizations(getPackageName());
-                if (isIgnoringBatteryOptimizations) {
-                    // Ignoring battery optimization
-                } else {
-                    // Not ignoring battery optimization
-                }
-                break;
+
         }
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void openPowerSettings() {
+        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isIgnoringBatteryOptimizations = pm.isIgnoringBatteryOptimizations(getPackageName());
         if (!isIgnoringBatteryOptimizations) {
             Intent intent = new Intent();

@@ -70,11 +70,11 @@ public class SharedPrefHelperMethodes {
         return id ;
     }
 
-    public static void setHaveAdialgoe(Context context)
+    public static void setHaveAdialgoe(Context context,Boolean hasDialoge)
     {
         sp = context.getSharedPreferences("Dialoge", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean("hasAdailgoe", true);
+        editor.putBoolean("hasAdailgoe",hasDialoge);
         editor.commit();
     }
     public static boolean isTheirAnyDialoge(Context context)
