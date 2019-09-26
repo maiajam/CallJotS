@@ -35,63 +35,21 @@ public class DialogeHelperMethods {
 
 
     private static Context context;
-    private static WindowsMangerSingleTon windowsMangerInstance;
-    private static View v, viewAfterDialgoe;
+    private static WindowManager windowsMangerInstance;
+    private static View v, viewDialgoe;
     private static DialogeHelperMethods Instance;
+    private final LayoutInflater inflater;
 
     private DialogeHelperMethods(Context context) {
-        windowsMangerInstance = WindowsMangerSingleTon.getWindowmangerInstance(context);
-        v = windowsMangerInstance.inflater.inflate(R.layout.contactinfo_note_dialoge, null);
-        viewAfterDialgoe = windowsMangerInstance.inflater.inflate(R.layout.contactinfo_note_dialoge, null);
+        windowsMangerInstance = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        viewDialgoe = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
     }
 
     public static DialogeHelperMethods getInstance(Context context) {
-        if(Instance == null)
+        if (Instance == null)
             Instance = new DialogeHelperMethods(context);
         return Instance;
-    }
-
-    public  void drawInfo(Context context) {
-
-        // fill data in the field
-        TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
-        TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
-        TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
-        ImageView contactImg = (ImageView) v.findViewById(R.id.ContPhotToast_img);
-        View pView = (View) v.findViewById(R.id.partView);
-        LinearLayout linStuts = (LinearLayout) v.findViewById(R.id.linStuts);
-        LinearLayout linClass = (LinearLayout) v.findViewById(R.id.linClassifcation);
-        TextView CatagoryType = (TextView) v.findViewById(R.id.CatTypeToa_txt);
-
-        ConName_txt.setText(getDailerInfo(context).getContName());
-        ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
-        CatagoryType.setVisibility(View.INVISIBLE);
-        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(), context));
-        NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
-        linClass.setVisibility(View.GONE);
-        linStuts.setVisibility(View.GONE);
-        pView.setVisibility(View.GONE);
-/*
-        if (isTheirAnyDialoge(context))
-            windowsMangerInstance.RemoveView(viewAfterDialgoe);
-        setHaveAdialgoe(context, true);*/
-
-        windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.RECIVED_CALL_HINT));
-        removeViewAfteraWhile(context, v);
-
-    }
-
-    private  void removeViewAfteraWhile(final Context context, final View v) {
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 100ms
-                WindowsMangerSingleTon.getWindowmangerInstance(context).RemoveView(v);
-                setHaveAdialgoe(context, false);
-            }
-        }, 2000);
     }
 
     public static void dialogeAfterCallLog(final Context context, int hintContactType,
@@ -100,15 +58,15 @@ public class DialogeHelperMethods {
 
 
         // fill data in the field
-        TextView ConName_txt = (TextView) viewAfterDialgoe.findViewById(R.id.ContNameToa_txt);
-        TextView ConNo_txt = (TextView) viewAfterDialgoe.findViewById(R.id.ContPhoNoToast_txt);
-        TextView FirsClass_txt = (TextView) viewAfterDialgoe.findViewById(R.id.ContFirstClassi_txt);
-        TextView SecClass_txt = (TextView) viewAfterDialgoe.findViewById(R.id.ContSecClass_txt);
-        TextView CatagoryType = (TextView) viewAfterDialgoe.findViewById(R.id.CatTypeToa_txt);
-        TextView afterDialoge_Txt = (TextView) viewAfterDialgoe.findViewById(R.id.noteDialoge_afterDialoge_Txt);
-        ImageView contactImg = (ImageView) viewAfterDialgoe.findViewById(R.id.ContPhotToast_img);
-        Button ok_b = (Button) viewAfterDialgoe.findViewById(R.id.noteDialoge_ok_b);
-        Button cancel_b = (Button) viewAfterDialgoe.findViewById(R.id.noteDialoge_cancel_b);
+        TextView ConName_txt = (TextView) viewDialgoe.findViewById(R.id.ContNameToa_txt);
+        TextView ConNo_txt = (TextView) viewDialgoe.findViewById(R.id.ContPhoNoToast_txt);
+        TextView FirsClass_txt = (TextView) viewDialgoe.findViewById(R.id.ContFirstClassi_txt);
+        TextView SecClass_txt = (TextView) viewDialgoe.findViewById(R.id.ContSecClass_txt);
+        TextView CatagoryType = (TextView) viewDialgoe.findViewById(R.id.CatTypeToa_txt);
+        TextView afterDialoge_Txt = (TextView) viewDialgoe.findViewById(R.id.noteDialoge_afterDialoge_Txt);
+        ImageView contactImg = (ImageView) viewDialgoe.findViewById(R.id.ContPhotToast_img);
+        Button ok_b = (Button) viewDialgoe.findViewById(R.id.noteDialoge_ok_b);
+        Button cancel_b = (Button) viewDialgoe.findViewById(R.id.noteDialoge_cancel_b);
 
         //
 
@@ -133,17 +91,17 @@ public class DialogeHelperMethods {
         }
 
 
-        LinearLayout noteAfterDialoge = (LinearLayout) viewAfterDialgoe.findViewById(R.id.noteDialoge_Lin_afterCallLog);
+        LinearLayout noteAfterDialoge = (LinearLayout) viewDialgoe.findViewById(R.id.noteDialoge_Lin_afterCallLog);
         noteAfterDialoge.setVisibility(View.VISIBLE);
         //
-        LinearLayout noteTitleLin = (LinearLayout) viewAfterDialgoe.findViewById(R.id.ContactInfo_Lin_);
+        LinearLayout noteTitleLin = (LinearLayout) viewDialgoe.findViewById(R.id.ContactInfo_Lin_);
         noteTitleLin.setVisibility(View.GONE);
         //
 
         cancel_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                windowsMangerInstance.RemoveView(viewAfterDialgoe);
+                windowsMangerInstance.removeView(viewDialgoe);
             }
         });
         if (hintContactType == Constant.NEW_CONTACT_HINT) {
@@ -164,7 +122,7 @@ public class DialogeHelperMethods {
                 public void onClick(View view) {
                     //
                     addNoteForCallLog(context, getDailerInfo(context).getContName(), number, imgUri, contactId, 0);
-                  /*  windowsMangerInstance.RemoveView(viewAfterDialgoe);
+                  /*  windowsMangerInstance.RemoveView(viewDialgoe);
                     setHaveAdialgoe(context, false);*/
                 }
             });
@@ -177,17 +135,18 @@ public class DialogeHelperMethods {
                 @Override
                 public void onClick(View view) {
                     addAsSpecialContact(context, getDailerInfo(context).getContName(), number, imgUri, contactId);
-                  /*  windowsMangerInstance.RemoveView(viewAfterDialgoe);
+                  /*  windowsMangerInstance.RemoveView(viewDialgoe);
                     setHaveAdialgoe(context, false);*/
                 }
             });
         }
         //
-       // if (isTheirAnyDialoge(context))
-         //   windowsMangerInstance.RemoveView(v);
+        // if (isTheirAnyDialoge(context))
+        //   windowsMangerInstance.RemoveView(v);
 
-        windowsMangerInstance.AddView(viewAfterDialgoe, windowsMangerInstance.getWindoesMangerParam(Constant.AFTER_Call_HINT));
-      //  setHaveAdialgoe(context, true);
+        windowsMangerInstance.addView(viewDialgoe,ge);
+        windowsMangerInstance.AddView(viewDialgoe, windowsMangerInstance.getWindoesMangerParam(Constant.AFTER_Call_HINT));
+        //  setHaveAdialgoe(context, true);
     }
 
     private static void addNewContact(Context context, String phoneNo, int conId, int id, View v) {
@@ -197,7 +156,7 @@ public class DialogeHelperMethods {
         intent.putExtra("Id", id);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
-        windowsMangerInstance.RemoveView(viewAfterDialgoe);
+        windowsMangerInstance.RemoveView(viewDialgoe);
         setHaveAdialgoe(context, false);
     }
 
@@ -210,11 +169,10 @@ public class DialogeHelperMethods {
         // fill data in the field
         addContentToTheView(context, v, contact, hint);
       /*  if (isTheirAnyDialoge(context))
-            windowsMangerInstance.RemoveView(viewAfterDialgoe);*/
+            windowsMangerInstance.RemoveView(viewDialgoe);*/
         windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.RECIVED_CALL_HINT));
         //setHaveAdialgoe(context, true);
     }
-
 
     private static void addContentToTheView(Context context, View v, DialerInfoAndNote contact, int hint) {
 
@@ -332,7 +290,7 @@ public class DialogeHelperMethods {
                 try {
                     sleep(10 * 1000);
                     windowsMangerInstance.RemoveView(v);
-                   // setHaveAdialgoe(context, false);
+                    // setHaveAdialgoe(context, false);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -341,7 +299,50 @@ public class DialogeHelperMethods {
         thread.start();
     }
 
+    public void drawInfo(Context context) {
+
+        // fill data in the field
+        TextView ConName_txt = (TextView) v.findViewById(R.id.ContNameToa_txt);
+        TextView ConNo_txt = (TextView) v.findViewById(R.id.ContPhoNoToast_txt);
+        TextView NoteTitle_txt = (TextView) v.findViewById(R.id.NoteTitle_Toast_txt);
+        ImageView contactImg = (ImageView) v.findViewById(R.id.ContPhotToast_img);
+        View pView = (View) v.findViewById(R.id.partView);
+        LinearLayout linStuts = (LinearLayout) v.findViewById(R.id.linStuts);
+        LinearLayout linClass = (LinearLayout) v.findViewById(R.id.linClassifcation);
+        TextView CatagoryType = (TextView) v.findViewById(R.id.CatTypeToa_txt);
+
+        ConName_txt.setText(getDailerInfo(context).getContName());
+        ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
+        CatagoryType.setVisibility(View.INVISIBLE);
+        contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(), context));
+        NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
+        linClass.setVisibility(View.GONE);
+        linStuts.setVisibility(View.GONE);
+        pView.setVisibility(View.GONE);
+/*
+        if (isTheirAnyDialoge(context))
+            windowsMangerInstance.RemoveView(viewDialgoe);
+        setHaveAdialgoe(context, true);*/
+
+        windowsMangerInstance.AddView(v, windowsMangerInstance.getWindoesMangerParam(Constant.RECIVED_CALL_HINT));
+        removeViewAfteraWhile(context, v);
+
+    }
+
+    private void removeViewAfteraWhile(final Context context, final View v) {
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                WindowsMangerSingleTon.getWindowmangerInstance(context).RemoveView(v);
+                setHaveAdialgoe(context, false);
+            }
+        }, 2000);
+    }
+
     public void removeAnyView() {
-        windowsMangerInstance.removeAnyView(v,viewAfterDialgoe);
+        windowsMangerInstance.removeAnyView(v, viewDialgoe);
     }
 }
