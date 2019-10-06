@@ -216,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         return true;
     }
+
+
     private void getSelectedNote(final String query) {
         final AllNotestFrag AllNotefrag = allNotesFrag;
         AllNotefrag.search_list = new ArrayList<>();

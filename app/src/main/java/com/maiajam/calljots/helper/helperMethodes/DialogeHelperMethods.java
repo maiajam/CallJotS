@@ -396,7 +396,7 @@ public class DialogeHelperMethods {
     }
 
     public void removeAnyView() {
-        if(vDialoge.getWindowToken() != null)
+        if(vDialoge.isShown())
         {
             wm.removeView(vDialoge);
         }
