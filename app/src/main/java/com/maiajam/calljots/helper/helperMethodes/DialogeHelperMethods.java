@@ -32,6 +32,7 @@ public class DialogeHelperMethods {
     private  static View vDialoge;
     private static WindowManager wm;
     private static LayoutInflater inflater;
+    private static boolean isRemoved;
 
 
     public DialogeHelperMethods(Context context) {
@@ -49,6 +50,9 @@ public class DialogeHelperMethods {
     public static void drawInfo(Context context) {
 
 
+        wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        vDialoge = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
         TextView ConName_txt = (TextView) vDialoge.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) vDialoge.findViewById(R.id.ContPhoNoToast_txt);
@@ -68,6 +72,7 @@ public class DialogeHelperMethods {
         linStuts.setVisibility(View.GONE);
         pView.setVisibility(View.GONE);
         wm.addView(vDialoge, getWindoesMangerParam(context,Constant.RECIVED_CALL_HINT));
+        if(!isRemoved)
         removeView(wm,vDialoge);
     }
     public static void dialogeAfterCallLog(final Context context, int hintContactType,
@@ -75,6 +80,9 @@ public class DialogeHelperMethods {
                                            DialerInfoAndNote contactInfo) {
 
 
+        wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        vDialoge = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         // fill data in the field
         TextView ConName_txt = (TextView) vDialoge.findViewById(R.id.ContNameToa_txt);
         TextView ConNo_txt = (TextView) vDialoge.findViewById(R.id.ContPhoNoToast_txt);
@@ -240,8 +248,12 @@ public class DialogeHelperMethods {
     //
     public static void drawContactInfo(final Context context, final DialerInfoAndNote contact, int hint) {
         // fill data in the field
+        wm = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        vDialoge = inflater.inflate(R.layout.contactinfo_note_dialoge, null);
         addContentToTheView(context,vDialoge,contact,hint);
         wm.addView(vDialoge, getWindoesMangerParam(context,Constant.RECIVED_CALL_HINT));
+        if(!isRemoved)
         removeView(wm,vDialoge);
     }
     private static void removeViewImmidiatly(final WindowManager wm, final View v)
@@ -398,6 +410,7 @@ public class DialogeHelperMethods {
     public void removeAnyView() {
         if(vDialoge.isShown())
         {
+            isRemoved = true ;
             wm.removeView(vDialoge);
         }
     }
