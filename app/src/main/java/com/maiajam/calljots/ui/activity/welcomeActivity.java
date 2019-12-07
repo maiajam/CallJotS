@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.maiajam.calljots.R;
 import com.maiajam.calljots.data.local.room.RoomManger;
 import com.maiajam.calljots.helper.Constant;
@@ -26,6 +27,8 @@ import com.maiajam.calljots.util.workmanger.MyWorker;
 
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.maiajam.calljots.helper.Constant.MY_IGNORE_OPTIMIZATION_REQUEST;
 
@@ -48,6 +51,7 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_welcome);
 
         initialView();

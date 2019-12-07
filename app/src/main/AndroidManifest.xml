@@ -26,6 +26,11 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="03c69a499999c5424fe6fad3849e0595d9889fb0"
+            />
         <activity
             android:name=".ui.activity.welcomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
