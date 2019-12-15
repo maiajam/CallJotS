@@ -152,7 +152,6 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-
             case Constant.REQ_READ_PHONE_STATE:
                 // If request is accepted, the result arrays not empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
