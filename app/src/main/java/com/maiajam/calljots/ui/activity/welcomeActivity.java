@@ -10,11 +10,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telecom.TelecomManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
     private int OVERLAY_PERMISSION_CODE = 100;
     private int READ_PHONE_STATE = 5;
     private PowerManager pm;
+    private int DefultCallHandler_requestCode = 120;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,18 +78,19 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
             editor.putBoolean("firstWelcome", false);
             editor.commit();
             editor.apply();
-            CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-            if (ContextCompat.checkSelfPermission(this, String.valueOf(READ_CONTACT_PERMISSIONS)) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(this, READ_CONTACT_PERMISSIONS,
-                        Constant.REQUEST_CODE_READ_WRITE);
-            } else {
-                // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
-                RoomManger.getInstance(getBaseContext());
-            }
+            setDefultCallHandler();
         } else {
             startActivity(new Intent(welcomeActivity.this, MainActivity.class));
         }
+    }
+
+    private void setDefultCallHandler() {
+
+        Intent setCallAppIntent =
+                new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
+        setCallAppIntent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
+        startActivity(setCallAppIntent);
+        startActivityForResult(setCallAppIntent, DefultCallHandler_requestCode);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -145,6 +149,21 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
                 // Not ignoring battery optimization
             }
 
+        } else if (requestCode == DefultCallHandler_requestCode) {
+            checkCallLogPermission();
+        }
+
+    }
+
+    private void checkCallLogPermission() {
+        CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
+        if (ContextCompat.checkSelfPermission(this, String.valueOf(READ_CONTACT_PERMISSIONS)) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, READ_CONTACT_PERMISSIONS,
+                    Constant.REQUEST_CODE_READ_WRITE);
+        } else {
+            // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
+            RoomManger.getInstance(getBaseContext());
         }
     }
 

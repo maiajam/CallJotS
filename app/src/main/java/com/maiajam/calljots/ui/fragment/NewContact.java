@@ -105,7 +105,6 @@ public class NewContact extends Fragment{
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     imagePath = cursor.getString(columnIndex);
                     cursor.close();
-
                     setImage(imagePath);
                 }
 
@@ -254,6 +253,7 @@ public class NewContact extends Fragment{
         }
 
     }
+
 
     public void setPhoneNo(String firstPhone) {
         PhoneNO = firstPhone ;

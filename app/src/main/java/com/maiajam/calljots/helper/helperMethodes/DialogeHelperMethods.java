@@ -67,7 +67,7 @@ public class DialogeHelperMethods {
         ConNo_txt.setText(getDailerInfo(context).getContPhoneNo());
         CatagoryType.setVisibility(View.INVISIBLE);
         contactImg.setImageDrawable(HelperMethodes.getBitmapImage(HelperMethodes.getDailerInfo(context).getContactPhotoUri(), context));
-        NoteTitle_txt.setText("' This Contact Is Not one Of your speacal contact '");
+        NoteTitle_txt.setText(context.getString(R.string.toast_notSpecialContact));
         linClass.setVisibility(View.GONE);
         linStuts.setVisibility(View.GONE);
         pView.setVisibility(View.GONE);
