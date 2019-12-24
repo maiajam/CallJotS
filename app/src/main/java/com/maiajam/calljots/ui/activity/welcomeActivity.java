@@ -56,7 +56,6 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_welcome);
-
         initialView();
         initialFirstTime();
     }
@@ -75,22 +74,17 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
         editor = sp.edit();
 
         if (sp.getBoolean("firstWelcome", true)) { // this is the first time visit the app
-            editor.putBoolean("firstWelcome", false);
-            editor.commit();
-            editor.apply();
-            setDefultCallHandler();
+           setFirstTimeAccess();
+           checkCallLogPermission();
         } else {
             startActivity(new Intent(welcomeActivity.this, MainActivity.class));
         }
     }
 
-    private void setDefultCallHandler() {
-
-        Intent setCallAppIntent =
-                new Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER);
-        setCallAppIntent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, getPackageName());
-        startActivity(setCallAppIntent);
-        startActivityForResult(setCallAppIntent, DefultCallHandler_requestCode);
+    private void setFirstTimeAccess() {
+        editor.putBoolean("firstWelcome", false);
+        editor.commit();
+        editor.apply();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -149,8 +143,6 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
                 // Not ignoring battery optimization
             }
 
-        } else if (requestCode == DefultCallHandler_requestCode) {
-            checkCallLogPermission();
         }
 
     }
@@ -204,5 +196,4 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
             startActivityForResult(intent, MY_IGNORE_OPTIMIZATION_REQUEST);
         }
     }
-
 }

@@ -4,8 +4,6 @@
     package="com.maiajam.calljots">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -37,9 +35,6 @@
             android:name=".ui.activity.welcomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                    <action android:name="android.intent.action.DIAL" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <data android:scheme="tel"/>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
