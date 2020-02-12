@@ -35,7 +35,7 @@ public class CallLogFrag extends Fragment {
     private LinearLayoutManager Laymang;
     private int Contact_Id;
     private String Contact_Number;
-    private String[] CALL_LOG_PERMISSIONS = new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG};
+   // private String[] CALL_LOG_PERMISSIONS = new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG};
 
     public CallLogFrag() {
     }
@@ -57,7 +57,7 @@ public class CallLogFrag extends Fragment {
         Contact_Id = getArguments().getInt(getString(R.string.Contact_Id));
         Contact_Number = getArguments().getString("phoneNo");
 
-      if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED &&
+    /*  if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED &&
               ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED )
         {
             lisLog = new ArrayList<>();
@@ -76,7 +76,7 @@ public class CallLogFrag extends Fragment {
         }else {
           requestPermissions(CALL_LOG_PERMISSIONS,Constant.RequestCodeCallLog);
 
-      }
+      }*/
         return v ;
     }
     @Override

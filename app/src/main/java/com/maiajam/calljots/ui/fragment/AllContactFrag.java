@@ -64,10 +64,7 @@ public class AllContactFrag extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.READ_CALL_LOG )!= PackageManager.PERMISSION_GRANTED)
-        {
-            requestPermissions(CALL_LOG_PERMISSIONS,Constant.RequestCodeCallLog);
-        }
+
     }
     @Nullable
     @Override
@@ -142,33 +139,6 @@ public class AllContactFrag extends Fragment {
         };
         myThread = new ReadDataThread(handler,getContext(),Constant.GET_ALL_PHONE_CONTACT,"");
         myThread.start();
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Constant.MY_PERMISSIONS_REQUEST_CALL_PHONE) {
-            boolean allgranted = false;
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                allgranted = true ;
-            }else {
-                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE);
-            }
-            if (allgranted) {
-                // permission was granted 🙂
-
-            }
-        }else if(requestCode == Constant.RequestCodeCallLog)
-        {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-               //
-            }else {
-                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), String.valueOf(CALL_LOG_PERMISSIONS));
-            }
-
-        }
-
     }
 
     private void callAction(String PhoneNo) {

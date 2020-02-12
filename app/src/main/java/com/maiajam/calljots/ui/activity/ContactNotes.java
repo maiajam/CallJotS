@@ -61,8 +61,7 @@ public class ContactNotes extends AppCompatActivity {
         pageAdapter adapter = new pageAdapter(getSupportFragmentManager());
         adapter.setContactInfo(getBaseContext(),Name,PhoneNo,Image_uri,id,Contact_Id,Constant.ONE_CONTACT_NOTE);
         adapter.AddFragment(new AllNotestFrag(), "Notes");
-        adapter.AddFragment(callLogFrag, "Call Loge");
-
+        //adapter.AddFragment(callLogFrag, "Call Loge");
         SPviewPager.setAdapter(adapter);
         SPviewPager.setCurrentItem(tab);
         tabLayout.setupWithViewPager(SPviewPager);
