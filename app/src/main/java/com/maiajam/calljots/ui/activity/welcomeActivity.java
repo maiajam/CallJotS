@@ -41,6 +41,10 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
     private static final String[] READ_CONTACT_PERMISSIONS =
             new String[]{Manifest.permission.READ_CONTACTS,
                     Manifest.permission.WRITE_CONTACTS};
+
+    private static final String[] READ_CallLog_PERMISSIONS =
+            new String[]{Manifest.permission.READ_CALL_LOG
+            };
     private static OneTimeWorkRequest CallRevicerRequest;
     TextView welcom_text, start_txt;
     ImageView start_img;
@@ -74,8 +78,8 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
         editor = sp.edit();
 
         if (sp.getBoolean("firstWelcome", true)) { // this is the first time visit the app
-           setFirstTimeAccess();
-           checkCallLogPermission();
+            setFirstTimeAccess();
+            checkCallLogPermission();
         } else {
             startActivity(new Intent(welcomeActivity.this, MainActivity.class));
         }
@@ -134,27 +138,33 @@ public class welcomeActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             }
-        } else if (requestCode == MY_IGNORE_OPTIMIZATION_REQUEST) {
-            pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            boolean isIgnoringBatteryOptimizations = pm.isIgnoringBatteryOptimizations(getPackageName());
-            if (isIgnoringBatteryOptimizations) {
-                // Ignoring battery optimization
-            } else {
-                // Not ignoring battery optimization
-            }
-
         }
 
     }
 
     private void checkCallLogPermission() {
-        CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-        if (ContextCompat.checkSelfPermission(this, String.valueOf(READ_CONTACT_PERMISSIONS)) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, String.valueOf(READ_CallLog_PERMISSIONS)) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(this, READ_CallLog_PERMISSIONS,
+                    Constant.REQUEST_CODE_READ_CALLLog);
+        } else {
+            initiateReciver();
+        }
+    }
+
+    private void initiateReciver()
+    {
+        CallRevicerRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
+        checkReadContactPermissin();
+    }
+
+    private void checkReadContactPermissin() {
+
+        if (ContextCompat.checkSelfPermission(this, String.valueOf(READ_CONTACT_PERMISSIONS)) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, READ_CONTACT_PERMISSIONS,
                     Constant.REQUEST_CODE_READ_WRITE);
         } else {
-            // initiate the room manger get instance to creat the database where we will get all phone contact and then add them to our db
+
             RoomManger.getInstance(getBaseContext());
         }
     }

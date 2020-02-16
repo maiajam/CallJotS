@@ -27,11 +27,12 @@ public class CallReciver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-        final String NOCont = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-        checkReciverHasNo(NOCont, context, intent);
+       // String CallerNO =  intent.getExtras().getString("incoming_number");
+        final String CallerNO = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+        checkReciverHasNumber(CallerNO, context, intent);
     }
 
-    private void checkReciverHasNo(String NOCont, Context context, Intent intent) {
+    private void checkReciverHasNumber(String NOCont, Context context, Intent intent) {
         if (TextUtils.isEmpty(NOCont)) {
             return;
         } else {
